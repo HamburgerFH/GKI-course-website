@@ -1,0 +1,366 @@
+## Single-Layer-Perzeptron (SLP)
+
+
+
+### Einführung in mathematische Struktur des SLP {.unlisted}
+
+- Binäre Klassifikation mit $d$-dimensionaler Eingabe/Input $\bs{x} \in \mathbb{R}^d$:
+  
+  $$
+  f: \mathbb{R}^d \ra \{0,1\}\\
+  \bs{x} \mapsto f(x)=\hat{y}
+  $$
+  
+- Ausgabe: $\hat{y} = \phi(\bs{w}^\top \bs{x} + b)$ mit Gewichtungsvektor $\bs{w} \in \mathbb{R}^d$ und Bias $b \in \mathbb{R}$
+
+- Aktivierungsfunktion: für binäre Klassifikation typisch – Heaviside:
+
+  $$
+  \phi(z) =
+    \begin{cases}
+      1 & \text{wenn } z \geq 0 \\
+      0 & \text{wenn } z < 0
+    \end{cases}
+  $$
+
+- Linearkombination: $z = \bs{w}^\top \bs{x} + b$ stellt lineare Entscheidungsgrenze dar mit $\bs{w}^\top \bs{x} + b = 0$ und entsprechender Vorhersage $\hat{y} = \phi(z)$ –  
+  Beispiel: $d = 2$, $\bs{x}_i = \begin{pmatrix} x_{i1} \\ x_{i2} \end{pmatrix}$,  
+  $\bs{w} = \begin{pmatrix} 2 \\ -1 \end{pmatrix}$, $b = -1$.  
+  Entscheidungsgrenze ist dann:
+  
+  $$
+  2 x_{i1} - x_{i2} - 1 = 0 \quad \Leftrightarrow \quad x_{i2} = 2 x_{i1} - 1
+  $$
+
+- Punkte oberhalb der Geraden $\ra$ Klasse 1, unterhalb $\ra$ Klasse 0
+
+- Bedingung: $\bs{w}^T \bs{x}_i + b = 0$ trennt den Eingaberaum in zwei Halbräume:
+  - Punkte mit $\bs{w}^T \bs{x}_i + b \geq 0$ $\ra$ Klasse 1
+  - Punkte mit $\bs{w}^T \bs{x}_i + b < 0$ $\ra$ Klasse 0
+
+
+
+## Lernen von Parametern im SLP
+
+
+
+### Intuition {.unlisted}
+
+- Trainingsdaten: $(\bs{x}_i, y_i)$ mit Label $y_i \in \{0,1\}$, $\bs{x}_i \in \mathbb{R}^d$ für $i = 1, \dots, N$, Vorhersage $\hat{y}_i = \phi(\bs{w}^\top \bs{x}_i + b)$, Gewichtungsvektor $\bs{w} \in \mathbb{R}^d$, und $b \in \mathbb{R}$
+
+- Ziel: Bestimme $\bs{w}$ und $b$, sodass $\hat{y}_i \approx y_i$ für alle $i$,  
+  d. h. bei Fehlklassifikation $y_i \ne \hat{y}_i$: Update der Lernregel:
+
+  $$
+  \bs{w} \leftarrow \bs{w} + \eta (y_i - \hat{y}_i) \bs{x}_i, \quad
+  b \leftarrow b + \eta (y_i - \hat{y}_i)
+  $$
+
+- Lernrate (Schrittweite) $\eta>0$, $\bs{w}$ und $b$ über Korrektursignal $y_i - \hat{y}_i \in \{-1, 0, +1\}$ bei Fehler anpassen: inkrementell
+
+- **[korrekt klassifizierte Punkte bewirken nichts]{.ctl}**
+
+
+
+### Bedeutung des Bias-Terms $b$ {.unlisted}
+
+- $b$ kann als zusätzliches Gewicht $w_0$ mit festem Input $x_0 = 1$ interpretiert werden $\ra$ das Modell wird zu:
+
+  $$
+  \hat{y} = \phi(\bs{w}^\top \bs{x} + b) = \phi(\tilde{\bs{w}}^\top \tilde{\bs{x}})
+  $$
+
+  $$
+  \tilde{\bs{x}} = \begin{pmatrix} 1 \\ \bs{x} \end{pmatrix}, \quad
+  \tilde{\bs{w}} = \begin{pmatrix} b \\ \bs{w} \end{pmatrix}
+  $$
+
+- Ohne Bias: Entscheidungshyperfläche $\bs{w}^\top \bs{x} = 0$ verläuft durch den Ursprung  
+  Mit Bias $b \in \mathbb{R}$: Verschiebung der Hyperfläche auf $\bs{w}^\top \bs{x} + b = 0$  
+  Bias wirkt wie ein frei lernbarer Achsenabschnitt, was verschiebbare Aktivierungsschwellen ermöglicht
+
+
+## Lernen von Parametern
+
+
+
+### Online-Lernen und Gewichtsanpassung {.unlisted}
+
+- Gewichtsupdate erfolgt sofort nach Verarbeitung von $(\bs{x}_i, y_i)$
+
+- Dieser Lernmodus heißt **online**: kein Warten auf ganzen Batch
+
+- Nur Fehlerpunkte ($y_i \ne \hat{y}_i$) führen zu einer Änderung $\ra$ korrekt klassifizierte Punkte lassen $\bs{w}$ und $b$ unverändert
+
+- Netzparameter $\bs{w}$, $b$ sind **global** – gelten für alle Beobachtungen $\ra$ Änderung an $\bs{w}$ durch Punkt $x_k$ kann spätere $\hat{y}_j$, $k<j$, beeinflussen
+
+- Daher kann ein zuvor korrekt klassifiziertes Trainingsdatum falsch werden
+
+
+
+### Einschränkungen des Perzeptrons {.unlisted}
+
+- Konvergenz garantiert, falls Daten **linear separierbar** sind
+
+- Beispiel: XOR-Funktion nicht trennbar durch eine lineare Hyperebene
+
+- Ursache: keine nichtlineare Transformation des Eingaberaums möglich
+
+- Lösungsidee: Zusammenschalten mehrerer Neuronen  
+  $\hra$ mehrschichtige Netzwerke (MLP)
+
+
+## Was ist ein Neuron?
+
+
+
+### Abgrenzung zur Trainingsbeobachtung {.unlisted}
+
+- Trainingsdaten: $N$ Vektoren $\bs{x}_i \in \mathbb{R}^d$ mit zugehörigem Label $y_i \in \{0,1\}$  
+  $\bs{x}_i$ besitzt $d$ Merkmale $\ra$ Eingabeschicht hat $d$ Inputneuronen
+
+- Ein Neuron ist eine **Verarbeitungseinheit im Netzwerk**, nicht ein Trainingsdatum  
+  $\ra$ **nicht** $N$ Neuronen, sondern $N$ Durchläufe durch dasselbe Netzwerk
+
+- Im Single-Layer-Perzeptron: genau **ein** Outputneuron in der Ausgabeschicht  
+  $\ra$ nimmt alle $d$ Komponenten von $\bs{x}$ auf:
+  - berechnet gewichtete Summe $z = \bs{w}^\top \bs{x} + b$
+  - entscheidet per Schwellenfunktion $\phi(z)$, ob Output $0$ oder $1$
+  - pro Eingabevektor entsteht genau ein Ausgabewert $\hat{y} \in \{0,1\}$
+
+
+
+### Wiederholtes Durchlaufen der Daten {.unlisted}
+
+- Trainingsdaten $\{(\bs{x}_i, y_i)\}_{i=1}^N$ werden mehrfach durchlaufen  
+  $\hra$ jeder vollständige Durchlauf heißt **Epoche**
+
+- Pro Epoche: alle $\bs{x}_i$ werden sequentiell verarbeitet:  
+  **for-loop über $i = 1,\dots,N$** für jedes $i$ Vorhersage $\hat{y}_i$, ggf. Update
+
+- Reihenfolge der Daten bleibt konstant oder wird pro Epoche neu gemischt
+
+
+## Ziel der Perzeptron-Lernregel, Formale Ableitung & Perzeptron-Konvergenzsatz
+
+
+### Ziel der Perzeptron-Lernregel {.unlisted}
+
+- Trainingsdaten: $(\bs{x}_i, y_i)$ mit $\bs{x}_i \in \mathbb{R}^d$, $y_i \in \{0,1\}$, $i = 1,\dots,N$
+
+- Modell:
+
+  $$
+  \hat{y}_i = \phi\left( \bs{w}^\top \bs{x}_i + b \right)
+  $$
+
+- Frage: wie lernen wir $\bs{w}$ und $b$ aus den Daten?
+
+- Falls $\hat{y}_i \neq y_i$, aktualisiere:
+
+  $$
+  \bs{w} \leftarrow \bs{w} + \eta (y_i - \hat{y}_i) \bs{x}_i
+  $$
+  $$
+  b \leftarrow b + \eta (y_i - \hat{y}_i)
+  $$
+
+- $\eta > 0$: Lernrate,  
+  $y_i - \hat{y}_i \in \{-1, 0, +1\}$: Korrektursignal
+
+- Intuition:
+  - $y_i = 1$, $\hat{y}_i = 0$ $\ra$ schiebe Grenze nach rechts
+  - $y_i = 0$, $\hat{y}_i = 1$ $\ra$ schiebe Grenze nach links
+  - bei $\hat{y}_i = y_i$ keine Änderung
+
+
+
+### Formale Ableitung {.unlisted}
+
+- Der Fehler bei Datum/Sample $i$ sei: $e_i = y_i - \hat{y}_i$
+
+
+- Die Gewichtsanpassung erfolgt entlang des negativen Gradienten (heuristisch), da die Heaviside-Funktion nicht differenzierbar ist. Dennoch interpretiert man die Lernregel grob als ob sie dem Gradienten von $e_i^2$ folgt:
+
+  $$
+  \Delta \bs{w} \propto \frac{\partial}{\partial \bs{w}} e_i^2
+  = -2 e_i \frac{\partial \hat{y}_i}{\partial \bs{w}} \approx e_i \bs{x}_i
+  $$
+
+
+  $$
+  \nabla_{\bs{w}} e_i^2 = -2 e_i \cdot \frac{\partial \hat{y}_i}{\partial \bs{w}}
+  \approx e_i \cdot \bs{x}_i
+  $$
+
+- Näherung: Schritt / Richtung der Korrektur ist $\bs{x}_i$ (gewichtet mit Vorzeichen des Fehlers), da  
+  $\frac{\partial \hat{y}_i}{\partial \bs{w}}$ bei Heaviside nicht definiert
+
+
+### Perzeptron-Konvergenzsatz {.unlisted}
+
+
+- **Theorem**: falls Daten linear separierbar, konvergiert Lernregel
+
+- Nach endlich vielen Schritten existiert $\bs{w}^*$ mit $\hat{y}_i = y_i$ für alle $i$
+
+- **Beweisidee** (nicht im Detail):
+  - konstruiere Maß für Fortschritt (z. B. Projektion auf wahre Trennrichtung)
+  - zeige monotonen Fortschritt bei Fehlklassifikation
+  - zeige, dass keine unendliche Zahl an Fehlern möglich ist
+
+- **Aber** Bei nicht separierbaren Daten $\ra$ keine Konvergenz, endlose Oszillation möglich
+
+
+
+### Grenzen der Lernregel {.unlisted}
+
+
+
+- Funktioniert nur bei linear separierbaren Daten
+
+- Keine Interpretation als Gradientenabstieg auf differenzierbarer Funktion
+
+- Grund: Sprungstelle der Heaviside-Funktion
+
+- Bei nicht separierbaren Daten: Oszillation ohne Konvergenz
+
+
+
+### Beispiel: ein Lernschritt {.unlisted}
+
+
+
+
+
+- Gegeben: $\bs{x}_1 = (1,1)^T$, $y_1 = 1$, Initialisierung:
+
+  $$
+  \bs{w} = (0,0)^T,\quad b = 0,\quad \eta = 1
+  $$
+
+- Dann: $z_1 = 0 \Rightarrow \hat{y}_1 = 1 \Rightarrow$ keine Änderung
+
+- Weiteres Sample: $\bs{x}_2 = (-2, 0)^T$, $y_2 = 0$
+
+- Dann: $z_2 = 0 \Rightarrow \hat{y}_2 = 1 \Rightarrow$ Fehler $e_2 = -1$
+
+- Update:
+
+  $$
+  \bs{w} \leftarrow (0,0) -1 \cdot (-2,0) = (2,0),\quad b \leftarrow 0 -1 = -1
+  $$
+
+
+
+
+## Differenzierbares Perzeptron und Gradientenverfahren
+
+
+
+### Motivation für Differenzierbarkeit {.unlisted}
+
+- Klassische Heaviside-Aktivierung ist nicht differenzierbar
+
+- Gradientverfahren wie SGD daher nicht direkt anwendbar
+
+- Lösung: Ersetze Heaviside durch glatte Approximation, z. B. Sigmoid
+
+
+
+### Sigmoid-Aktivierung {.unlisted}
+
+- Definition:
+
+  $$
+  \sigma(z) = \frac{1}{1 + e^{-z}}, \quad z \in \mathbb{R}
+  $$
+
+- Eigenschaften:
+  - glatt und überall differenzierbar
+  - Wertebereich: $(0,1)$
+  - Sättigung bei großen positiven/negativen $z$
+  - Ableitung:
+
+    $$
+    \sigma'(z) = \sigma(z)(1 - \sigma(z))
+    $$
+
+
+
+### Modell mit Sigmoid-Aktivierung {.unlisted}
+
+- Für $i = 1, \dots, N$:
+
+  $$
+  z_i = \bs{w}^\top \bs{x}_i + b,\quad \hat{y}_i = \sigma(z_i)
+  $$
+
+- Ziel: $\hat{y}_i \approx y_i \in \{0,1\}$
+
+
+
+## Differenzierbares Perzeptron und Gradientenverfahren
+
+
+
+### Fehlerfunktion: log loss {.unlisted}
+
+- Interpretation von $\hat{y}_i$ als Wahrscheinlichkeit $\Rightarrow$ log loss:
+
+  $$
+  \mathcal{L}_i = - \left[ y_i \log \hat{y}_i + (1 - y_i) \log(1 - \hat{y}_i) \right]
+  $$
+
+- Gesamte Verlustfunktion:
+
+  $$
+  \mathcal{L} = \sum_{i=1}^N \mathcal{L}_i
+  = - \sum_{i=1}^N \left[ y_i \log \hat{y}_i + (1 - y_i) \log(1 - \hat{y}_i) \right]
+  $$
+
+
+
+### Gradienten für Gewichte und Bias {.unlisted}
+
+- Ableitung nach $\bs{w}$:
+
+  $$
+  \frac{\partial \mathcal{L}_i}{\partial \bs{w}} = (\hat{y}_i - y_i) \cdot \bs{x}_i
+  $$
+
+- Ableitung nach $b$:
+
+  $$
+  \frac{\partial \mathcal{L}_i}{\partial b} = \hat{y}_i - y_i
+  $$
+
+
+
+### Update-Regeln (Gradient Descent) {.unlisted}
+
+- Batch-Update für Lernrate $\eta > 0$:
+
+  $$
+  \bs{w} \leftarrow \bs{w} - \eta \sum_{i=1}^N (\hat{y}_i - y_i) \bs{x}_i
+  $$
+  $$
+  b \leftarrow b - \eta \sum_{i=1}^N (\hat{y}_i - y_i)
+  $$
+
+- Stochastisch (SGD):
+
+  $$
+  \bs{w} \leftarrow \bs{w} - \eta (\hat{y}_i - y_i) \bs{x}_i,\quad
+  b \leftarrow b - \eta (\hat{y}_i - y_i)
+  $$
+
+
+
+### Interpretation {.unlisted}
+
+- Fehlerterm $\hat{y}_i - y_i$ misst Abstand zur Zielklasse
+
+- Richtung der Korrektur: Eingabevektor $\bs{x}_i$
+
+- Durch Differenzierbarkeit der Sigmoid-Funktion $\ra$ Grundlage für Backpropagation

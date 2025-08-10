@@ -1,0 +1,113 @@
+## Grundlagen der Künstlichen Intelligenz
+
+
+
+### Einführung {.unlisted}
+
+- Künstliche Intelligenz umfasst eine Vielzahl von Algorithmen zur automatisierten
+  Datenverarbeitung
+- Entscheidungsbäume gehören zum Bereich des **maschinellen Lernens**
+- Fokus dieser Vorlesung: Methoden des **überwachten Lernens**
+- maschinelles Lernen ist ein Teilbereich der KI, bei dem Systeme aus
+  Daten lernen statt explizit programmiert zu werden
+
+
+  
+### Zentrale Algorithmen {.unlisted}
+
+- ein **zentral gesteuerter Algorithmus** verwaltet Daten, Parameter und Logik
+  an einem einzigen Ort
+- Vorteil: einfache Struktur, leicht zu implementieren
+- Nachteil: zentraler Ausfallpunkt, eingeschränkte Skalierbarkeit
+- Nachteil: zentraler Ausfallpunkt, schlecht skalierbar bei verteilten Aufgaben
+- Beispiel: ineffizient zur Steuerung ganzer Fahrzeugflotten
+- zentrale Modelle wie Entscheidungsbäume folgen einer klaren, 
+  regelbasierten Struktur und sind gut interpretierbar
+
+
+  
+### Überwachtes Lernen: Grundidee {.unlisted}
+
+- Ziel: aus Eingabevariablen $X$ eine **Vorhersage** $Y$ oder $G$ ableiten
+- auch möglich: **geordnete Kategorien** (z. B. klein, mittel, groß) – 
+  hier nicht behandelt
+- **Regression:** $Y$ ist quantitativ, z. B. Preis, Temperatur, Gewicht
+- **Klassifikation:** $G$ ist qualitativ, z. B. Klasse ``Ja/Nein'', ``rot/blau''
+- ``überwacht'' bedeutet: Trainingsdaten enthalten Zielgrößen zur
+  Kontrolle des Lernprozesses
+- beide Aufgaben lassen sich als **Funktionsapproximation** formulieren
+- Trainingsdaten bestehen aus Paaren $(x_i, y_i)$ oder $(x_i, g_i)$
+
+
+
+## Beispiel: Klassifikation mit Iris-Daten
+
+
+
+![Abbildung](/figs/02_intro_iris.png){#fig-02_intro_iris}
+
+- Eingabe: Länge und Breite von Kelch- und Blütenblättern 
+- **Sepal** = Kelchblatt vs. **Petal** = Blütenblatt (siehe Bild)
+- Ziel: Vorhersage der Iris-Spezies (setosa, versicolor, virginica)
+- typische Klassifikationsaufgabe mit $G \in \{1, 2, 3\}$
+
+
+  
+### Hintergrund zum Datensatz {.unlisted}
+
+- stammt aus einer Studie von **Ronald Fisher** (1936)
+- enthält 150 Beobachtungen, je 50 pro Iris-Art: `setosa`, 
+  `versicolor`, `virginica`
+- für jede Pflanze sind 4 Merkmale gegeben: Kelchblatt-Länge/Breite und Blütenblatt-Länge/Breite
+- seit Jahrzehnten Standard-Datensatz zum Testen von Klassifikationsverfahren
+- gut geeignet für visuelle Trennung \& erste Modellbeispiele
+
+
+
+## Notation
+
+
+
+### Eingabedaten (Input) {.unlisted}
+
+- $\bs{X} \in \mathbb{R}^{N \times p}$: Matrix aller Inputvektoren und eine
+  Input/Eingabe: $\bs{x}_i \in \mathbb{R}^p$, $i = 1, \dots, N$ Beobachtungen
+- dazugehöriger Zeilenvektor: $\bs{x}_i^T$ (transponierter Spaltenvektor) 
+  der $i$-ten Beobachtung
+
+$$
+\bs{X} =
+\begin{bmatrix}
+  x_{11} & x_{12} & \dots & x_{1p} \\\\
+  \vdots & \vdots &       & \vdots \\\\
+  x_{i1} & x_{i2} & \dots & x_{ip} \\\\
+  \vdots & \vdots &       & \vdots \\\\
+  x_{N1} & x_{N2} & \dots & x_{Np}
+\end{bmatrix}
+\quad \Rightarrow \quad \bs{x}_i^T = \text{i-te Zeile}
+$$
+
+- für den Iris Datensatz wäre $p=4$, $N=150$ und die Reihenfolge
+- $\bs{x}_i^T$ enthält alle vier Merkmale der $i$-ten Blüte:
+  `sepal_length` `sepal_width` `petal_length`
+  `petal_width`
+- Beispiel: $x_{i2}$ = sepal-Breite der $i$-ten Blüte, und
+  $x_{N3}$ = petal-Länge der $N$-ten Blüte 
+
+
+  
+### Zielgrößen (Output) {.unlisted}
+
+- $Y_i \in \mathbb{R}$: quantitatives Ziel (Regression)
+- $G_i \in \Omega$: qualitatives Ziel (Klassifikation), z. B. $\Omega = \{\text{setosa}, \dots\}$
+- $\hat{Y}_i$, $\hat{G}_i$: geschätzte Ausgaben
+- Ziel: $\hat{Y}_i \approx Y_i$, $\hat{G}_i \approx G_i$
+- Binäre Klassifikation für binäres $G$: $\hat{Y}_i \in [0, 1]$ und Schwellenwert-Regel z. B. für Wert 0.5:
+
+$$
+\hat{G}_i =
+\begin{cases}
+  1 & \text{falls } \hat{Y}_i \geq 0{,}5 \\\\
+  0 & \text{falls } \hat{Y}_i < 0{,}5
+\end{cases}
+$$

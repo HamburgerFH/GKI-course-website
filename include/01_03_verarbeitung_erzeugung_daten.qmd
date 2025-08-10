@@ -1,0 +1,126 @@
+## Verarbeitung und Erzeugen von Daten
+
+### Motivation und Problemstellung {.unlisted}
+
+- reale Daten sind oft verrauscht, unvollständig oder inkonsistent
+- Ziel: Datenqualität verbessern, damit ML-Algorithmen effektiv lernen
+- typische Probleme: fehlende Werte, Ausreißer, falsches Format, Rauschen
+- Merkmale (Features) = Eingabegrößen für das Modell
+
+![](/figs/01_03_01_preprocessing_uebersicht.png)
+
+
+## Datenbereinigung
+
+- Ziel: Korrektur oder Entfernung fehlerhafter Einträge
+- Methoden:
+  - fehlende Werte ignorieren oder durch Mittelwert, Regression o. Ä. ersetzen
+  - Rauschentfernung durch Binning, Regression oder Clustering
+  - Ausreißerbehandlung mittels Clustering oder Entfernung
+
+### [**_Klausurrelevant:_** schonmal abgefragt (s. Altklausuren)]{.ctl} {.unlisted}
+
+![](/figs/01_03_01_bereinigung.png)
+
+
+## Integration, Transformation und Reduktion
+
+### Datenintegration {.unlisted}
+
+- Zusammenführung verschiedener Datenquellen in eine einheitliche Struktur
+- typische Probleme:
+  - Schemaintegration (uneinheitliche Formate)
+  - redundante Attribute
+  - Datenwertkonflikte (z. B. unterschiedliche Einheiten)
+
+### Datentransformation {.unlisted}
+
+- Ziel: Daten vereinheitlichen, um Verarbeitbarkeit zu verbessern
+- Techniken: Normalisierung, Aggregation, Generalisierung, Attributbildung
+
+
+### [**_Klausurrelevant:_** schonmal abgefragt (s. Altklausuren)]{.ctl} {.unlisted}
+
+![](/figs/01_03_01_transformation.png)
+
+
+## Datenreduktion
+
+- Reduktion des Datenvolumens bei Erhalt der Analysequalität
+- Verfahren: Datenkompression, Dimensionsreduktion, Diskretisierung
+- Ziel: schnellere Verarbeitung bei geringem Informationsverlust
+
+
+### [**_Klausurrelevant:_** schonmal abgefragt (s. Altklausuren)]{.ctl} {.unlisted}
+
+![](/figs/01_03_01_reduktion.png)
+
+
+## Datenerweiterung: klassische Augmentation
+
+### Motivation und Prinzip {.unlisted}
+
+- Ziel: künstliche Vergrößerung von Trainingsdatensätzen
+- hilfreich bei kleinen Datenbasen oder zur Erhöhung der Robustheit
+- neue Datenpunkte entstehen durch gezielte Veränderungen bestehender Beispiele
+- besonders verbreitet bei visuellen Daten
+
+### typische Bildtransformationen {.unlisted}
+
+- Drehen, Spiegeln, Zoomen, Zuschneiden, Verschieben (Translation)
+- Farbänderung, Helligkeit/Kontrast anpassen, Rauschen hinzufügen
+- Graustufenumwandlung, zufälliges Löschen (Cutout)
+
+![](/figs/01_03_02_augmentation_visuell.png)
+
+
+## Datenerzeugung mit Deep Learning
+
+### GANs und neuronale Stilübertragung {.unlisted}
+
+- **Generative Adversarial Networks (GAN):**
+  - bestehen aus Generator und Diskriminator im Wettstreit
+  - erzeugen neue Datenpunkte, die echten Daten ähneln
+- **Neuronale Stilübertragung:**
+  - kombiniert **Inhaltsbild** und **Stilbild** zu synthetischem Output
+  - Output enthält die Inhalte des ersten Bilds im Stil des zweiten
+
+![](/figs/01_03_02_stiltransfer.png)
+
+## Datenerweiterung: Vor- und Nachteile
+
+- Datenerweiterung kann Genauigkeit und Robustheit von KI verbessern
+- sie ersetzt jedoch keine hochwertigen Originaldaten
+- Risiken: Reproduktion von Verzerrungen, mangelhafte Qualität künstlicher Daten
+- besonders kritisch bei ethischen oder sensiblen Anwendungen
+
+### [**_Potentiell Klausurrelevant:_** aber noch nie abgefragt]{.ctl} {.unlisted}
+
+![](/figs/01_03_02_vor_nachteile_augmentation.png)
+
+
+## Simulation als künstliche Datenquelle
+
+### Prinzip und Zielsetzung {.unlisted}
+
+- Simulation = virtuelle Nachbildung realer Prozesse auf Basis mathematischer Modelle
+- Ziel: Erzeugung realistischer, aber kontrollierter Daten ohne physische Durchführung
+- zentrale Bestandteile:
+  - **Modell** des Systems (z. B. physikalisch, ökonomisch, biologisch)
+  - **Eingabeparameter**, die Systemverhalten definieren
+  - **Ausgabevariablen**, die analysiert und als Trainingsdaten genutzt werden
+
+### Vorteile gegenüber realer Datenerhebung {.unlisted}
+
+- keine Risiken für Personen, Geräte oder Infrastruktur
+- flexibel skalierbar, auch für seltene/extreme Szenarien
+- vollständige Kontrolle über Ground Truth und Umweltvariablen
+- geeignet bei Datenschutzproblemen oder nicht zugänglichen Szenarien
+
+### Anwendungsfelder {.unlisted}
+
+- **Reinforcement Learning (RL)**:
+  - Training von Agenten via Trial \& Error in sicherer Simulationsumgebung
+  - spätere Übertragung des Verhaltens in reale Systeme (z. B. Roboter)
+- **Forecasting** (z. B. Energie, Logistik), **Anomaliedetektion**, **Risikobewertung**
+- **Simulation synthetischer Bilddaten** (z. B. für medizinische Diagnostik)
