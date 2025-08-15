@@ -571,3 +571,64 @@ $$
   Attributanzahl $m$ pro Split)
 - Ensemble-Vorhersagen sind oft genauer und stabiler als Einzelbäume
 - Nachteile: geringe Interpretierbarkeit, hoher Rechenaufwand bei vielen Bäumen
+
+
+## Hyperparameter-Optimierung: Grundlagen
+
+- **parameter**: durch den Datensatz bestimmt, vom Algorithmus gelernt
+  (z. B. Regressionskoeffizienten, Gewichte im neuronalen Netz)
+- **hyperparameter**: vom anwender vor dem training festgelegt, steuern
+  das lernverfahren
+- ziel der HPO: wahl von hyperparametern, die die modellgüte maximieren
+- es gibt verfahren ohne hyperparameter (lineare regression) und
+  verfahren ohne lernbare parameter (k-nearest-neighbour), aber keine
+  ohne beides
+- typische HPO-verfahren: grid search, random search, bayessche
+  optimierung, gradientenbasierte optimierung, evolutionäre verfahren
+
+### Entscheidungsbaum: kurzer Überblick {.unlisted} 
+
+- iterative aufteilung des datensatzes entlang attributen bis zu blättern
+- klassifikation: datenpunkt folgt vom wurzelknoten bis zum blatt
+- problem: overfitting bei zu komplexen bäumen
+
+
+Zentrale Hyperparameter sind hier sog. **Splittingkriterien**
+
+- **criterion**: gini, entropy, log_loss
+- **max_depth**: maximale tiefe des baums zur komplexitätskontrolle
+- **min_samples_split**: minimale anzahl datenpunkte für einen split
+
+### Datengrundlage für die Beispiele {.unlisted}
+
+- Datensatz: handgeschriebene Ziffern 0–9 (``Pen-Based Recognition of
+  Handwritten Digits'')
+- 16 attribute als 4$\times$4-pixel-darstellung, werte 0–100
+- Umfang: 10 992 Beobachtungen, davon 7 494 training und 3 498 test
+- keine Fehlwerte (missing values)
+
+
+### Grid Search: Idee, Eigenschaften und Umsetzung für Entscheidungsbaum {.unlisted}
+
+- **Prinzip**: brute-force Prüfung aller Hyperparameter-kombinationen
+- garantiertes Auffinden der besten Kombination im Raster
+- **Komplexität**: viele parameter $\times$ viele Ausprägungen $\ra$ rasches
+  Wachstum der Kombinationszahl
+- Beispiel: 5 Hyperparameter $\times$ 4 Werte $\ra$ $4^5 = 1\,024$ Kombinationen
+- **parallele Ausführung** möglich, da Einzeltests unabhängig sind
+- daten splitten: training und test
+- suchraum
+  - criterion $\in \{$gini, entropy, log_loss$\}$
+  - max_depth $\in \{1,\dots,10\}$
+  - min_samples_split $\in \{2,\dots,10\}$
+- Schleifen über alle Kombinationen, Modell trainieren, **accuracy** auf
+  Testdaten berechnen, beste Kombination merken
+- optional Reproduzierbarkeit: `random_state = 123`
+
+### Grid Search: Beobachtung und Einsatzgrenzen {.unlisted}
+
+- Laufzeit steigt stark mit Suchraumgröße
+- gut geeignet bei wenigen diskreten Hyperparametern
+- Ergebnisse variieren leicht durch zufallseffekte in Datensplitting und
+  Baumerzeugung
+- beispielhafte Güte in der Anwendung: accuracy um ca. 88 % auf Testdaten
