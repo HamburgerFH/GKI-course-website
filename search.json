@@ -1,112 +1,123 @@
 [
   {
-    "objectID": "include/99_altklausuren.html",
-    "href": "include/99_altklausuren.html",
+    "objectID": "include/02_04_MLP.html",
+    "href": "include/02_04_MLP.html",
     "title": "Grundlagen der Künstlichen Intelligenz (GKI)",
     "section": "",
-    "text": "Nachfolgend finden Sie die Aufgabenstellung und die dazugehörige Musterlösung.\n\n\n\n\n\n\nFigure 1: Aufgabenstellung der Klausur vom 28.09.2024\n\n\n\n\n\n\n\n\n\nFigure 2: Lösung zur Klausur vom 28.09.2024",
+    "text": "Lineare Modelle wie das Perzeptron sind begrenzt\n\nKönnen nur linear separierbare Daten klassifizieren\n\nBeispiel: XOR ist nicht linear trennbar\n\nLösung: Komposition einfacher nichtlinearer Funktionen\n\n\\(\\ra\\) Einführung verdeckter Schichten (Hidden Layer)\n\n\n\n\n\nEingabe: \\(\\bs{x}_i \\in \\mathbb{R}^d\\)\n\nHidden Layer: Dimension \\(h_1\\)\n\nAusgang: \\(\\hat{y}_i \\in (0,1)\\)\n\n\n\n\n\nEingabe \\(\\rightarrow\\) Hidden: \\(\\bs{W}^{(1)} \\in \\mathbb{R}^{h_1 \\times d},\\quad \\bs{b}^{(1)} \\in \\mathbb{R}^{h_1}\\)\nHidden \\(\\rightarrow\\) Output: \\(\\bs{W}^{(2)} \\in \\mathbb{R}^{1 \\times h_1},\\quad b^{(2)} \\in \\mathbb{R}\\)\n\n\n\n\n\nHidden Layer: \\(\\bs{a}_i^{(1)} = \\bs{W}^{(1)} \\bs{x}_i + \\bs{b}^{(1)} \\in \\mathbb{R}^{h_1}\\) und \\(\\bs{h}_i = \\phi\\left( \\bs{a}_i^{(1)} \\right) \\in \\mathbb{R}^{h_1}\\)\nOutput Layer: \\(z_i^{(2)} = \\bs{W}^{(2)} \\bs{h}_i + b^{(2)} \\in \\mathbb{R}\\) und \\(\\hat{y}_i = \\sigma(z_i^{(2)}) \\in (0,1)\\)",
+    "crumbs": [
+      "Zentrale Algorithmen der künstlichen Intelligenz",
+      "Neuronale Netze II: MLP"
+    ]
+  },
+  {
+    "objectID": "include/02_04_MLP.html#motivation-multilayer-perceptron-mlp-und-kernidee",
+    "href": "include/02_04_MLP.html#motivation-multilayer-perceptron-mlp-und-kernidee",
+    "title": "Grundlagen der Künstlichen Intelligenz (GKI)",
+    "section": "",
+    "text": "Lineare Modelle wie das Perzeptron sind begrenzt\n\nKönnen nur linear separierbare Daten klassifizieren\n\nBeispiel: XOR ist nicht linear trennbar\n\nLösung: Komposition einfacher nichtlinearer Funktionen\n\n\\(\\ra\\) Einführung verdeckter Schichten (Hidden Layer)\n\n\n\n\n\nEingabe: \\(\\bs{x}_i \\in \\mathbb{R}^d\\)\n\nHidden Layer: Dimension \\(h_1\\)\n\nAusgang: \\(\\hat{y}_i \\in (0,1)\\)\n\n\n\n\n\nEingabe \\(\\rightarrow\\) Hidden: \\(\\bs{W}^{(1)} \\in \\mathbb{R}^{h_1 \\times d},\\quad \\bs{b}^{(1)} \\in \\mathbb{R}^{h_1}\\)\nHidden \\(\\rightarrow\\) Output: \\(\\bs{W}^{(2)} \\in \\mathbb{R}^{1 \\times h_1},\\quad b^{(2)} \\in \\mathbb{R}\\)\n\n\n\n\n\nHidden Layer: \\(\\bs{a}_i^{(1)} = \\bs{W}^{(1)} \\bs{x}_i + \\bs{b}^{(1)} \\in \\mathbb{R}^{h_1}\\) und \\(\\bs{h}_i = \\phi\\left( \\bs{a}_i^{(1)} \\right) \\in \\mathbb{R}^{h_1}\\)\nOutput Layer: \\(z_i^{(2)} = \\bs{W}^{(2)} \\bs{h}_i + b^{(2)} \\in \\mathbb{R}\\) und \\(\\hat{y}_i = \\sigma(z_i^{(2)}) \\in (0,1)\\)",
+    "crumbs": [
+      "Zentrale Algorithmen der künstlichen Intelligenz",
+      "Neuronale Netze II: MLP"
+    ]
+  },
+  {
+    "objectID": "include/02_04_MLP.html#modelaufbau",
+    "href": "include/02_04_MLP.html#modelaufbau",
+    "title": "Grundlagen der Künstlichen Intelligenz (GKI)",
+    "section": "Modelaufbau",
+    "text": "Modelaufbau\n\nKomponenten des Modells\n\n\\(\\phi\\): Aktivierungsfunktion im Hidden Layer (z. B. ReLU, \\(\\tanh\\), Sigmoid)\n\n\\(\\sigma\\): Aktivierung im Output Layer (typisch Sigmoid bei binärer Klassifikation)\n\n\n\nDimensionsüberprüfung\n\n\\(\\bs{x}_i \\in \\mathbb{R}^d\\)\n\n\\(\\bs{W}^{(1)} \\bs{x}_i \\in \\mathbb{R}^{h_1}\\)\n\n\\(\\bs{h}_i \\in \\mathbb{R}^{h_1}\\)\n\n\\(\\hat{y}_i = \\sigma(\\bs{W}^{(2)} \\bs{h}_i + b^{(2)}) \\in (0,1)\\)\n\n\n\nBeispiel\n\nBeispielhafte Netzstruktur:\n\\[\n\\bs{x}_i \\rightarrow \\text{Linear}(\\bs{W}^{(1)}) \\rightarrow \\phi()\n\\rightarrow \\text{Linear}(\\bs{W}^{(2)}) \\rightarrow \\sigma() \\rightarrow \\hat{y}_i\n\\]\nAnzahl der Parameter:\n\\[\nh_1 \\cdot d + h_1 + h_1 + 1 = h_1(d + 2) + 1\n\\]\nDoppelt \\(h_1\\): Bias im Hidden Layer und Gewichte im Output\n\n\n\nKlarstellung: Warum \\(\\bs{W}^{(2)} \\in \\mathbb{R}^{1 \\times h_1}\\)?\n\nDie Form von \\(\\bs{W}^{(2)}\\) hängt nicht von der Aktivierungsfunktion \\(\\phi\\) ab\n\n\\(\\phi\\) wirkt elementweise auf Vektoren in \\(\\mathbb{R}^{h_1}\\)\n\n\\(\\phi\\) verlangt keine Skalareingabe im Output-Layer\n\n\n\nKlarstellung: Outputstruktur bestimmt Form von \\(\\bs{W}^{(2)}\\)\n\nZiel: skalare Ausgabe \\(\\hat{y}_i \\in (0,1)\\)\n\nDazu: \\(\\bs{W}^{(2)}\\) muss \\(\\bs{h}_i \\in \\mathbb{R}^{h_1}\\) zu Skalar kombinieren:\n\\[\nz_i^{(2)} = \\bs{W}^{(2)} \\bs{h}_i + b^{(2)} \\in \\mathbb{R}\n\\]\nDeshalb: \\(\\bs{W}^{(2)} \\in \\mathbb{R}^{1 \\times h_1}\\)\n\n\n\nAchtung: Erweiterung auf \\(C\\) Klassen (Softmax)\n\nBei Klassifikation mit \\(C\\) Klassen:\n\nOutput ist Vektor \\(\\hat{\\bs{y}}_i \\in \\mathbb{R}^C\\)\nGewichtsmatrix: \\(\\bs{W}^{(2)} \\in \\mathbb{R}^{C \\times h_1}\\)\n\nSoftmax erzeugt Wahrscheinlichkeitsverteilung über \\(C\\) Klassen\n\nFazit: Form von \\(\\bs{W}^{(2)}\\) ergibt sich aus gewünschter Ausgabedimension",
+    "crumbs": [
+      "Zentrale Algorithmen der künstlichen Intelligenz",
+      "Neuronale Netze II: MLP"
+    ]
+  },
+  {
+    "objectID": "include/02_04_MLP.html#vorwärtspropagation-im-mlp",
+    "href": "include/02_04_MLP.html#vorwärtspropagation-im-mlp",
+    "title": "Grundlagen der Künstlichen Intelligenz (GKI)",
+    "section": "Vorwärtspropagation im MLP",
+    "text": "Vorwärtspropagation im MLP\n\nZiel\n\nVollständige Vorwärtspropagation im MLP formal darstellen\n\nNotation:\n\n\\(\\bs{x}_i \\in \\mathbb{R}^d\\): Eingabevektor\n\n\\(h_1\\): Dimension des Hidden Layers\n\n\\(\\phi\\): Aktivierung im Hidden Layer\n\n\\(\\sigma\\): Aktivierung im Output Layer\n\n\n\n\nGewichtsmatrizen und Biasvektoren\n\n\\(\\bs{W}^{(1)} \\in \\mathbb{R}^{h_1 \\times d}\\), \\(\\bs{b}^{(1)} \\in \\mathbb{R}^{h_1}\\)\n\n\\(\\bs{W}^{(2)} \\in \\mathbb{R}^{1 \\times h_1}\\), \\(b^{(2)} \\in \\mathbb{R}\\)\n\n\n\nVorwärtspass: Hidden Layer\n\nAffiner Schritt:\n\\[\n\\bs{a}_i^{(1)} = \\bs{W}^{(1)} \\bs{x}_i + \\bs{b}^{(1)} \\in \\mathbb{R}^{h_1}\n\\]\nAktivierung (elementweise):\n\\[\n\\bs{h}_i = \\phi\\left( \\bs{a}_i^{(1)} \\right) \\in \\mathbb{R}^{h_1}\n\\]\n\n\n\nVorwärtspass: Output Layer\n\nAffiner Schritt:\n\\[\nz_i^{(2)} = \\bs{W}^{(2)} \\bs{h}_i + b^{(2)} \\in \\mathbb{R}\n\\]\nAktivierung:\n\\[\n\\hat{y}_i = \\sigma(z_i^{(2)}) \\in (0,1)\n\\]\n\n\n\nGesamtmodell als Funktion\n\nKomposition der Schritte:\n\\[\n\\hat{y}_i = \\sigma\\left( \\bs{W}^{(2)} \\cdot \\phi\\left( \\bs{W}^{(1)} \\bs{x}_i + \\bs{b}^{(1)} \\right) + b^{(2)} \\right)\n\\]\nFunktion \\(f_\\theta: \\mathbb{R}^d \\ra (0,1)\\) mit Parametern:\n\\[\n\\theta = \\left\\{ \\bs{W}^{(1)}, \\bs{b}^{(1)}, \\bs{W}^{(2)}, b^{(2)} \\right\\}\n\\]",
+    "crumbs": [
+      "Zentrale Algorithmen der künstlichen Intelligenz",
+      "Neuronale Netze II: MLP"
+    ]
+  },
+  {
+    "objectID": "include/02_04_MLP.html#vorwärtspropagation-im-mlp-beispiel",
+    "href": "include/02_04_MLP.html#vorwärtspropagation-im-mlp-beispiel",
+    "title": "Grundlagen der Künstlichen Intelligenz (GKI)",
+    "section": "Vorwärtspropagation im MLP: Beispiel",
+    "text": "Vorwärtspropagation im MLP: Beispiel\n\nBeispiel: Hidden Layer\n\n\\(d = 2\\), \\(h_1 = 3\\)\n\n\\(\\bs{x}_i = \\begin{pmatrix} 1 \\\\ -1 \\end{pmatrix}\\)\n\n\\(\\bs{W}^{(1)} = \\begin{pmatrix} 1 & 0 \\\\ 0 & -1 \\\\ 1 & 1 \\end{pmatrix}\\),\n\\(\\bs{b}^{(1)} = \\begin{pmatrix} 0 \\\\ 1 \\\\ 0 \\end{pmatrix}\\)\n\nAktivierung: \\(\\phi = \\text{ReLU}\\)\n\n\\[\n\\bs{a}_i^{(1)} =\n\\begin{pmatrix} 1 & 0 \\\\ 0 & -1 \\\\ 1 & 1 \\end{pmatrix}\n\\begin{pmatrix} 1 \\\\ -1 \\end{pmatrix}\n+\n\\begin{pmatrix} 0 \\\\ 1 \\\\ 0 \\end{pmatrix}\n=\n\\begin{pmatrix} 1 \\\\ 2 \\\\ 0 \\end{pmatrix}\n\\]\n\\[\n\\bs{h}_i = \\text{ReLU}\\left( \\bs{a}_i^{(1)} \\right) =\n\\begin{pmatrix} 1 \\\\ 2 \\\\ 0 \\end{pmatrix}\n\\]\n\n\nBeispiel: Output Layer\n\n\\(\\bs{W}^{(2)} = \\begin{pmatrix} 1 & -1 & 2 \\end{pmatrix}\\), \\(b^{(2)} = 0\\)\n\n\\[\nz_i^{(2)} =\n\\begin{pmatrix} 1 & -1 & 2 \\end{pmatrix}\n\\begin{pmatrix} 1 \\\\ 2 \\\\ 0 \\end{pmatrix}\n= 1 \\cdot 1 + (-1) \\cdot 2 + 2 \\cdot 0 = -1\n\\]\n\\[\n\\hat{y}_i = \\sigma(-1) \\approx 0.2689\n\\]\n\n\nInterpretation\n\nHidden Layer \\(\\ra\\) nichtlineare Repräsentation der Eingabe\n\nOutput Layer \\(\\ra\\) linearer Schritt + Sigmoid \\(\\ra\\) Wahrscheinlichkeit\n\nGesamtmodell ist vollständig differenzierbar",
+    "crumbs": [
+      "Zentrale Algorithmen der künstlichen Intelligenz",
+      "Neuronale Netze II: MLP"
+    ]
+  },
+  {
+    "objectID": "include/02_04_MLP.html#backpropagation",
+    "href": "include/02_04_MLP.html#backpropagation",
+    "title": "Grundlagen der Künstlichen Intelligenz (GKI)",
+    "section": "Backpropagation",
+    "text": "Backpropagation\n\nZiel\n\nEffizienter Gradient der Verlustfunktion bezüglich aller Modellparameter:\n\\[\n\\theta = \\left\\{ \\bs{W}^{(1)}, \\bs{b}^{(1)}, \\bs{W}^{(2)}, b^{(2)} \\right\\}\n\\]\nZentrale Methode: Backpropagation basierend auf Kettenregel der Ableitung\n\n\n\nWiederholung: Vorwärtspass\n\\[\n\\bs{a}_i^{(1)} = \\bs{W}^{(1)} \\bs{x}_i + \\bs{b}^{(1)} \\in \\mathbb{R}^{h_1}\n\\] \\[\n\\bs{h}_i = \\phi\\left( \\bs{a}_i^{(1)} \\right) \\in \\mathbb{R}^{h_1}\n\\] \\[\nz_i^{(2)} = \\bs{W}^{(2)} \\bs{h}_i + b^{(2)} \\in \\mathbb{R}\n\\] \\[\n\\hat{y}_i = \\sigma(z_i^{(2)}) \\in (0,1)\n\\]\n\\[\n\\mathcal{L}_i = -\\left[ y_i \\log \\hat{y}_i + (1 - y_i) \\log(1 - \\hat{y}_i) \\right]\n\\]\n\n\nSchritt 1: Ableitung am Output\n\nGesucht:\n\\[\n\\frac{\\partial \\mathcal{L}_i}{\\partial z_i^{(2)}}\n\\]\nHerleitung:\n\n\\(\\mathcal{L}_i\\) hängt von \\(\\hat{y}_i = \\sigma(z_i^{(2)})\\) ab\n\n\\(\\frac{d}{dz} \\mathcal{L}_i = (\\sigma(z_i^{(2)}) - y_i) \\cdot \\sigma'(z_i^{(2)})\\)\n\nmit \\(\\sigma'(z) = \\sigma(z)(1 - \\sigma(z))\\)\n\nErgibt: \\[\n\\frac{\\partial \\mathcal{L}_i}{\\partial z_i^{(2)}} = \\hat{y}_i - y_i\n\\]\n\n\n\nSchritt 2: Gradienten Output Layer\n\nFür \\(\\bs{W}^{(2)} \\in \\mathbb{R}^{1 \\times h_1}\\): \\[\n\\frac{\\partial \\mathcal{L}_i}{\\partial \\bs{W}^{(2)}} = (\\hat{y}_i - y_i) \\cdot \\bs{h}_i^\\top\n\\]\nFür \\(b^{(2)} \\in \\mathbb{R}\\): \\[\n\\frac{\\partial \\mathcal{L}_i}{\\partial b^{(2)}} = \\hat{y}_i - y_i\n\\]\n\n\n\nSchritt 3: Fehlerterm im Hidden Layer\n\nFehlerterm wird rückwärts weitergegeben: \\[\n\\bs{\\delta}_i^{(1)} = (\\hat{y}_i - y_i) \\cdot \\bs{W}^{(2)\\top} \\circ \\phi'\\left( \\bs{a}_i^{(1)} \\right)\n\\]\n\\(\\circ\\): Hadamard-Produkt (elementweise Multiplikation)\n\n\\(\\phi'(\\bs{a}_i^{(1)})\\): Ableitung der Aktivierungsfunktion pro Neuron\n\n\n\nSchritt 4: Gradienten Hidden Layer\n\nFür \\(\\bs{W}^{(1)} \\in \\mathbb{R}^{h_1 \\times d}\\): \\[\n\\frac{\\partial \\mathcal{L}_i}{\\partial \\bs{W}^{(1)}} = \\bs{\\delta}_i^{(1)} \\cdot \\bs{x}_i^\\top\n\\]\nFür \\(\\bs{b}^{(1)} \\in \\mathbb{R}^{h_1}\\): \\[\n\\frac{\\partial \\mathcal{L}_i}{\\partial \\bs{b}^{(1)}} = \\bs{\\delta}_i^{(1)}\n\\]\n\n\n\nGesamtalgorithmus: Backpropagation\n\nFür jedes \\(i = 1, \\dots, N\\):\n\nVorwärtspass: berechne \\(\\hat{y}_i\\)\n\nFehlerterm: \\(\\delta_i^{(2)} = \\hat{y}_i - y_i\\)\n\nRückpropagation: berechne \\(\\bs{\\delta}_i^{(1)}\\)\n\nGradienten für alle Gewichte und Bias berechnen\n\nSGD-Update: \\[\n\\theta \\leftarrow \\theta - \\eta \\cdot \\nabla_\\theta \\mathcal{L}_i\n\\]",
+    "crumbs": [
+      "Zentrale Algorithmen der künstlichen Intelligenz",
+      "Neuronale Netze II: MLP"
+    ]
+  },
+  {
+    "objectID": "include/02_04_MLP.html#training-und-praktische-aspekte",
+    "href": "include/02_04_MLP.html#training-und-praktische-aspekte",
+    "title": "Grundlagen der Künstlichen Intelligenz (GKI)",
+    "section": "Training und praktische Aspekte",
+    "text": "Training und praktische Aspekte\n\nWahl von Lernrate und Initialisierung\n\nZu große Lernrate \\(\\eta\\) \\(\\rightarrow\\) Divergenz\n\nZu kleine Lernrate \\(\\rightarrow\\) langsames Lernen\n\nHäufig: Start mit moderatem \\(\\eta\\) und Reduktion über Epochen\n\nInitialisierung der Gewichte:\n\nKleine Zufallswerte (z. B. Normalverteilung)\n\nVermeidung von Symmetrie: nicht alle Gewichte = 0\n\n\n\n\nOverfitting und Generalisierung\n\nZu hohe Modellkapazität \\(\\rightarrow\\) Anpassung an Rauschen in den Trainingsdaten\n\nSymptome:\n\nTraining loss sinkt weiter, Validation loss steigt\n\nKlassifikationsfehler im Test höher als erwartet\n\nLösung: Regularisierung oder Early Stopping\n\n\n\nMini-Batch Training und SGD\n\nSGD: Gewichtsupdate nach jedem Datenpunkt\n\nBatch Gradient Descent: über alle Daten summieren\n\nMini-Batch SGD:\n\nReduzierter Rechenaufwand pro Schritt\n\nStabilerer Verlauf durch Mittelung über kleine Teilmengen\n\n\nTypische Batchgrößen: \\(B = 32, 64, 128\\)\n\n\n\nRegularisierung\n\nL2-Regularisierung (Ridge): \\[\n\\mathcal{L}_\\text{reg} = \\mathcal{L} + \\lambda \\|\\bs{W}\\|_2^2\n\\]\nKontrolliert die Größe der Gewichte, verhindert Überanpassung\nDropout:\n\nZufälliges Deaktivieren von Neuronen während des Trainings\n\nErhöht Robustheit, reduziert Abhängigkeit einzelner Pfade\n\n\n\n\nGrenzen klassischer MLPs\n\nKeine Gedächtnisstruktur \\(\\rightarrow\\) nicht geeignet für zeitabhängige Daten\n\nEingaben müssen fester Länge sein \\(\\rightarrow\\) keine sequenzielle Verarbeitung\n\nTraining bei tieferen Architekturen problematisch:\n\nVanishing Gradient\n\nRechenaufwand steigt stark\n\nDeshalb: CNNs für Bilddaten, RNNs/LSTMs für Sequenzen",
+    "crumbs": [
+      "Zentrale Algorithmen der künstlichen Intelligenz",
+      "Neuronale Netze II: MLP"
+    ]
+  },
+  {
+    "objectID": "include/99_altklausuren_A1.html",
+    "href": "include/99_altklausuren_A1.html",
+    "title": "Grundlagen der Künstlichen Intelligenz (GKI)",
+    "section": "",
+    "text": "Aufgabenstellung der Übungsklausur\n\n\n\n\n\nLösung zur Übungsklausur\n\n\n\n\n\n\n\n\nAufgabenstellung der Klausur vom 09.12.2023\n\n\n\n\n\nLösung zur Klausur vom 09.12.2023\n\n\n\n\n\n\n\n\nAufgabenstellung der Klausur vom 09.03.2024\n\n\n\n\n\nLösung zur Klausur vom 09.03.2024\n\n\n\n\n\n\n\n\nAufgabenstellung der Klausur vom 22.06.2024\n\n\n\n\n\nLösung zur Klausur vom 22.06.2024\n\n\n\n\n\n\n\n\nAufgabenstellung der Klausur vom 14.09.2024\n\n\n\n\n\nLösung zur Klausur vom 14.09.2024\n\n\n\n\n\n\n\n\nAufgabenstellung der Klausur vom 14.12.2024\n\n\n\n\n\nLösung zur Klausur vom 14.12.2024\n\n\n\n\n\n\n\n\nAufgabenstellung der Klausur vom 15.03.2025\n\n\n\n\n\nLösung zur Klausur vom 15.03.2025\n\n\n\n\n\n\n\n\nAufgabenstellung der Klausur vom 21.06.2025\n\n\n\n\n\nLösung zur Klausur vom 21.06.2025",
     "crumbs": [
       "Altklausuren",
       "Aufgabentyp 1"
     ]
   },
   {
-    "objectID": "include/99_altklausuren.html#klausuraufgaben-zu-sb-01",
-    "href": "include/99_altklausuren.html#klausuraufgaben-zu-sb-01",
+    "objectID": "include/99_altklausuren_A1.html#klausuraufgaben-sb-01",
+    "href": "include/99_altklausuren_A1.html#klausuraufgaben-sb-01",
     "title": "Grundlagen der Künstlichen Intelligenz (GKI)",
     "section": "",
-    "text": "Nachfolgend finden Sie die Aufgabenstellung und die dazugehörige Musterlösung.\n\n\n\n\n\n\nFigure 1: Aufgabenstellung der Klausur vom 28.09.2024\n\n\n\n\n\n\n\n\n\nFigure 2: Lösung zur Klausur vom 28.09.2024",
+    "text": "Aufgabenstellung der Übungsklausur\n\n\n\n\n\nLösung zur Übungsklausur\n\n\n\n\n\n\n\n\nAufgabenstellung der Klausur vom 09.12.2023\n\n\n\n\n\nLösung zur Klausur vom 09.12.2023\n\n\n\n\n\n\n\n\nAufgabenstellung der Klausur vom 09.03.2024\n\n\n\n\n\nLösung zur Klausur vom 09.03.2024\n\n\n\n\n\n\n\n\nAufgabenstellung der Klausur vom 22.06.2024\n\n\n\n\n\nLösung zur Klausur vom 22.06.2024\n\n\n\n\n\n\n\n\nAufgabenstellung der Klausur vom 14.09.2024\n\n\n\n\n\nLösung zur Klausur vom 14.09.2024\n\n\n\n\n\n\n\n\nAufgabenstellung der Klausur vom 14.12.2024\n\n\n\n\n\nLösung zur Klausur vom 14.12.2024\n\n\n\n\n\n\n\n\nAufgabenstellung der Klausur vom 15.03.2025\n\n\n\n\n\nLösung zur Klausur vom 15.03.2025\n\n\n\n\n\n\n\n\nAufgabenstellung der Klausur vom 21.06.2025\n\n\n\n\n\nLösung zur Klausur vom 21.06.2025",
     "crumbs": [
       "Altklausuren",
       "Aufgabentyp 1"
     ]
   },
   {
-    "objectID": "include/01_02_themenfelder_kuenstliche_intelligenz.html",
-    "href": "include/01_02_themenfelder_kuenstliche_intelligenz.html",
+    "objectID": "include/99_altklausuren_A5.html",
+    "href": "include/99_altklausuren_A5.html",
     "title": "Grundlagen der Künstlichen Intelligenz (GKI)",
     "section": "",
-    "text": "Teilgebiet der KI: Programme verbessern sich durch Erfahrung\nDefinition (Tom M. Mitchell, 1997):\n\nA computer program learns from experience \\(E\\) w. r. t. tasks \\(T\\) and performance \\(P\\)\nif its performance at \\(T\\), measured by \\(P\\), improves with \\(E\\)\n\nML-Algorithmen erkennen Muster in Daten und lernen daraus\nUnterschied zu klassischen Programmen: Lernen durch Rückkopplung\nhier könnte Abbildung 2.1 stehen\n\n\n\n\n\nTrainingsdaten \\(\\ra\\) Hypothese \\(\\ra\\) Ergebnis \\(\\ra\\) Feedback\nZiel: Optimierung der Hypothese durch Rückkopplung\nzwei Modi:\n\nOffline-Lernen: Training einmalig vor Anwendung\nOnline-Lernen: kontinuierliche Anpassung im Betrieb",
+    "text": "Aufgabenstellung der Übungsklausur\n\n\n\n\n\nLösung zur Übungsklausur\n\n\n\n\n\n\n\n\nAufgabenstellung der Klausur vom 09.12.2023\n\n\n\n\n\nLösung zur Klausur vom 09.12.2023\n\n\n\n\n\n\n\n\nAufgabenstellung der Klausur vom 09.03.2024\n\n\n\n\n\nLösung zur Klausur vom 09.03.2024\n\n\n\n\n\n\n\n\nAufgabenstellung der Klausur vom 22.06.2024\n\n\n\n\n\nLösung zur Klausur vom 22.06.2024\n\n\n\n\n\n\n\n\nAufgabenstellung der Klausur vom 14.09.2024\n\n\n\n\n\nLösung zur Klausur vom 14.09.2024\n\n\n\n\n\n\n\n\nAufgabenstellung der Klausur vom 14.12.2024\n\n\n\n\n\nLösung zur Klausur vom 14.12.2024\n\n\n\n\n\n\n\n\nAufgabenstellung der Klausur vom 15.03.2025\n\n\n\n\n\nLösung zur Klausur vom 15.03.2025\n\n\n\n\n\n\n\n\nAufgabenstellung der Klausur vom 21.06.2025\n\n\n\n\n\nLösung zur Klausur vom 21.06.2025",
     "crumbs": [
-      "Einführung in die Künstliche Intelligenz",
-      "Themenfelder der Künstlichen Intelligenz"
+      "Altklausuren",
+      "Aufgabentyp 5"
     ]
   },
   {
-    "objectID": "include/01_02_themenfelder_kuenstliche_intelligenz.html#maschinelles-lernen-themenfelder-und-überblick",
-    "href": "include/01_02_themenfelder_kuenstliche_intelligenz.html#maschinelles-lernen-themenfelder-und-überblick",
+    "objectID": "include/99_altklausuren_A5.html#klausuraufgaben-sb-05",
+    "href": "include/99_altklausuren_A5.html#klausuraufgaben-sb-05",
     "title": "Grundlagen der Künstlichen Intelligenz (GKI)",
     "section": "",
-    "text": "Teilgebiet der KI: Programme verbessern sich durch Erfahrung\nDefinition (Tom M. Mitchell, 1997):\n\nA computer program learns from experience \\(E\\) w. r. t. tasks \\(T\\) and performance \\(P\\)\nif its performance at \\(T\\), measured by \\(P\\), improves with \\(E\\)\n\nML-Algorithmen erkennen Muster in Daten und lernen daraus\nUnterschied zu klassischen Programmen: Lernen durch Rückkopplung\nhier könnte Abbildung 2.1 stehen\n\n\n\n\n\nTrainingsdaten \\(\\ra\\) Hypothese \\(\\ra\\) Ergebnis \\(\\ra\\) Feedback\nZiel: Optimierung der Hypothese durch Rückkopplung\nzwei Modi:\n\nOffline-Lernen: Training einmalig vor Anwendung\nOnline-Lernen: kontinuierliche Anpassung im Betrieb",
+    "text": "Aufgabenstellung der Übungsklausur\n\n\n\n\n\nLösung zur Übungsklausur\n\n\n\n\n\n\n\n\nAufgabenstellung der Klausur vom 09.12.2023\n\n\n\n\n\nLösung zur Klausur vom 09.12.2023\n\n\n\n\n\n\n\n\nAufgabenstellung der Klausur vom 09.03.2024\n\n\n\n\n\nLösung zur Klausur vom 09.03.2024\n\n\n\n\n\n\n\n\nAufgabenstellung der Klausur vom 22.06.2024\n\n\n\n\n\nLösung zur Klausur vom 22.06.2024\n\n\n\n\n\n\n\n\nAufgabenstellung der Klausur vom 14.09.2024\n\n\n\n\n\nLösung zur Klausur vom 14.09.2024\n\n\n\n\n\n\n\n\nAufgabenstellung der Klausur vom 14.12.2024\n\n\n\n\n\nLösung zur Klausur vom 14.12.2024\n\n\n\n\n\n\n\n\nAufgabenstellung der Klausur vom 15.03.2025\n\n\n\n\n\nLösung zur Klausur vom 15.03.2025\n\n\n\n\n\n\n\n\nAufgabenstellung der Klausur vom 21.06.2025\n\n\n\n\n\nLösung zur Klausur vom 21.06.2025",
     "crumbs": [
-      "Einführung in die Künstliche Intelligenz",
-      "Themenfelder der Künstlichen Intelligenz"
-    ]
-  },
-  {
-    "objectID": "include/01_02_themenfelder_kuenstliche_intelligenz.html#ml-teilbereiche-und-abgrenzung",
-    "href": "include/01_02_themenfelder_kuenstliche_intelligenz.html#ml-teilbereiche-und-abgrenzung",
-    "title": "Grundlagen der Künstlichen Intelligenz (GKI)",
-    "section": "ML: Teilbereiche und Abgrenzung",
-    "text": "ML: Teilbereiche und Abgrenzung\n\n\nÜberblick\n\nUnsupervised Learning (UL): lernt aus nicht gelabelten Daten (z. B. Clustering)\nSupervised Learning (SL): lernt aus gelabelten Beispielen (z. B. Klassifikation, Regression)\nReinforcement Learning (RL): lernt durch Belohnung/Strafe in Interaktion mit Umwelt\n\n\n\nSupervised Learning (SL)\n\ngelabelte Trainingsdaten: \\((x_i, y_i)\\) bekannt für alle \\(i\\)\nZiel: Modell zur Vorhersage von \\(y\\) aus \\(x\\)\nzwei Problemtypen: Regression (z. B. Temperatur) und Klassifikation (z. B. medizinische Diagnose)\ntypische Anwendungen: Spracherkennung, Chatbots, Predictive Maintenance\ntypische Algorithmen: KNN, Random Forest, SVM, Neuronale Netze\n\n\n\nUnsupervised Learning (UL)\n\nkeine Zielvariable \\(y\\) – nur Merkmalsdaten \\(x\\)\nZiel: versteckte Muster oder Strukturen erkennen\nwichtigste Technik: Clustering\nBeispiele: Marktsegmente, soziale Gruppen, Themen in Texten\ntypische Algorithmen: K-Means, hierarchisches Clustering, spektrales Clustering\nAnwendung u. a. bei Empfehlungssystemen (z. B. Netflix)\n\n\n\nReinforcement Learning (RL)\n\nAgent lernt durch Interaktion mit einer Umgebung\nAktionen \\(a_t\\) verändern Zustand \\(s_t\\) und führen zu Reward \\(r_t\\)\nLernen basiert auf Trial & Error ohne vollständiges Umweltwissen\nZiel: Policy, die langfristig Belohnung maximiert\nzentrale Herausforderung: Exploration vs. Exploitation\ntypische Algorithmen: Q-Learning, SARSA, Monte Carlo, Temporal Difference\n\n\n\nTeilbereiche des ML (Überblick)\n\n\nACHTUNG: Auch diese Tabelle ist regelmäßig klausurrelevant",
-    "crumbs": [
-      "Einführung in die Künstliche Intelligenz",
-      "Themenfelder der Künstlichen Intelligenz"
-    ]
-  },
-  {
-    "objectID": "include/01_02_themenfelder_kuenstliche_intelligenz.html#robotik",
-    "href": "include/01_02_themenfelder_kuenstliche_intelligenz.html#robotik",
-    "title": "Grundlagen der Künstlichen Intelligenz (GKI)",
-    "section": "Robotik",
-    "text": "Robotik\n\nEinführung\n\nRobotik ist Teilbereich der KI, eng verbunden mit Maschinenbau und Informatik\nFokus: Interaktion mit physischer Welt über Sensoren und Aktoren\nzentrale Rolle in Industrie 4.0, z. B. durch fahrerlose Transportsysteme\ntypische Einsatzbereiche: automatisierte Produktion, Materialfluss, Mensch-Maschine-Kooperation\nzwei zentrale Robotertypen:\n\nCobots – kollaborative Roboter\nFTS/AMR – autonome Transportfahrzeuge\n\n\n\n\nCobots: kollaborative Roboter\n\nCobots arbeiten direkt mit Menschen ohne Schutzvorrichtung zusammen\nzentrale Idee: Kombination menschlicher Flexibilität mit robotischer Ausdauer\nvier Haupttypen nach ISO 10218:\n\nSicherheitsüberwachter Stopp\nGeschwindigkeit/Abstandsüberwachung\nLeistungs- und Kraftbegrenzung\nHandführung\n\n\n\n\nACHTUNG: Klausur (14.09.2024): bisher einmalig folgende Tabelle abgefragt:\n\n\n\nRobotik: Anwendungen kollaborativer Roboter\n\nPick & Place: Objekte greifen, bewegen, neu positionieren\nMaschinenversorgung: z. B. CNC-, Spritzgieß- oder Stanzmaschinen\nProzessunterstützung: Kleben, Bohren, Schweißen mit Endeffektor\nFertigstellung: Polieren, Schleifen, Entgraten mit Kraftsensor\nQualitätskontrolle: Bilderfassung & Sortierung mit maschinellem Sehen\nVerpackung: Entlastung bei monotonen Routineaufgaben\nGesundheitswesen:\n\nUnterstützung bei Hygiene, Vitaldaten, Blutabnahme\nautomatisierte Reha-Maßnahmen",
-    "crumbs": [
-      "Einführung in die Künstliche Intelligenz",
-      "Themenfelder der Künstlichen Intelligenz"
-    ]
-  },
-  {
-    "objectID": "include/01_02_themenfelder_kuenstliche_intelligenz.html#autonome-transportsysteme",
-    "href": "include/01_02_themenfelder_kuenstliche_intelligenz.html#autonome-transportsysteme",
-    "title": "Grundlagen der Künstlichen Intelligenz (GKI)",
-    "section": "Autonome Transportsysteme",
-    "text": "Autonome Transportsysteme\n\nEinführung: Fahrerlose Transportsysteme (FTS)\n\nselbstgesteuerte Fahrzeuge für Lager, Produktion, Logistik\nzwei Typen:\n\nAGV (automated guided vehicle): folgen Leitlinien (z. B. Magnetband)\nAMR (autonomous mobile robot): navigieren frei per Sensorik\n\nVorteile: effizienter Materialfluss, geringe Personalkosten, hohe Präzision\n\n\n\n\nACHTUNG: Klausur (14.09.2024): bisher einmalig folgende Tabelle abgefragt:\n\n\n\nUnterschiede AGV vs. AMR\n\nNavigation: AGV folgt externer Infrastruktur, AMR navigiert eigenständig\nHindernisse: AGV wird blockiert, AMR umfährt\nFlexibilität: AMR kann spontan neue Ziele anfahren\nKosten: AMR teurer, aber geringere Installationskosten\nSicherheit: AGV sicher bei klarer Spur, AMR benötigt Sicherheitsprotokolle",
-    "crumbs": [
-      "Einführung in die Künstliche Intelligenz",
-      "Themenfelder der Künstlichen Intelligenz"
-    ]
-  },
-  {
-    "objectID": "include/01_02_themenfelder_kuenstliche_intelligenz.html#evolutionäre-algorithmen-genetische-verfahren",
-    "href": "include/01_02_themenfelder_kuenstliche_intelligenz.html#evolutionäre-algorithmen-genetische-verfahren",
-    "title": "Grundlagen der Künstlichen Intelligenz (GKI)",
-    "section": "Evolutionäre Algorithmen: genetische Verfahren",
-    "text": "Evolutionäre Algorithmen: genetische Verfahren\n\nGenetische Algorithmen (GA): Grundprinzip\n\nheuristische Optimierung basierend auf Darwin’scher Selektion\nLösung = Chromosom; Variable = Gen\nZiel: mit Selektion, Crossover und Mutation bessere Lösungen erzeugen\nFitnessfunktion bewertet Qualität jeder Lösung\n\n\n\n\nOperatoren: Selektion, Crossover, Mutation\n\nSelektion: fittere Individuen haben höhere Auswahlwahrscheinlichkeit\nCrossover: Austausch von Genen zur Kombination guter Eigenschaften\nMutation: zufällige Genänderung zur Vermeidung lokaler Minima\nElitismus: beste Lösungen direkt in nächste Generation übernommen\n\n\n\n\nACHTUNG: Klausurrelevant mehrmals – Definitionen\nBeachte die jeweiligen einzeln hervorgehoen Sätze !\n\nKreuzung (Crossover):\nDie natürliche Selektion ermöglicht die Auswahl von Individuen als Eltern für den Crossover-Schritt. Dieser Schritt ermöglicht den Austausch von Genen zwischen Individuen, um neue Lösungen zu erzeugen. In der Literatur gibt es verschiedene Crossover-Methoden. Bei der einfachsten Methode werden die Chromosomen an zwei oder drei Stellen geteilt. Anschließend werden dann die Gene zwischen zwei Chromosomen ausgetauscht.\nMutation:\nMit Hilfe der Mutation werden zufällige Veränderungen in den Genen erzeugt. Es gibt einen Parameter namens Mutationswahrscheinlichkeit \\((P_m)\\), der für jedes Gen in einem Kinderchromosom verwendet wird, das in der Crossover-Phase erzeugt wird. Dieser Parameter ist eine Zahl im Intervall von \\([0,1]\\). Für jedes Gen im neuen Kindchromosom wird eine Zufallszahl im gleichen Intervall erzeugt. Wenn diese Zufallszahl kleiner als \\(P_m\\) ist, wird dem Gen eine Zufallszahl mit der unteren und oberen Grenze zugewiesen.",
-    "crumbs": [
-      "Einführung in die Künstliche Intelligenz",
-      "Themenfelder der Künstlichen Intelligenz"
-    ]
-  },
-  {
-    "objectID": "include/01_02_themenfelder_kuenstliche_intelligenz.html#schwarmintelligenz",
-    "href": "include/01_02_themenfelder_kuenstliche_intelligenz.html#schwarmintelligenz",
-    "title": "Grundlagen der Künstlichen Intelligenz (GKI)",
-    "section": "Schwarmintelligenz",
-    "text": "Schwarmintelligenz\n\nGrundprinzip\n\nkollektives Verhalten einfacher Agenten (z. B. Insekten, Vögel)\nSystemverhalten entsteht durch lokale Interaktion & Selbstorganisation\nkein zentrales Steuerungselement, aber globale Zielerreichung möglich\nrobust gegenüber Ausfällen, sehr flexibel einsetzbar\n\n\n\nAmeisenalgorithmus (Ant Colony Optimization, ACO)\n\nVorbild: reale Ameisen suchen effizient kürzeste Wege\nKommunikation über Pheromonspuren – Stigmergie\nBestandteile:\n\nkünstliche Ameisen als Lösungskonstrukte\nPheromon-Aktualisierung (Verstärkung & Verdunstung)\noptional: Daemon-Strategien zur Sicherung guter Lösungen\n\ngeeignet für kombinatorische Optimierung (z. B. Routing-Probleme)",
-    "crumbs": [
-      "Einführung in die Künstliche Intelligenz",
-      "Themenfelder der Künstlichen Intelligenz"
-    ]
-  },
-  {
-    "objectID": "include/01_02_themenfelder_kuenstliche_intelligenz.html#expertensysteme-es-und-multiagentensysteme-mas",
-    "href": "include/01_02_themenfelder_kuenstliche_intelligenz.html#expertensysteme-es-und-multiagentensysteme-mas",
-    "title": "Grundlagen der Künstlichen Intelligenz (GKI)",
-    "section": "Expertensysteme (ES) und Multiagentensysteme (MAS)",
-    "text": "Expertensysteme (ES) und Multiagentensysteme (MAS)\n\nAufbau und Arbeitsweise\n\nwissensbasierte Systeme: simulieren Expertenwissen\nbestehen aus:\n\nWissensbasis: Fakten, Regeln, Heuristiken\nInferenzmaschine: Schlussfolgerung durch Verkettung\nBenutzeroberfläche: Eingabe/Interaktion\n\nVorwärtsverkettung: datengetriebene Ableitung\nRückwärtsverkettung: hypothesengeleitete Prüfung\n\n\n\n\nEigenschaften und Herausforderungen\n\nNetzwerk autonomer Agenten zur Lösung komplexer Probleme\nzentrale Merkmale:\n\nSituiertheit, Autonomie, Inferenzfähigkeit, Reaktivität\nProaktivität, soziales Verhalten\n\nVorteile: Robustheit, Skalierbarkeit, Wiederverwendbarkeit\nHerausforderungen: Koordination, Abstraktion, Konfliktlösung",
-    "crumbs": [
-      "Einführung in die Künstliche Intelligenz",
-      "Themenfelder der Künstlichen Intelligenz"
+      "Altklausuren",
+      "Aufgabentyp 5"
     ]
   },
   {
@@ -198,6 +209,28 @@
     ]
   },
   {
+    "objectID": "include/99_altklausuren_A2.html",
+    "href": "include/99_altklausuren_A2.html",
+    "title": "Grundlagen der Künstlichen Intelligenz (GKI)",
+    "section": "",
+    "text": "Aufgabenstellung der Übungsklausur\n\n\n\n\n\nLösung zur Übungsklausur\n\n\n\n\n\n\n\n\nAufgabenstellung der Klausur vom 09.12.2023\n\n\n\n\n\nLösung zur Klausur vom 09.12.2023\n\n\n\n\n\n\n\n\nAufgabenstellung der Klausur vom 09.03.2024\n\n\n\n\n\nLösung zur Klausur vom 09.03.2024\n\n\n\n\n\n\n\n\nAufgabenstellung der Klausur vom 22.06.2024\n\n\n\n\n\nLösung zur Klausur vom 22.06.2024\n\n\n\n\n\n\n\n\nAufgabenstellung der Klausur vom 14.09.2024\n\n\n\n\n\nLösung zur Klausur vom 14.09.2024\n\n\n\n\n\n\n\n\nAufgabenstellung der Klausur vom 14.12.2024\n\n\n\n\n\nLösung zur Klausur vom 14.12.2024\n\n\n\n\n\n\n\n\nAufgabenstellung der Klausur vom 15.03.2025\n\n\n\n\n\nLösung zur Klausur vom 15.03.2025\n\n\n\n\n\n\n\n\nAufgabenstellung der Klausur vom 21.06.2025\n\n\n\n\n\nLösung zur Klausur vom 21.06.2025",
+    "crumbs": [
+      "Altklausuren",
+      "Aufgabentyp 2"
+    ]
+  },
+  {
+    "objectID": "include/99_altklausuren_A2.html#klausuraufgaben-sb-02",
+    "href": "include/99_altklausuren_A2.html#klausuraufgaben-sb-02",
+    "title": "Grundlagen der Künstlichen Intelligenz (GKI)",
+    "section": "",
+    "text": "Aufgabenstellung der Übungsklausur\n\n\n\n\n\nLösung zur Übungsklausur\n\n\n\n\n\n\n\n\nAufgabenstellung der Klausur vom 09.12.2023\n\n\n\n\n\nLösung zur Klausur vom 09.12.2023\n\n\n\n\n\n\n\n\nAufgabenstellung der Klausur vom 09.03.2024\n\n\n\n\n\nLösung zur Klausur vom 09.03.2024\n\n\n\n\n\n\n\n\nAufgabenstellung der Klausur vom 22.06.2024\n\n\n\n\n\nLösung zur Klausur vom 22.06.2024\n\n\n\n\n\n\n\n\nAufgabenstellung der Klausur vom 14.09.2024\n\n\n\n\n\nLösung zur Klausur vom 14.09.2024\n\n\n\n\n\n\n\n\nAufgabenstellung der Klausur vom 14.12.2024\n\n\n\n\n\nLösung zur Klausur vom 14.12.2024\n\n\n\n\n\n\n\n\nAufgabenstellung der Klausur vom 15.03.2025\n\n\n\n\n\nLösung zur Klausur vom 15.03.2025\n\n\n\n\n\n\n\n\nAufgabenstellung der Klausur vom 21.06.2025\n\n\n\n\n\nLösung zur Klausur vom 21.06.2025",
+    "crumbs": [
+      "Altklausuren",
+      "Aufgabentyp 2"
+    ]
+  },
+  {
     "objectID": "include/02_01_grundlagen_und_definitionen.html",
     "href": "include/02_01_grundlagen_und_definitionen.html",
     "title": "Grundlagen der Künstlichen Intelligenz (GKI)",
@@ -239,6 +272,304 @@
     "crumbs": [
       "Zentrale Algorithmen der künstlichen Intelligenz",
       "Grundlagen und Definitionen"
+    ]
+  },
+  {
+    "objectID": "include/03_04_iris_structured_regression.html",
+    "href": "include/03_04_iris_structured_regression.html",
+    "title": "Kapitel 4 — Entscheidungsbäume zur Regression (winequality-red)",
+    "section": "",
+    "text": "Einleitung: Im Gegensatz zu Klassifikationsbäume, die verwendet werden, um eine Zielvariable zu kategorisieren, werden Regressionsbäume verwendet werden, um eine numerische Zielvariable vorherzusagen**.\nZiel: Regressionsbaum mit scikit-learn für die Vorhersage der Weinqualität trainieren, evaluieren (MSE, RMSE, \\(R^2\\)), visualisieren und durch Hyperparametertuning verbessern\nInhalt: 1. Daten laden und vorbereiten 2. Basismodell: DecisionTreeRegressor 3. Evaluierung: MSE, RMSE, \\(R^2\\) und Fehleranalyse 4. Baumvisualisierung 5. Grid Search: max_depth, min_samples_leaf, min_samples_split\n# Umgebungs-Setup\nimport sys, os, math, warnings\nimport numpy as np\nimport pandas as pd\n\nfrom sklearn.model_selection import train_test_split, GridSearchCV\nfrom sklearn.tree import DecisionTreeRegressor, plot_tree, export_text\nfrom sklearn.metrics import mean_squared_error, r2_score, mean_absolute_error\n\nimport matplotlib.pyplot as plt\n\n# Reproduzierbarkeit\nnp.random.seed(42)\n\n# Versionsinfo (nützlich für Reproduktion)\nprint({\n    \"python\": sys.version.split()[0],\n    \"numpy\": np.__version__,\n    \"pandas\": pd.__version__,\n})\n\n{'python': '3.10.18', 'numpy': '2.2.6', 'pandas': '2.3.1'}",
+    "crumbs": [
+      "Implementierung mit Hilfe von Python",
+      "Entscheidungsbäume",
+      "Regression: Wein-Datensatz"
+    ]
+  },
+  {
+    "objectID": "include/03_04_iris_structured_regression.html#daten-laden-und-vorbereiten",
+    "href": "include/03_04_iris_structured_regression.html#daten-laden-und-vorbereiten",
+    "title": "Kapitel 4 — Entscheidungsbäume zur Regression (winequality-red)",
+    "section": "1. Daten laden und vorbereiten",
+    "text": "1. Daten laden und vorbereiten\nAus dem UCI Machine Learning Repository wird der Datensatz winequailty-red für die Verprobung von Weinen verwendet. Der winequality-red Datenset ist Teil des UCI Machine Learning Repositories und enthält chemische Analyse von Weinen sowie die Qualitätseinschätzungen von Experten. Der Datensatz enthält 1599 Einträge und 12 Merkmale:\n\nfixed acidity\nvolatile acidity\ncitric acid\nresidual sugar\nchlorides\nfree sulfur dioxide\ntotal sulfur dioxide\ndensity\npH\nsulphates\nalcohol\n\nZielvariable: quality (ganzzahlig 0–10) -&gt; Qualität des Weins, die auf einer Skala von 0 bis 10 bewertet wird\nLegen Sie die CSV lokal ab und tragen den Pfad unten ein. Erwartete Spalten (Features):\n\n# Passen Sie den Pfad an, falls nötig\nDATA_PATH = \"../data/processed/winequality-red.csv\"  # z.B. \".../winequality-red.csv\"\n\nif not os.path.exists(DATA_PATH):\n    raise FileNotFoundError(\n        f\"Datei nicht gefunden: {DATA_PATH}\\n\"\n        \"Laden Sie 'winequality-red.csv' vom UCI Repository herunter und \"\n        \"speichern Sie sie am angegebenen Ort.\"\n    )\n\n# Laden\ndf = pd.read_csv(DATA_PATH, sep=\";\")\n\n# Schneller Datencheck (knapp gehalten)\nprint(df.shape)\nprint(df.isnull().sum().to_string())\ndf.head(3)\n\n(1599, 12)\nfixed acidity           0\nvolatile acidity        0\ncitric acid             0\nresidual sugar          0\nchlorides               0\nfree sulfur dioxide     0\ntotal sulfur dioxide    0\ndensity                 0\npH                      0\nsulphates               0\nalcohol                 0\nquality                 0\n\n\n\n\n\n\n\n\n\nfixed acidity\nvolatile acidity\ncitric acid\nresidual sugar\nchlorides\nfree sulfur dioxide\ntotal sulfur dioxide\ndensity\npH\nsulphates\nalcohol\nquality\n\n\n\n\n0\n7.4\n0.70\n0.00\n1.9\n0.076\n11.0\n34.0\n0.9978\n3.51\n0.56\n9.4\n5\n\n\n1\n7.8\n0.88\n0.00\n2.6\n0.098\n25.0\n67.0\n0.9968\n3.20\n0.68\n9.8\n5\n\n\n2\n7.8\n0.76\n0.04\n2.3\n0.092\n15.0\n54.0\n0.9970\n3.26\n0.65\n9.8\n5\n\n\n\n\n\n\n\n\nTrain/Test-Split\nWir trennen Features (X) und Ziel (y) und splitten 80/20.\n\n# Feature-/Ziel-Definition\nX = df.drop(columns=[\"quality\"])\ny = df[\"quality\"]\n\n# Train/Test\nX_tr, X_tst, y_tr, y_tst = train_test_split(\n    X, y, test_size=0.2, random_state=42\n)\n\nX_tr.shape, X_tst.shape\n\n((1279, 11), (320, 11))",
+    "crumbs": [
+      "Implementierung mit Hilfe von Python",
+      "Entscheidungsbäume",
+      "Regression: Wein-Datensatz"
+    ]
+  },
+  {
+    "objectID": "include/03_04_iris_structured_regression.html#basismodell-decisiontreeregressor",
+    "href": "include/03_04_iris_structured_regression.html#basismodell-decisiontreeregressor",
+    "title": "Kapitel 4 — Entscheidungsbäume zur Regression (winequality-red)",
+    "section": "2. Basismodell: DecisionTreeRegressor",
+    "text": "2. Basismodell: DecisionTreeRegressor\nWir starten mit Defaults und prüfen Baumtiefe und Blattanzahl.\n\n# Hinweis zu 'criterion':\n# Neuere scikit-learn Versionen nutzen 'squared_error' (früher 'mse').\nreg = DecisionTreeRegressor(random_state=42)\n\nreg.fit(X_tr, y_tr)\n\nprint(\"Tiefe:\", reg.get_depth())\nprint(\"Blätter:\", reg.get_n_leaves())\n\nTiefe: 25\nBlätter: 335",
+    "crumbs": [
+      "Implementierung mit Hilfe von Python",
+      "Entscheidungsbäume",
+      "Regression: Wein-Datensatz"
+    ]
+  },
+  {
+    "objectID": "include/03_04_iris_structured_regression.html#evaluierung-mse-rmse-r2-und-mae",
+    "href": "include/03_04_iris_structured_regression.html#evaluierung-mse-rmse-r2-und-mae",
+    "title": "Kapitel 4 — Entscheidungsbäume zur Regression (winequality-red)",
+    "section": "3. Evaluierung: MSE, RMSE, \\(R^2\\) und MAE",
+    "text": "3. Evaluierung: MSE, RMSE, \\(R^2\\) und MAE\nEs gibt verschiedene Kriterien, die zur Messung der Qualität eines Splits verwendet werden können, z. B. der mittlere quadratische Fehler (MSE – Mean Squared Error), der mittlere absolute Fehler (MAE – Mean Absolute Error) usw.\nStandardmäßig verwendet DecisionTreeRegressor das MSE-Kriterium (squared_error) für den Split, und keine Begrenzung für die Anzahl der Blattknoten oder die Tiefe des Baums. Das ist auch das am häufigsten verwendete Kriterium für Regressionsbäume allgemein. Dieser ist als Summe der quadratischen Unterschiede zwischen den vorhergesagten und den tatsächlichen Werten für jede Stichprobe in einer Teilmenge definiert:\n$ MSE=_{i=1}^n(y_i - _i );, $\nwobei \\(n\\) die Anyahl der Stichproben in der Teilmenge ist, \\(y_i\\) der tatsächliche Zielwert für die \\(i\\)-te Stichprobe ist, und \\(\\widehat{y}_i\\) der vorhergesagte Zielwert für \\(i\\)-te Stichprobe ist.\nKnoten-Impurität (Split-Kriterium) für einen Knoten \\(S\\):\n\\[\n\\mathrm{MSE}(S)\n= \\frac{1}{\\lvert S\\rvert}\\sum_{i\\in S}\\bigl(y_i-\\bar y_S\\bigr)^2,\n\\qquad\n\\bar y_S=\\frac{1}{\\lvert S\\rvert}\\sum_{i\\in S} y_i\n\\]\nImpurity-Decrease eines Splits $S(S_L,S_R):\n\\[\n\\Delta\n= \\mathrm{MSE}(S)\n- \\frac{\\lvert S_L\\rvert}{\\lvert S\\rvert}\\,\\mathrm{MSE}(S_L)\n- \\frac{\\lvert S_R\\rvert}{\\lvert S\\rvert}\\,\\mathrm{MSE}(S_R)\n\\]\nTestmetriken:\n\\[\n\\mathrm{MSE}_{\\text{test}}\n= \\frac{1}{n}\\sum_{i=1}^{n}\\bigl(y_i-\\hat y_i\\bigr)^2,\n\\qquad\n\\mathrm{RMSE}=\\sqrt{\\mathrm{MSE}_{\\text{test}}}\n\\]\n\\[\n\\mathrm{MAE}\n= \\frac{1}{n}\\sum_{i=1}^{n}\\lvert y_i-\\hat y_i\\rvert,\n\\qquad\nR^2\n= 1-\\frac{\\sum_{i=1}^{n}\\bigl(y_i-\\hat y_i\\bigr)^2}\n{\\sum_{i=1}^{n}\\bigl(y_i-\\bar y\\bigr)^2},\n\\quad\n\\bar y=\\frac{1}{n}\\sum_{i=1}^{n}y_i\n\\]\nWir berechnen MSE, RMSE, MAE und \\(R^2\\) auf dem Testset.\n\ny_hat = reg.predict(X_tst)\n\nmse = mean_squared_error(y_tst, y_hat)\nrmse = math.sqrt(mse)\nmae = mean_absolute_error(y_tst, y_hat)\nr2 = r2_score(y_tst, y_hat)\n\nprint(f\"MSE  : {mse:.4f}\")\nprint(f\"RMSE : {rmse:.4f}\")\nprint(f\"MAE  : {mae:.4f}\")\nprint(f\"R^2  : {r2:.4f}\")\n\nMSE  : 0.6062\nRMSE : 0.7786\nMAE  : 0.4625\nR^2  : 0.0723",
+    "crumbs": [
+      "Implementierung mit Hilfe von Python",
+      "Entscheidungsbäume",
+      "Regression: Wein-Datensatz"
+    ]
+  },
+  {
+    "objectID": "include/03_04_iris_structured_regression.html#mse-basiertes-splitten-kernidee",
+    "href": "include/03_04_iris_structured_regression.html#mse-basiertes-splitten-kernidee",
+    "title": "Kapitel 4 — Entscheidungsbäume zur Regression (winequality-red)",
+    "section": "MSE-basiertes Splitten: Kernidee",
+    "text": "MSE-basiertes Splitten: Kernidee\n\nDaten am aktuellen Knoten \\(S\\) nach Merkmal \\(x_j\\) und Schwelle \\(v\\) in zwei Teilmengen aufteilen\n\\(S_L=\\{\\,i\\in S: x_{ij}&lt;v\\,\\}\\), \\(S_R=\\{\\,i\\in S: x_{ij}\\ge v\\,\\}\\)\nFür jede Teilmenge den MSE berechnen\nFeature–Schwellenwert-Paar wählen, das den gewichteten Kind-MSE minimiert\n\n\nBewertung eines Splits\n\nTeilmengen-MSE\n\n\\[\n\\mathrm{MSE}(S)=\\frac{1}{\\lvert S\\rvert}\\sum_{i\\in S}\\bigl(y_i-\\bar y_S\\bigr)^2,\n\\qquad\n\\bar y_S=\\frac{1}{\\lvert S\\rvert}\\sum_{i\\in S} y_i\n\\]\n\nSplit-Score (zu minimieren)\n\n\\[\n\\text{Score}(x_j,v)\n=\\frac{\\lvert S_L\\rvert}{\\lvert S\\rvert}\\,\\mathrm{MSE}(S_L)\n+\\frac{\\lvert S_R\\rvert}{\\lvert S\\rvert}\\,\\mathrm{MSE}(S_R)\n\\]\n\nBester Split: \\((x_j^{*}, v^{*})=\\arg\\min_{j,v}\\ \\text{Score}(x_j, v)\\)\n\n\n\nBeispielhafte Partition\n\nGegeben Merkmal \\(x\\) und Schwelle \\(v\\):\nLinkes Kind \\(S_L=\\{\\,x&lt;v\\,\\}\\), Rechtes Kind \\(S_R=\\{\\,x\\ge v\\,\\}\\)\nBerechne \\(\\mathrm{MSE}(S_L)\\) und \\(\\mathrm{MSE}(S_R)\\), bilde gewichteten Mittelwert, wähle minimales Paar\n\n\n\nHinweis zu Ausreißern\n\nMSE ist ausreißerempfindlich: Große Fehler \\((|y_i-\\hat y_i|)\\) werden quadratisch gewichtet\n\nKonsequenz: Baum kann Ausreißer überanpassen (tiefe/kleine Blätter)\n\nPraxis: Hyperparameter wie max_depth, min_samples_leaf, min_samples_split zur Regularisierung setzen\n\n\n# Residuen\nres = y_tst - y_hat\nplt.figure()\nplt.hist(res, bins=20)\nplt.xlabel(\"Residuum\")\nplt.ylabel(\"Häufigkeit\")\nplt.title(\"Residuenverteilung\")\nplt.show()",
+    "crumbs": [
+      "Implementierung mit Hilfe von Python",
+      "Entscheidungsbäume",
+      "Regression: Wein-Datensatz"
+    ]
+  },
+  {
+    "objectID": "include/03_04_iris_structured_regression.html#baumvisualisierung",
+    "href": "include/03_04_iris_structured_regression.html#baumvisualisierung",
+    "title": "Kapitel 4 — Entscheidungsbäume zur Regression (winequality-red)",
+    "section": "4. Baumvisualisierung",
+    "text": "4. Baumvisualisierung\nWir zeichnen den trainierten Regressionsbaum. Zusätzlich geben wir eine kompakte Textdarstellung aus.\n\nplt.figure(figsize=(15,7))\nplot_tree(reg, filled=True)\nplt.title(\"DecisionTreeRegressor\")\nplt.show()\n\n\n\n\n\n\n\n\n\n# Textdarstellung (gekürzt über max_depth)\nprint(export_text(reg, feature_names=list(X.columns), max_depth=3))\n\n|--- alcohol &lt;= 10.53\n|   |--- sulphates &lt;= 0.57\n|   |   |--- density &lt;= 1.00\n|   |   |   |--- chlorides &lt;= 0.25\n|   |   |   |   |--- truncated branch of depth 14\n|   |   |   |--- chlorides &gt;  0.25\n|   |   |   |   |--- value: [3.00]\n|   |   |--- density &gt;  1.00\n|   |   |   |--- value: [3.00]\n|   |--- sulphates &gt;  0.57\n|   |   |--- volatile acidity &lt;= 0.41\n|   |   |   |--- sulphates &lt;= 0.68\n|   |   |   |   |--- truncated branch of depth 7\n|   |   |   |--- sulphates &gt;  0.68\n|   |   |   |   |--- truncated branch of depth 9\n|   |   |--- volatile acidity &gt;  0.41\n|   |   |   |--- total sulfur dioxide &lt;= 65.50\n|   |   |   |   |--- truncated branch of depth 22\n|   |   |   |--- total sulfur dioxide &gt;  65.50\n|   |   |   |   |--- truncated branch of depth 9\n|--- alcohol &gt;  10.53\n|   |--- sulphates &lt;= 0.58\n|   |   |--- volatile acidity &lt;= 1.00\n|   |   |   |--- volatile acidity &lt;= 0.38\n|   |   |   |   |--- truncated branch of depth 8\n|   |   |   |--- volatile acidity &gt;  0.38\n|   |   |   |   |--- truncated branch of depth 9\n|   |   |--- volatile acidity &gt;  1.00\n|   |   |   |--- chlorides &lt;= 0.08\n|   |   |   |   |--- truncated branch of depth 2\n|   |   |   |--- chlorides &gt;  0.08\n|   |   |   |   |--- value: [3.00]\n|   |--- sulphates &gt;  0.58\n|   |   |--- alcohol &lt;= 11.55\n|   |   |   |--- total sulfur dioxide &lt;= 61.50\n|   |   |   |   |--- truncated branch of depth 12\n|   |   |   |--- total sulfur dioxide &gt;  61.50\n|   |   |   |   |--- truncated branch of depth 5\n|   |   |--- alcohol &gt;  11.55\n|   |   |   |--- sulphates &lt;= 0.69\n|   |   |   |   |--- truncated branch of depth 10\n|   |   |   |--- sulphates &gt;  0.69\n|   |   |   |   |--- truncated branch of depth 10",
+    "crumbs": [
+      "Implementierung mit Hilfe von Python",
+      "Entscheidungsbäume",
+      "Regression: Wein-Datensatz"
+    ]
+  },
+  {
+    "objectID": "include/03_04_iris_structured_regression.html#hyperparameter-grid-search",
+    "href": "include/03_04_iris_structured_regression.html#hyperparameter-grid-search",
+    "title": "Kapitel 4 — Entscheidungsbäume zur Regression (winequality-red)",
+    "section": "5. Hyperparameter: Grid Search",
+    "text": "5. Hyperparameter: Grid Search\nWir optimieren max_depth, min_samples_leaf und min_samples_split per 5-fach-CV. Zielmetrik: negativer MSE (entspricht MSE-Minimierung).\n\nparam_grid = {\n    \"max_depth\": [None, 3, 5, 7, 10],\n    \"min_samples_leaf\": [1, 3, 5, 10, 20],\n    \"min_samples_split\": [2, 5, 10],\n}\n\ngcv = GridSearchCV(\n    estimator=DecisionTreeRegressor(random_state=42),\n    param_grid=param_grid,\n    cv=5,\n    scoring=\"neg_mean_squared_error\",\n    n_jobs=None,\n)\n\ngcv.fit(X_tr, y_tr)\n\nprint(\"Beste Parameter:\", gcv.best_params_)\nprint(\"CV-Score (neg MSE):\", f\"{gcv.best_score_:.4f}\")\n\nbest_reg = gcv.best_estimator_\ny_hat_best = best_reg.predict(X_tst)\n\nmse_b = mean_squared_error(y_tst, y_hat_best)\nrmse_b = math.sqrt(mse_b)\nmae_b = mean_absolute_error(y_tst, y_hat_best)\nr2_b = r2_score(y_tst, y_hat_best)\n\nprint(\"\\nTestleistung (bestes Modell)\")\nprint(f\"MSE  : {mse_b:.4f}\")\nprint(f\"RMSE : {rmse_b:.4f}\")\nprint(f\"MAE  : {mae_b:.4f}\")\nprint(f\"R^2  : {r2_b:.4f}\")\n\nBeste Parameter: {'max_depth': 5, 'min_samples_leaf': 20, 'min_samples_split': 2}\nCV-Score (neg MSE): -0.4539\n\nTestleistung (bestes Modell)\nMSE  : 0.4382\nRMSE : 0.6620\nMAE  : 0.5200\nR^2  : 0.3295\n\n\n\nHinweis\n\nErgebnisse variieren je nach CSV-Version, Preprocessing und Zufallssplit\nFür reproduzierbare Splits random_state konstant halten",
+    "crumbs": [
+      "Implementierung mit Hilfe von Python",
+      "Entscheidungsbäume",
+      "Regression: Wein-Datensatz"
+    ]
+  },
+  {
+    "objectID": "include/03_03_mnist_structured.html",
+    "href": "include/03_03_mnist_structured.html",
+    "title": "Klassifikation von MNIST und Fashion-MNIST",
+    "section": "",
+    "text": "In diesem Notebook vergleichen wir verschiedene neuronale Netzarchitekturen zur Klassifikation von Bildern aus dem MNIST- und Fashion-MNIST-Datensatz.",
+    "crumbs": [
+      "Implementierung mit Hilfe von Python",
+      "Neuronale Netze mit Keras",
+      "Optimierung eines Modells: MNIST-Datensatz"
+    ]
+  },
+  {
+    "objectID": "include/03_03_mnist_structured.html#bibliotheken-importieren",
+    "href": "include/03_03_mnist_structured.html#bibliotheken-importieren",
+    "title": "Klassifikation von MNIST und Fashion-MNIST",
+    "section": "Bibliotheken importieren",
+    "text": "Bibliotheken importieren\n\nimport keras as K\nimport matplotlib.pyplot as plt\nfrom keras.models import Sequential\nfrom keras.layers import Conv2D, MaxPooling2D, Flatten, Dense, Dropout\n\n2025-08-15 16:16:55.350334: I external/local_xla/xla/tsl/cuda/cudart_stub.cc:31] Could not find cuda drivers on your machine, GPU will not be used.\n2025-08-15 16:16:55.395656: I tensorflow/core/platform/cpu_feature_guard.cc:210] This TensorFlow binary is optimized to use available CPU instructions in performance-critical operations.\nTo enable the following instructions: AVX2 FMA, in other operations, rebuild TensorFlow with the appropriate compiler flags.\n2025-08-15 16:16:56.952808: I external/local_xla/xla/tsl/cuda/cudart_stub.cc:31] Could not find cuda drivers on your machine, GPU will not be used.",
+    "crumbs": [
+      "Implementierung mit Hilfe von Python",
+      "Neuronale Netze mit Keras",
+      "Optimierung eines Modells: MNIST-Datensatz"
+    ]
+  },
+  {
+    "objectID": "include/03_03_mnist_structured.html#mnist-datensatz-laden-und-vorbereiten",
+    "href": "include/03_03_mnist_structured.html#mnist-datensatz-laden-und-vorbereiten",
+    "title": "Klassifikation von MNIST und Fashion-MNIST",
+    "section": "MNIST-Datensatz laden und vorbereiten",
+    "text": "MNIST-Datensatz laden und vorbereiten\n\nLaden des Fashion-MNIST-Datensatzes aus Keras (10 Klassen, z. B. Schuhe, Pullover, Taschen)\nNormalisierung der Bilddaten auf Werte im Bereich [0, 1]\nUrsprünglich liegen die Grauwerte im Bereich [0, 255]\n\n\nmnist = K.datasets.mnist\n(x_train, y_train), (x_test, y_test) = mnist.load_data()\nx_train = x_train / 255.0\nx_test = x_test / 255.0\n\n\nDownloading data from https://storage.googleapis.com/tensorflow/tf-keras-datasets/mnist.npz\n\n\n       0/11490434 ━━━━━━━━━━━━━━━━━━━━ 0s 0s/step\n\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\n 9199616/11490434 ━━━━━━━━━━━━━━━━━━━━ 0s 0us/step\n\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\n11490434/11490434 ━━━━━━━━━━━━━━━━━━━━ 0s 0us/step",
+    "crumbs": [
+      "Implementierung mit Hilfe von Python",
+      "Neuronale Netze mit Keras",
+      "Optimierung eines Modells: MNIST-Datensatz"
+    ]
+  },
+  {
+    "objectID": "include/03_03_mnist_structured.html#one-hot-encoding-der-zielvariablen",
+    "href": "include/03_03_mnist_structured.html#one-hot-encoding-der-zielvariablen",
+    "title": "Klassifikation von MNIST und Fashion-MNIST",
+    "section": "One-Hot-Encoding der Zielvariablen",
+    "text": "One-Hot-Encoding der Zielvariablen\n\nOne-Hot-Encoding der Zielvariable (10 Klassen -&gt; Vektor mit 10 Einträgen)\nBeispiel: Klasse 3 -&gt; [0, 0, 0, 1, 0, 0, 0, 0, 0, 0]\n\n\ny_train = K.utils.to_categorical(y_train)\ny_test = K.utils.to_categorical(y_test)",
+    "crumbs": [
+      "Implementierung mit Hilfe von Python",
+      "Neuronale Netze mit Keras",
+      "Optimierung eines Modells: MNIST-Datensatz"
+    ]
+  },
+  {
+    "objectID": "include/03_03_mnist_structured.html#feedforward-netzwerk-erstellen",
+    "href": "include/03_03_mnist_structured.html#feedforward-netzwerk-erstellen",
+    "title": "Klassifikation von MNIST und Fashion-MNIST",
+    "section": "Feedforward-Netzwerk erstellen",
+    "text": "Feedforward-Netzwerk erstellen\nEin einfaches Dense-Netz mit zwei Hidden-Layern je 128 Neuronen:\n\nWieder: sequentieller Aufbau eines FFNN K.models.Sequential()\nFlatten-Ebene wandelt 2D-Bilder (28x28) in 1D-Vektoren (784)\nzwei versteckte Dense-Schichten mit jeweils 128 Neuronen, ReLU-Aktivierung\nAusgabeschicht mit 10 Neuronen (für 10 Klassen), Softmax-Aktivierung für Wahrscheinlichkeitsverteilung\n\n\nmodel = K.models.Sequential()\nmodel.add(K.layers.Flatten())\nmodel.add(K.layers.Dense(128, activation='relu'))\nmodel.add(K.layers.Dense(128, activation='relu'))\nmodel.add(K.layers.Dense(10, activation='softmax'))",
+    "crumbs": [
+      "Implementierung mit Hilfe von Python",
+      "Neuronale Netze mit Keras",
+      "Optimierung eines Modells: MNIST-Datensatz"
+    ]
+  },
+  {
+    "objectID": "include/03_03_mnist_structured.html#kompilieren-des-modells",
+    "href": "include/03_03_mnist_structured.html#kompilieren-des-modells",
+    "title": "Klassifikation von MNIST und Fashion-MNIST",
+    "section": "Kompilieren des Modells",
+    "text": "Kompilieren des Modells\n\nAdam-Optimierer\nCategorical Crossentropy (für mehrklassige Klassifikation mit One-Hot-Labels)\nAccuracy als Metrik\n\n\nmodel.compile(\n    optimizer='adam',\n    loss='categorical_crossentropy',\n    metrics=['accuracy']\n)\n\n2025-08-15 16:16:57.815219: E external/local_xla/xla/stream_executor/cuda/cuda_platform.cc:51] failed call to cuInit: INTERNAL: CUDA error: Failed call to cuInit: UNKNOWN ERROR (303)",
+    "crumbs": [
+      "Implementierung mit Hilfe von Python",
+      "Neuronale Netze mit Keras",
+      "Optimierung eines Modells: MNIST-Datensatz"
+    ]
+  },
+  {
+    "objectID": "include/03_03_mnist_structured.html#training-des-feedforward-netzes",
+    "href": "include/03_03_mnist_structured.html#training-des-feedforward-netzes",
+    "title": "Klassifikation von MNIST und Fashion-MNIST",
+    "section": "Training des Feedforward-Netzes",
+    "text": "Training des Feedforward-Netzes\n\n30 Epochen\nBatch-Größe 128\n30 % der Trainingsdaten werden für Validierung verwendet\n\n\nhistory = model.fit(\n    x_train,\n    y_train,\n    epochs=30,\n    batch_size=128,\n    validation_split=0.3,\n    verbose=2)\n\nEpoch 1/30\n329/329 - 2s - 6ms/step - accuracy: 0.8965 - loss: 0.3714 - val_accuracy: 0.9450 - val_loss: 0.1880\nEpoch 2/30\n329/329 - 1s - 3ms/step - accuracy: 0.9570 - loss: 0.1487 - val_accuracy: 0.9586 - val_loss: 0.1390\nEpoch 3/30\n329/329 - 1s - 3ms/step - accuracy: 0.9696 - loss: 0.1017 - val_accuracy: 0.9617 - val_loss: 0.1285\nEpoch 4/30\n329/329 - 1s - 3ms/step - accuracy: 0.9778 - loss: 0.0760 - val_accuracy: 0.9666 - val_loss: 0.1107\nEpoch 5/30\n329/329 - 1s - 3ms/step - accuracy: 0.9822 - loss: 0.0588 - val_accuracy: 0.9684 - val_loss: 0.1080\nEpoch 6/30\n329/329 - 1s - 3ms/step - accuracy: 0.9862 - loss: 0.0470 - val_accuracy: 0.9721 - val_loss: 0.0993\nEpoch 7/30\n329/329 - 1s - 3ms/step - accuracy: 0.9892 - loss: 0.0375 - val_accuracy: 0.9718 - val_loss: 0.0986\nEpoch 8/30\n329/329 - 1s - 3ms/step - accuracy: 0.9901 - loss: 0.0311 - val_accuracy: 0.9721 - val_loss: 0.1016\nEpoch 9/30\n329/329 - 1s - 3ms/step - accuracy: 0.9930 - loss: 0.0248 - val_accuracy: 0.9717 - val_loss: 0.1056\nEpoch 10/30\n329/329 - 1s - 3ms/step - accuracy: 0.9942 - loss: 0.0192 - val_accuracy: 0.9728 - val_loss: 0.1056\nEpoch 11/30\n329/329 - 1s - 3ms/step - accuracy: 0.9942 - loss: 0.0179 - val_accuracy: 0.9683 - val_loss: 0.1205\nEpoch 12/30\n329/329 - 1s - 3ms/step - accuracy: 0.9945 - loss: 0.0178 - val_accuracy: 0.9735 - val_loss: 0.1141\nEpoch 13/30\n329/329 - 1s - 3ms/step - accuracy: 0.9974 - loss: 0.0097 - val_accuracy: 0.9730 - val_loss: 0.1170\nEpoch 14/30\n329/329 - 1s - 3ms/step - accuracy: 0.9970 - loss: 0.0098 - val_accuracy: 0.9727 - val_loss: 0.1251\nEpoch 15/30\n329/329 - 1s - 3ms/step - accuracy: 0.9956 - loss: 0.0128 - val_accuracy: 0.9699 - val_loss: 0.1364\nEpoch 16/30\n329/329 - 1s - 3ms/step - accuracy: 0.9966 - loss: 0.0103 - val_accuracy: 0.9741 - val_loss: 0.1183\nEpoch 17/30\n329/329 - 1s - 3ms/step - accuracy: 0.9979 - loss: 0.0069 - val_accuracy: 0.9742 - val_loss: 0.1185\nEpoch 18/30\n329/329 - 1s - 3ms/step - accuracy: 0.9977 - loss: 0.0079 - val_accuracy: 0.9738 - val_loss: 0.1293\nEpoch 19/30\n329/329 - 1s - 3ms/step - accuracy: 0.9987 - loss: 0.0058 - val_accuracy: 0.9727 - val_loss: 0.1384\nEpoch 20/30\n329/329 - 1s - 3ms/step - accuracy: 0.9979 - loss: 0.0070 - val_accuracy: 0.9679 - val_loss: 0.1708\nEpoch 21/30\n329/329 - 1s - 3ms/step - accuracy: 0.9969 - loss: 0.0098 - val_accuracy: 0.9742 - val_loss: 0.1335\nEpoch 22/30\n329/329 - 1s - 3ms/step - accuracy: 0.9990 - loss: 0.0032 - val_accuracy: 0.9754 - val_loss: 0.1362\nEpoch 23/30\n329/329 - 1s - 3ms/step - accuracy: 0.9975 - loss: 0.0082 - val_accuracy: 0.9743 - val_loss: 0.1427\nEpoch 24/30\n329/329 - 1s - 3ms/step - accuracy: 0.9973 - loss: 0.0086 - val_accuracy: 0.9739 - val_loss: 0.1453\nEpoch 25/30\n329/329 - 1s - 3ms/step - accuracy: 0.9968 - loss: 0.0097 - val_accuracy: 0.9741 - val_loss: 0.1527\nEpoch 26/30\n329/329 - 1s - 3ms/step - accuracy: 0.9974 - loss: 0.0074 - val_accuracy: 0.9744 - val_loss: 0.1455\nEpoch 27/30\n329/329 - 1s - 3ms/step - accuracy: 0.9980 - loss: 0.0057 - val_accuracy: 0.9730 - val_loss: 0.1586\nEpoch 28/30\n329/329 - 1s - 3ms/step - accuracy: 0.9987 - loss: 0.0039 - val_accuracy: 0.9742 - val_loss: 0.1500\nEpoch 29/30\n329/329 - 1s - 3ms/step - accuracy: 0.9995 - loss: 0.0020 - val_accuracy: 0.9746 - val_loss: 0.1523\nEpoch 30/30\n329/329 - 1s - 3ms/step - accuracy: 0.9998 - loss: 9.3368e-04 - val_accuracy: 0.9771 - val_loss: 0.1387",
+    "crumbs": [
+      "Implementierung mit Hilfe von Python",
+      "Neuronale Netze mit Keras",
+      "Optimierung eines Modells: MNIST-Datensatz"
+    ]
+  },
+  {
+    "objectID": "include/03_03_mnist_structured.html#hinweise",
+    "href": "include/03_03_mnist_structured.html#hinweise",
+    "title": "Klassifikation von MNIST und Fashion-MNIST",
+    "section": "Hinweise:",
+    "text": "Hinweise:\n\nDas history-Objekt speichert den gesamten Trainingsverlauf (Loss und Accuracy je Epoche)\nNur dadurch ist es möglich, die Trainings- und Validierungskurven im Nachhinein zu plotten\nDie resultierende Grafik zeigt beide Verläufe (Accuracy auf Trainings- und Validierungsdaten)\nBei einfachem MNIST (Ziffern 0–9) erreicht das Netz bereits sehr hohe Genauigkeit\nIm Vergleich dazu ist Fashion-MNIST (Kleidungsstücke) komplexer und führt zu geringerer Genauigkeit\nUrsache: visuelle Ähnlichkeit mancher Klassen (z. B. Shirt vs. Pullover)",
+    "crumbs": [
+      "Implementierung mit Hilfe von Python",
+      "Neuronale Netze mit Keras",
+      "Optimierung eines Modells: MNIST-Datensatz"
+    ]
+  },
+  {
+    "objectID": "include/03_03_mnist_structured.html#trainingsverlauf-feedforward-netz",
+    "href": "include/03_03_mnist_structured.html#trainingsverlauf-feedforward-netz",
+    "title": "Klassifikation von MNIST und Fashion-MNIST",
+    "section": "Trainingsverlauf (Feedforward-Netz)",
+    "text": "Trainingsverlauf (Feedforward-Netz)\nVergleich im Trainingsdatensatz von sowohl Train- als auch Validationsaccuracy\n\nfig, ax = plt.subplots()\nax.set_title('Accuracy over epochs')\nax.set_xlabel('epochs')\nax.set_ylabel('accuracy')\nax.plot(history.history['accuracy'], label='train')\nax.plot(history.history['val_accuracy'], label='validation')\nax.legend(loc='upper left')\nplt.show()\nplt.savefig('../figs/mnist_accuracy.png')\n\n\n\n\n\n\n\n\n&lt;Figure size 672x480 with 0 Axes&gt;",
+    "crumbs": [
+      "Implementierung mit Hilfe von Python",
+      "Neuronale Netze mit Keras",
+      "Optimierung eines Modells: MNIST-Datensatz"
+    ]
+  },
+  {
+    "objectID": "include/03_03_mnist_structured.html#convolutional-neural-networks-cnn-mit-fashion-mnist",
+    "href": "include/03_03_mnist_structured.html#convolutional-neural-networks-cnn-mit-fashion-mnist",
+    "title": "Klassifikation von MNIST und Fashion-MNIST",
+    "section": "Convolutional Neural Networks (CNN) mit Fashion-MNIST",
+    "text": "Convolutional Neural Networks (CNN) mit Fashion-MNIST\nZiel: Verbesserung der Genauigkeit gegenüber einem einfachen Feedforward-Netz.\n\nfashion = K.datasets.fashion_mnist\n(x_train_mf, y_train_mf), (x_test_mf, y_test_mf) = fashion.load_data()\nx_train_mf = x_train_mf / 255.0\nx_test_mf = x_test_mf / 255.0\ny_train_mf = K.utils.to_categorical(y_train_mf)\ny_test_mf = K.utils.to_categorical(y_test_mf)\n\n\nDownloading data from https://storage.googleapis.com/tensorflow/tf-keras-datasets/train-labels-idx1-ubyte.gz\n\n\n    0/29515 ━━━━━━━━━━━━━━━━━━━━ 0s 0s/step\n\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\n29515/29515 ━━━━━━━━━━━━━━━━━━━━ 0s 0us/step\n\nDownloading data from https://storage.googleapis.com/tensorflow/tf-keras-datasets/train-images-idx3-ubyte.gz\n\n\n       0/26421880 ━━━━━━━━━━━━━━━━━━━━ 0s 0s/step\n\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\n 6021120/26421880 ━━━━━━━━━━━━━━━━━━━━ 0s 0us/step\n\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\n13066240/26421880 ━━━━━━━━━━━━━━━━━━━━ 0s 0us/step\n\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\n22061056/26421880 ━━━━━━━━━━━━━━━━━━━━ 0s 0us/step\n\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\n26421880/26421880 ━━━━━━━━━━━━━━━━━━━━ 0s 0us/step\n\nDownloading data from https://storage.googleapis.com/tensorflow/tf-keras-datasets/t10k-labels-idx1-ubyte.gz\n\n\n   0/5148 ━━━━━━━━━━━━━━━━━━━━ 0s 0s/step\n\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\n5148/5148 ━━━━━━━━━━━━━━━━━━━━ 0s 0us/step\n\nDownloading data from https://storage.googleapis.com/tensorflow/tf-keras-datasets/t10k-images-idx3-ubyte.gz\n\n\n      0/4422102 ━━━━━━━━━━━━━━━━━━━━ 0s 0s/step\n\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\n4422102/4422102 ━━━━━━━━━━━━━━━━━━━━ 0s 0us/step",
+    "crumbs": [
+      "Implementierung mit Hilfe von Python",
+      "Neuronale Netze mit Keras",
+      "Optimierung eines Modells: MNIST-Datensatz"
+    ]
+  },
+  {
+    "objectID": "include/03_03_mnist_structured.html#cnn-architektur-definieren",
+    "href": "include/03_03_mnist_structured.html#cnn-architektur-definieren",
+    "title": "Klassifikation von MNIST und Fashion-MNIST",
+    "section": "CNN-Architektur definieren",
+    "text": "CNN-Architektur definieren\n\nDer erste Layer ist ein Conv2D-Layer:\n\n32 Filter mit einer Kerneldimension von 3×3\nReLU-Aktivierung\ninput_shape=(28, 28, 1): Eingabebilder sind 28×28 Pixel mit 1 Kanal (grau)\n\nAnschließend reduziert ein **MaxPooling2D-Layer* die räumliche Dimension der Featuremaps\nDer Flatten-Layer wandelt die 2D-Ausgabe in einen 1D-Vektor um, sodass dieser an vollverbundene (Dense) Schichten übergeben werden kann\nEine Dense-Schicht mit 100 Neuronen und **ReLU-Aktivierung* als Hidden-Layer\nAusgabeschicht für 10 Klassen (z. B. Ziffern oder Kleidungsstücke), Softmax-Aktivierung liefert Wahrscheinlichkeiten\n\n\nmodel2 = Sequential()\nmodel2.add(Conv2D(32, (3, 3), activation = 'relu', input_shape=(28, 28, 1)))\nmodel2.add(MaxPooling2D((2, 2)))\nmodel2.add(Flatten())\nmodel2.add(Dense(100, activation = 'relu'))\nmodel2.add(Dense(10, activation = 'softmax'))\n\n/opt/hostedtoolcache/Python/3.10.18/x64/lib/python3.10/site-packages/keras/src/layers/convolutional/base_conv.py:113: UserWarning:\n\nDo not pass an `input_shape`/`input_dim` argument to a layer. When using Sequential models, prefer using an `Input(shape)` object as the first layer in the model instead.",
+    "crumbs": [
+      "Implementierung mit Hilfe von Python",
+      "Neuronale Netze mit Keras",
+      "Optimierung eines Modells: MNIST-Datensatz"
+    ]
+  },
+  {
+    "objectID": "include/03_03_mnist_structured.html#kompilierung-des-cnn-modells",
+    "href": "include/03_03_mnist_structured.html#kompilierung-des-cnn-modells",
+    "title": "Klassifikation von MNIST und Fashion-MNIST",
+    "section": "Kompilierung des CNN-Modells",
+    "text": "Kompilierung des CNN-Modells\n\nOptimierer: Adam (effizient, adaptiv)\nVerlustfunktion: categorical_crossentropy (geeignet für mehrklassige Klassifikation mit One-Hot-Labels)\nMetrik: accuracy\n\n\nmodel2.compile(\n    optimizer = 'adam', loss = 'categorical_crossentropy',\n    metrics = ['accuracy'])\n\n\nx_train_mf = x_train_mf.reshape(-1, 28, 28, 1)\nx_test_mf = x_test_mf.reshape(-1, 28, 28, 1)",
+    "crumbs": [
+      "Implementierung mit Hilfe von Python",
+      "Neuronale Netze mit Keras",
+      "Optimierung eines Modells: MNIST-Datensatz"
+    ]
+  },
+  {
+    "objectID": "include/03_03_mnist_structured.html#training-des-cnns-auf-fashion-mnist",
+    "href": "include/03_03_mnist_structured.html#training-des-cnns-auf-fashion-mnist",
+    "title": "Klassifikation von MNIST und Fashion-MNIST",
+    "section": "Training des CNNs auf Fashion-MNIST",
+    "text": "Training des CNNs auf Fashion-MNIST\n\nx_train_mf und y_train_mf: normalisierte Trainingsbilder und One-Hot-Labels\nx_test_mf und y_test_mf: Testdaten zur Validierung\n30 Epochen, Batch-Größe 128\n\n\nhistory = model2.fit(\n    x_train_mf, y_train_mf,\n    epochs=30,\n    batch_size=128,\n    validation_data=(x_test_mf, y_test_mf),\n    verbose=2\n)\n\nEpoch 1/30\n469/469 - 9s - 19ms/step - accuracy: 0.8462 - loss: 0.4441 - val_accuracy: 0.8760 - val_loss: 0.3517\nEpoch 2/30\n469/469 - 7s - 16ms/step - accuracy: 0.8953 - loss: 0.2953 - val_accuracy: 0.8881 - val_loss: 0.3020\nEpoch 3/30\n469/469 - 7s - 15ms/step - accuracy: 0.9079 - loss: 0.2564 - val_accuracy: 0.9003 - val_loss: 0.2770\nEpoch 4/30\n469/469 - 7s - 16ms/step - accuracy: 0.9186 - loss: 0.2265 - val_accuracy: 0.9004 - val_loss: 0.2690\nEpoch 5/30\n469/469 - 7s - 15ms/step - accuracy: 0.9237 - loss: 0.2076 - val_accuracy: 0.9080 - val_loss: 0.2578\nEpoch 6/30\n469/469 - 7s - 15ms/step - accuracy: 0.9309 - loss: 0.1904 - val_accuracy: 0.9109 - val_loss: 0.2493\nEpoch 7/30\n469/469 - 7s - 15ms/step - accuracy: 0.9375 - loss: 0.1710 - val_accuracy: 0.9089 - val_loss: 0.2554\nEpoch 8/30\n469/469 - 7s - 16ms/step - accuracy: 0.9427 - loss: 0.1570 - val_accuracy: 0.9153 - val_loss: 0.2502\nEpoch 9/30\n469/469 - 7s - 16ms/step - accuracy: 0.9483 - loss: 0.1448 - val_accuracy: 0.9162 - val_loss: 0.2426\nEpoch 10/30\n469/469 - 10s - 22ms/step - accuracy: 0.9513 - loss: 0.1345 - val_accuracy: 0.9172 - val_loss: 0.2451\nEpoch 11/30\n469/469 - 7s - 15ms/step - accuracy: 0.9572 - loss: 0.1190 - val_accuracy: 0.9151 - val_loss: 0.2610\nEpoch 12/30\n469/469 - 7s - 15ms/step - accuracy: 0.9598 - loss: 0.1099 - val_accuracy: 0.9190 - val_loss: 0.2612\nEpoch 13/30\n469/469 - 7s - 15ms/step - accuracy: 0.9627 - loss: 0.1021 - val_accuracy: 0.9146 - val_loss: 0.2725\nEpoch 14/30\n469/469 - 7s - 15ms/step - accuracy: 0.9676 - loss: 0.0913 - val_accuracy: 0.9149 - val_loss: 0.2916\nEpoch 15/30\n469/469 - 7s - 15ms/step - accuracy: 0.9702 - loss: 0.0824 - val_accuracy: 0.9183 - val_loss: 0.2832\nEpoch 16/30\n469/469 - 7s - 16ms/step - accuracy: 0.9747 - loss: 0.0732 - val_accuracy: 0.9129 - val_loss: 0.3137\nEpoch 17/30\n469/469 - 7s - 15ms/step - accuracy: 0.9772 - loss: 0.0658 - val_accuracy: 0.9181 - val_loss: 0.3001\nEpoch 18/30\n469/469 - 7s - 15ms/step - accuracy: 0.9783 - loss: 0.0622 - val_accuracy: 0.9117 - val_loss: 0.3264\nEpoch 19/30\n469/469 - 7s - 16ms/step - accuracy: 0.9819 - loss: 0.0533 - val_accuracy: 0.9190 - val_loss: 0.3113\nEpoch 20/30\n469/469 - 7s - 15ms/step - accuracy: 0.9827 - loss: 0.0499 - val_accuracy: 0.9135 - val_loss: 0.3659\nEpoch 21/30\n469/469 - 7s - 15ms/step - accuracy: 0.9857 - loss: 0.0425 - val_accuracy: 0.9157 - val_loss: 0.3499\nEpoch 22/30\n469/469 - 7s - 15ms/step - accuracy: 0.9877 - loss: 0.0376 - val_accuracy: 0.9160 - val_loss: 0.3729\nEpoch 23/30\n469/469 - 7s - 16ms/step - accuracy: 0.9885 - loss: 0.0344 - val_accuracy: 0.9162 - val_loss: 0.3772\nEpoch 24/30\n469/469 - 7s - 15ms/step - accuracy: 0.9895 - loss: 0.0320 - val_accuracy: 0.9122 - val_loss: 0.4280\nEpoch 25/30\n469/469 - 7s - 15ms/step - accuracy: 0.9888 - loss: 0.0321 - val_accuracy: 0.9140 - val_loss: 0.4163\nEpoch 26/30\n469/469 - 7s - 16ms/step - accuracy: 0.9917 - loss: 0.0250 - val_accuracy: 0.9152 - val_loss: 0.4080\nEpoch 27/30\n469/469 - 7s - 16ms/step - accuracy: 0.9911 - loss: 0.0269 - val_accuracy: 0.9176 - val_loss: 0.4133\nEpoch 28/30\n469/469 - 7s - 16ms/step - accuracy: 0.9932 - loss: 0.0229 - val_accuracy: 0.9136 - val_loss: 0.4390\nEpoch 29/30\n469/469 - 7s - 16ms/step - accuracy: 0.9934 - loss: 0.0203 - val_accuracy: 0.9144 - val_loss: 0.4733\nEpoch 30/30\n469/469 - 7s - 16ms/step - accuracy: 0.9954 - loss: 0.0165 - val_accuracy: 0.9175 - val_loss: 0.4419",
+    "crumbs": [
+      "Implementierung mit Hilfe von Python",
+      "Neuronale Netze mit Keras",
+      "Optimierung eines Modells: MNIST-Datensatz"
+    ]
+  },
+  {
+    "objectID": "include/03_03_mnist_structured.html#visualisierung-des-cnn-trainingsverlaufs",
+    "href": "include/03_03_mnist_structured.html#visualisierung-des-cnn-trainingsverlaufs",
+    "title": "Klassifikation von MNIST und Fashion-MNIST",
+    "section": "Visualisierung des CNN-Trainingsverlaufs",
+    "text": "Visualisierung des CNN-Trainingsverlaufs\n\nfig, ax = plt.subplots()\nax.set_title('Accuracy over epochs')\nax.set_xlabel('epochs')\nax.set_ylabel('accuracy')\nax.plot(history.history['accuracy'], label = 'train')\nax.plot(history.history['val_accuracy'], label = 'validation')\nax.legend(loc = 'upper left')\nplt.show()\nplt.savefig('../figs/mnist_accuracy_convolutional.png')\n\n\n\n\n\n\n\n\n&lt;Figure size 672x480 with 0 Axes&gt;",
+    "crumbs": [
+      "Implementierung mit Hilfe von Python",
+      "Neuronale Netze mit Keras",
+      "Optimierung eines Modells: MNIST-Datensatz"
+    ]
+  },
+  {
+    "objectID": "include/03_03_mnist_structured.html#zusammenfassung",
+    "href": "include/03_03_mnist_structured.html#zusammenfassung",
+    "title": "Klassifikation von MNIST und Fashion-MNIST",
+    "section": "Zusammenfassung",
+    "text": "Zusammenfassung\n\nDas CNN beginnt mit einem Conv2D-Layer:\nEr verwendet 32 Filter mit einer Kernelgröße von 3x3\nDiese extrahieren lokale Bildmerkmale (z. B. Kanten, Texturen)\nDie erste Zahl (32) gibt die Anzahl der Filter (= Ausgabekanäle) an\nEine höhere Anzahl an Filtern erhöht die Modellkapazität, aber auch den Rechenaufwand\n\nIn empirischen Tests zeigt sich: - Bereits einfache CNNs erreichen ~99 % Trainingsgenauigkeit und ~91 % Testgenauigkeit - Dies entspricht einem signifikanten Fortschritt gegenüber klassischen Feedforward-Netzen\nFür eine bessere Generalisierbarkeit wurden zusätzliche Experimente durchgeführt: - Variation der Anzahl der Filter im ersten Conv2D-Layer (z. B. 32, 40, 48, 56) - Das Modell mit 48 Filtern schnitt im Mittel am besten auf den Testdaten ab\nEine weitere bewährte Technik zur Vermeidung von Overfitting ist der Einsatz eines Dropout-Layers: - Während des Trainings werden zufällig ausgewählte Neuronen deaktiviert - Dies verhindert eine zu starke Abhängigkeit von einzelnen Aktivierungen - Ziel: bessere Generalisierbarkeit auf unbekannte Daten",
+    "crumbs": [
+      "Implementierung mit Hilfe von Python",
+      "Neuronale Netze mit Keras",
+      "Optimierung eines Modells: MNIST-Datensatz"
+    ]
+  },
+  {
+    "objectID": "include/03_03_mnist_structured.html#cnn-mit-dropout-zur-vermeidung-von-overfitting",
+    "href": "include/03_03_mnist_structured.html#cnn-mit-dropout-zur-vermeidung-von-overfitting",
+    "title": "Klassifikation von MNIST und Fashion-MNIST",
+    "section": "CNN mit Dropout zur Vermeidung von Overfitting",
+    "text": "CNN mit Dropout zur Vermeidung von Overfitting\nEin Dropout-Layer deaktiviert während des Trainings zufällig 10 % der Neuronen im vorherigen Layer. Ziel: Netz soll robuster gegen Überanpassung werden und besser auf neuen Daten generalisieren\n\nmodel = Sequential()\nmodel.add(Conv2D(32, (3, 3), activation = 'relu', input_shape=(28, 28, 1)))\nmodel.add(MaxPooling2D((2, 2)))\nmodel.add(Dropout(0.1)) # 10 % der Neuronen werden zufällig deaktiviert\nmodel.add(Flatten())\nmodel.add(Dense(100, activation = 'relu'))\nmodel.add(Dense(10, activation = 'softmax'))",
+    "crumbs": [
+      "Implementierung mit Hilfe von Python",
+      "Neuronale Netze mit Keras",
+      "Optimierung eines Modells: MNIST-Datensatz"
+    ]
+  },
+  {
+    "objectID": "include/99_altklausuren_A3.html",
+    "href": "include/99_altklausuren_A3.html",
+    "title": "Grundlagen der Künstlichen Intelligenz (GKI)",
+    "section": "",
+    "text": "Aufgabenstellung der Übungsklausur\n\n\n\n\n\nLösung zur Übungsklausur\n\n\n\n\n\n\n\n\nAufgabenstellung der Klausur vom 09.12.2023\n\n\n\n\n\nLösung zur Klausur vom 09.12.2023\n\n\n\n\n\n\n\n\nAufgabenstellung der Klausur vom 09.03.2024\n\n\n\n\n\nLösung zur Klausur vom 09.03.2024\n\n\n\n\n\n\n\n\nAufgabenstellung der Klausur vom 22.06.2024\n\n\n\n\n\nLösung zur Klausur vom 22.06.2024\n\n\n\n\n\n\n\n\nAufgabenstellung der Klausur vom 14.09.2024\n\n\n\n\n\nLösung zur Klausur vom 14.09.2024\n\n\n\n\n\n\n\n\nAufgabenstellung der Klausur vom 14.12.2024\n\n\n\n\n\nLösung zur Klausur vom 14.12.2024\n\n\n\n\n\n\n\n\nAufgabenstellung der Klausur vom 15.03.2025\n\n\n\n\n\nLösung zur Klausur vom 15.03.2025\n\n\n\n\n\n\n\n\nAufgabenstellung der Klausur vom 21.06.2025\n\n\n\n\n\nLösung zur Klausur vom 21.06.2025",
+    "crumbs": [
+      "Altklausuren",
+      "Aufgabentyp 3"
+    ]
+  },
+  {
+    "objectID": "include/99_altklausuren_A3.html#klausuraufgaben-sb-03",
+    "href": "include/99_altklausuren_A3.html#klausuraufgaben-sb-03",
+    "title": "Grundlagen der Künstlichen Intelligenz (GKI)",
+    "section": "",
+    "text": "Aufgabenstellung der Übungsklausur\n\n\n\n\n\nLösung zur Übungsklausur\n\n\n\n\n\n\n\n\nAufgabenstellung der Klausur vom 09.12.2023\n\n\n\n\n\nLösung zur Klausur vom 09.12.2023\n\n\n\n\n\n\n\n\nAufgabenstellung der Klausur vom 09.03.2024\n\n\n\n\n\nLösung zur Klausur vom 09.03.2024\n\n\n\n\n\n\n\n\nAufgabenstellung der Klausur vom 22.06.2024\n\n\n\n\n\nLösung zur Klausur vom 22.06.2024\n\n\n\n\n\n\n\n\nAufgabenstellung der Klausur vom 14.09.2024\n\n\n\n\n\nLösung zur Klausur vom 14.09.2024\n\n\n\n\n\n\n\n\nAufgabenstellung der Klausur vom 14.12.2024\n\n\n\n\n\nLösung zur Klausur vom 14.12.2024\n\n\n\n\n\n\n\n\nAufgabenstellung der Klausur vom 15.03.2025\n\n\n\n\n\nLösung zur Klausur vom 15.03.2025\n\n\n\n\n\n\n\n\nAufgabenstellung der Klausur vom 21.06.2025\n\n\n\n\n\nLösung zur Klausur vom 21.06.2025",
+    "crumbs": [
+      "Altklausuren",
+      "Aufgabentyp 3"
     ]
   },
   {
@@ -323,7 +654,7 @@
     "href": "include/02_02_entscheidungsbaeume.html#beispiel-entropie-und-informationsgewinn",
     "title": "Grundlagen der Künstlichen Intelligenz (GKI)",
     "section": "Beispiel: Entropie und Informationsgewinn",
-    "text": "Beispiel: Entropie und Informationsgewinn\n\ngegeben seien \\(K=2\\) Klassen: sick'' undhealthy’’ mit \\(p_1\\) als Anteil der Objekte in Klasse ``sick’’, \\(p_2 = 1 - p_1\\) für eine Menge von Objekten M\nInformationsgehalt eines Ereignisses \\(z\\) mit \\(p(z)\\) ist: \\[\nI_g(z) = -\\log_2 p(z)\n\\]\nIntuition: über ein wahrscheinliches Ereignis zu lernen ist weniger informativ als über ein unwahrscheinliches Ereignis zu lernen\nEntropie ist Erwartungswert des Informationsgehalts über alle Klassen und misst die Unbestimmtheit/Unreinheit der Klassenzugehörigkeit: \\[\nH(M) = p_1 \\cdot I_g(p_1) + p_2 \\cdot I_g(p_2)\n= -p_1 \\log_2 p_1 - p_2 \\log_2 p_2\n\\]\nExtremfall 1: \\(p_1 = 1\\), \\(p_2 = 0\\) \\(\\rightarrow\\) \\(H(M) = 0\\) (vollständige Sicherheit)\nExtremfall 2: \\(p_1 = p_2 = 0.5\\) \\(\\rightarrow\\) \\(H(M) = 1\\) (maximale Unsicherheit)\nInformationsgewinn durch ein Attribut \\(A\\): \\[\n\\text{gain}(A) = H(M) - H_A(M)\n\\]\nhoher Informationsgewinn von \\(A\\) erzeugt möglichst ``reinere’’ Teilmengen\nZiel: maximale Reduktion der Unreinheit durch Auswahl des besten \\(A^*\\)",
+    "text": "Beispiel: Entropie und Informationsgewinn\n\ngegeben seien \\(K=2\\) Klassen: ‘’sick’’ und ‘’healthy’’ mit \\(p_1\\) als Anteil der Objekte in Klasse ‘’sick’’, \\(p_2 = 1 - p_1\\) für eine Menge von Objekten M\nInformationsgehalt eines Ereignisses \\(z\\) mit \\(p(z)\\) ist: \\[\nI_g(z) = -\\log_2 p(z)\n\\]\nIntuition: über ein wahrscheinliches Ereignis zu lernen ist weniger informativ als über ein unwahrscheinliches Ereignis zu lernen\nEntropie ist Erwartungswert des Informationsgehalts über alle Klassen und misst die Unbestimmtheit/Unreinheit der Klassenzugehörigkeit: \\[\nH(M) = p_1 \\cdot I_g(p_1) + p_2 \\cdot I_g(p_2)\n= -p_1 \\log_2 p_1 - p_2 \\log_2 p_2\n\\]\nExtremfall 1: \\(p_1 = 1\\), \\(p_2 = 0\\) \\(\\rightarrow\\) \\(H(M) = 0\\) (vollständige Sicherheit)\nExtremfall 2: \\(p_1 = p_2 = 0.5\\) \\(\\rightarrow\\) \\(H(M) = 1\\) (maximale Unsicherheit)\nInformationsgewinn durch ein Attribut \\(A\\): \\[\n\\text{gain}(A) = H(M) - H_A(M)\n\\]\nhoher Informationsgewinn von \\(A\\) erzeugt möglichst ‘’reinere’’ Teilmengen\nZiel: maximale Reduktion der Unreinheit durch Auswahl des besten \\(A^*\\)",
     "crumbs": [
       "Zentrale Algorithmen der künstlichen Intelligenz",
       "Entscheidungsbäume"
@@ -378,7 +709,7 @@
     "href": "include/02_02_entscheidungsbaeume.html#cart-grundidee",
     "title": "Grundlagen der Künstlichen Intelligenz (GKI)",
     "section": "CART: Grundidee",
-    "text": "CART: Grundidee\n\nCART beginnt mit einem einzelnen Knoten \\(L_0\\) (der Wurzel) und Menge von Objekten \\(M_0\\) (\\(=M\\))\njeder Knoten \\(L_q\\) verarbeitet eine Teilmenge \\(M_q \\subseteq M\\) der Daten\nwenn alle Elemente in \\(M_q\\) die gleiche Klasse haben \\(\\rightarrow\\) \\(L_q\\) wird Blatt\nfalls für eine Untermenge \\(M_q\\) kein Informationsgewinn mehr möglich ist:\n\ndann zufällige Festsetzung der Kategoriezugehörigkeit\noder Festsetzung der Kategoriezugehörigkeit mit Wert der Mehrheitskategorie\noder als Mittelwert über Kategorien (bei metrischen Werten z.B. Regressionsbäumen)\n\nsonst: wähle Attribut \\(A_i\\) unter allen Attributen, für \\(i=1,\\ldots,v\\), mit Menge von Attributwerten \\(\\mathcal{A}_i\\), sodass eine optimale Aufspaltung von \\(M_q\\) entsteht\n\n\\(\\hookrightarrow\\) Optimalitätsmaß: nicht Entropie sondern Gini-Index !\n\nes werden binäre Partitionen \\(\\mathcal{A}_i^L \\cup \\mathcal{A}_i^R = \\mathcal{A}_i\\), ~~ \\(\\mathcal{A}_i^L \\cap \\mathcal{A}_i^R = \\emptyset\\) betrachtet; diese definieren dann auch eine Zerlegung von \\(M_q\\) zwei ebenfalls disjunkte Teilmengen: \\[\\begin{align}\nL_q^i(\\mathcal{A}_i^L)&=\\lbrace x^{(m)}\\in M_q:a_i^{m}\\in \\mathcal{A}_i^L\\rbrace\\\\\nR_q^i(\\mathcal{A}_i^R)&=\\lbrace x^{(m)}\\in M_q:a_i^{m}\\in \\mathcal{A}_i^R\\rbrace\n\\end{align}\\]\nwobei \\(a_i^{m}\\) die konkrete Ausprägung eines Attributs \\(A_i\\) für ein zu klassifizierendes Input(-objekt) \\(x^{(m)}\\) bezeichnet und die Wahrscheinlichkeiten bzw. Anteile: \\(p_{iL}^q(\\mathcal{A}_i^L) = \\frac{L_q^i(\\mathcal{A}_i^L)}{M_q}\\) und \\(p_{iR}^q(\\mathcal{A}_i^R) = 1 - p_{iL}^q(\\mathcal{A}_i^L)\\)",
+    "text": "CART: Grundidee\n\nCART beginnt mit einem einzelnen Knoten \\(L_0\\) (der Wurzel) und Menge von Objekten \\(M_0\\) (\\(=M\\))\njeder Knoten \\(L_q\\) verarbeitet eine Teilmenge \\(M_q \\subseteq M\\) der Daten\nwenn alle Elemente in \\(M_q\\) die gleiche Klasse haben \\(\\rightarrow\\) \\(L_q\\) wird Blatt\nfalls für eine Untermenge \\(M_q\\) kein Informationsgewinn mehr möglich ist:\n\ndann zufällige Festsetzung der Kategoriezugehörigkeit\noder Festsetzung der Kategoriezugehörigkeit mit Wert der Mehrheitskategorie\noder als Mittelwert über Kategorien (bei metrischen Werten z.B. Regressionsbäumen)\n\nsonst: wähle Attribut \\(A_i\\) unter allen Attributen, für \\(i=1,\\ldots,v\\), mit Menge von Attributwerten \\(\\mathcal{A}_i\\), sodass eine optimale Aufspaltung von \\(M_q\\) entsteht\n\n\\(\\hookrightarrow\\) Optimalitätsmaß: nicht Entropie sondern Gini-Index !\n\nes werden binäre Partitionen, d.h. Partitionen mit den Eigenschaften \\(\\mathcal{A}_i^L \\cup \\mathcal{A}_i^R = \\mathcal{A}_i\\), und \\(\\mathcal{A}_i^L \\cap \\mathcal{A}_i^R = \\emptyset\\) betrachtet; diese definieren dann auch eine Zerlegung von \\(M_q\\) zwei ebenfalls disjunkte Teilmengen: \\[\\begin{align}\nL_q^i(\\mathcal{A}_i^L)&=\\lbrace x^{(m)}\\in M_q:a_i^{m}\\in \\mathcal{A}_i^L\\rbrace\\\\\nR_q^i(\\mathcal{A}_i^R)&=\\lbrace x^{(m)}\\in M_q:a_i^{m}\\in \\mathcal{A}_i^R\\rbrace\n\\end{align}\\]\nwobei \\(a_i^{m}\\) die konkrete Ausprägung eines Attributs \\(A_i\\) für ein zu klassifizierendes Input(-objekt) \\(x^{(m)}\\) bezeichnet und die Wahrscheinlichkeiten bzw. Anteile: \\(p_{iL}^q(\\mathcal{A}_i^L) = \\frac{L_q^i(\\mathcal{A}_i^L)}{M_q}\\) und \\(p_{iR}^q(\\mathcal{A}_i^R) = 1 - p_{iL}^q(\\mathcal{A}_i^L)\\)",
     "crumbs": [
       "Zentrale Algorithmen der künstlichen Intelligenz",
       "Entscheidungsbäume"
@@ -389,7 +720,7 @@
     "href": "include/02_02_entscheidungsbaeume.html#cart-gini-index-und-knotenaufteilung",
     "title": "Grundlagen der Künstlichen Intelligenz (GKI)",
     "section": "CART: Gini-Index und Knotenaufteilung",
-    "text": "CART: Gini-Index und Knotenaufteilung\n\nGini-Index misst Unreinheit in \\(M_q\\) mit Klassenanteilen \\(p_k^q\\): \\[\nGini(M_q) = 1 - \\sum_{k=1}^K (p_k^q)^2\n\\]\nminimale Unreinheit bei homogener Klassenzuordnung: \\(Gini(M_q) = 0\\)\nmaximale Unreinheit bei Gleichverteilung: \\(p_k^q = \\frac{1}{K}\\)\nAufteilung von \\(M_q\\) in zwei Mengen über Zerlegung \\(\\mathcal{A}_i^L, \\mathcal{A}_i^R\\) und Berechnung eines gewichteten Gini-Index nach Aufteilung: \\[\\begin{align}\nwGini(M_q, \\mathcal{A}_i^L) &= p_{iL}^q \\cdot\nGini(L_q^i(\\mathcal{A}_i^L)) + p_{iR}^q \\cdot\nGini(R_q^i(\\mathcal{A}_i^R))\\\\\nGini(L_q^i(\\mathcal{A}_i^L)) &= 1 - \\sum_{k=1}^K\n(p_{kL}^q(\\mathcal{A}_i^L))^2\\\\\nGini(R_q^i(\\mathcal{A}_i^R)) &= 1 - \\sum_{k=1}^K\n(p_{kR}^q(\\mathcal{A}_i^R))^2\n\\end{align}\\]",
+    "text": "CART: Gini-Index und Knotenaufteilung\n\nGini-Index misst Unreinheit in \\(M_q\\) mit Klassenanteilen \\(p_k^q\\): \\[\nGini(M_q) = 1 - \\sum_{k=1}^K (p_k^q)^2\n\\]\nminimale Unreinheit bei homogener Klassenzuordnung: \\(Gini(M_q) = 0\\)\nmaximale Unreinheit bei Gleichverteilung: \\(p_k^q = \\frac{1}{K}\\)\nAufteilung von \\(M_q\\) in zwei Mengen über Zerlegung \\(\\mathcal{A}_i^L, \\mathcal{A}_i^R\\) und Berechnung eines gewichteten Gini-Index nach Aufteilung:\n\\[\\begin{align}\nwGini(M_q, \\mathcal{A}_i^L) &= p_{iL}^q \\cdot\nGini(L_q^i(\\mathcal{A}_i^L)) + p_{iR}^q \\cdot\nGini(R_q^i(\\mathcal{A}_i^R))\\\\\nGini(L_q^i(\\mathcal{A}_i^L)) &= 1 - \\sum_{k=1}^K\n(p_{kL}^q(\\mathcal{A}_i^L))^2\\\\\nGini(R_q^i(\\mathcal{A}_i^R)) &= 1 - \\sum_{k=1}^K\n(p_{kR}^q(\\mathcal{A}_i^R))^2\n\\end{align}\\]",
     "crumbs": [
       "Zentrale Algorithmen der künstlichen Intelligenz",
       "Entscheidungsbäume"
@@ -433,7 +764,7 @@
     "href": "include/02_02_entscheidungsbaeume.html#beispiel-fußball-datensatz-regression",
     "title": "Grundlagen der Künstlichen Intelligenz (GKI)",
     "section": "Beispiel: Fußball-Datensatz (Regression)",
-    "text": "Beispiel: Fußball-Datensatz (Regression)\n\n\n\n\n\n\n\n\n\n\n\nDay\nOutlook\nTemperature\nHumidity\nWind\nPlayers\n\n\n\n\nD1\nSun\nHot\nHigh\nLow\n25\n\n\nD2\nSun\nHot\nHigh\nHigh\n30\n\n\nD3\nOvercast\nHot\nHigh\nLow\n46\n\n\nD4\nRain\nSweet\nHigh\nLow\n45\n\n\nD5\nRain\nCool\nNormal\nLow\n52\n\n\nD6\nRain\nCool\nNormal\nHigh\n23\n\n\nD7\nOvercast\nCool\nNormal\nHigh\n43\n\n\nD8\nSun\nSweet\nHigh\nLow\n35\n\n\nD9\nSun\nCool\nNormal\nLow\n38\n\n\nD10\nRain\nSweet\nNormal\nLow\n46\n\n\nD11\nSun\nSweet\nNormal\nHigh\n48\n\n\nD12\nOvercast\nSweet\nHigh\nHigh\n52\n\n\nD13\nOvercast\nHot\nNormal\nLow\n44\n\n\nD14\nRain\nSweet\nHigh\nHigh\n30\n\n\n\nTitel: Trainingsdaten für die Regression: Wetterbedingungen und Spieleranzahl\n\nZiel: Vorhersage der Spieleranzahl (numerisch) \\(\\rightarrow\\) Beispielattribut ``Outlook’’ mit drei Ausprägungen\n\n\n\n\n\n\n\n\n\n\n\nOutlook\nAnzahl\nMittelwert\nVarianz\nStd.-Abw.\n\n\n\n\nOvercast\n4\n46.25\n14.19\n3.77\n\n\nRain\n5\n39.20\n101.36\n10.07\n\n\nSun\n5\n35.20\n86.56\n9.30\n\n\n\nTitel: Spieleranzahl nach Outlook: Mittelwert, Varianz und Standardabweichung\nFormel Varianz und Standardabweichung: \\[\n\\text{Var}(M) = \\frac{1}{n} \\sum_{i=1}^n (y_i - \\bar{y})^2\\;,\\quad\n\\text{SD}(M) = \\sqrt{\\text{Var}(M)}\n\\]",
+    "text": "Beispiel: Fußball-Datensatz (Regression)\n\n\n\n\n\n\n\n\n\n\n\nDay\nOutlook\nTemperature\nHumidity\nWind\nPlayers\n\n\n\n\nD1\nSun\nHot\nHigh\nLow\n25\n\n\nD2\nSun\nHot\nHigh\nHigh\n30\n\n\nD3\nOvercast\nHot\nHigh\nLow\n46\n\n\nD4\nRain\nSweet\nHigh\nLow\n45\n\n\nD5\nRain\nCool\nNormal\nLow\n52\n\n\nD6\nRain\nCool\nNormal\nHigh\n23\n\n\nD7\nOvercast\nCool\nNormal\nHigh\n43\n\n\nD8\nSun\nSweet\nHigh\nLow\n35\n\n\nD9\nSun\nCool\nNormal\nLow\n38\n\n\nD10\nRain\nSweet\nNormal\nLow\n46\n\n\nD11\nSun\nSweet\nNormal\nHigh\n48\n\n\nD12\nOvercast\nSweet\nHigh\nHigh\n52\n\n\nD13\nOvercast\nHot\nNormal\nLow\n44\n\n\nD14\nRain\nSweet\nHigh\nHigh\n30\n\n\n\nTitel: Trainingsdaten für die Regression: Wetterbedingungen und Spieleranzahl\n\nZiel: Vorhersage der Spieleranzahl (numerisch) \\(\\rightarrow\\) Beispielattribut ‘’Outlook’’ mit drei Ausprägungen\n\n\n\n\n\n\n\n\n\n\n\nOutlook\nAnzahl\nMittelwert\nVarianz\nStd.-Abw.\n\n\n\n\nOvercast\n4\n46.25\n14.19\n3.77\n\n\nRain\n5\n39.20\n101.36\n10.07\n\n\nSun\n5\n35.20\n86.56\n9.30\n\n\n\nTitel: Spieleranzahl nach Outlook: Mittelwert, Varianz und Standardabweichung\nFormel Varianz und Standardabweichung: \\[\n\\text{Var}(M) = \\frac{1}{n} \\sum_{i=1}^n (y_i - \\bar{y})^2\\;,\\quad\n\\text{SD}(M) = \\sqrt{\\text{Var}(M)}\n\\]",
     "crumbs": [
       "Zentrale Algorithmen der künstlichen Intelligenz",
       "Entscheidungsbäume"
@@ -444,7 +775,7 @@
     "href": "include/02_02_entscheidungsbaeume.html#beispiel-fußball-datensatz-regression-1",
     "title": "Grundlagen der Künstlichen Intelligenz (GKI)",
     "section": "Beispiel: Fußball-Datensatz (Regression)",
-    "text": "Beispiel: Fußball-Datensatz (Regression)\n\nGesamtvarianz (korrekt): \\(86.88\\) Gesamt-Std.-Abw. (wie im SB): \\(9.32\\)\ngewichtete Varianz nach Outlook: \\[\\begin{align}\n\\bar{y} &= \\frac{1}{14} \\sum_{i=1}^{14} y_i\n= \\frac{607}{14} \\approx 43.36 \\\\[1ex]\n\\text{Var}(M) &= \\frac{1}{14} \\sum_{i=1}^{14} (y_i - \\bar{y})^2\n= \\frac{1}{14} \\left[\n(25 - 43.36)^2 + (30 - 43.36)^2 + \\dots + (30 - 43.36)^2 \\right] \\\\\n&= \\frac{1}{14} \\cdot 1216.26 \\approx 86.88 \\\\[1ex]\n\\text{SD}(M) &= \\sqrt{86.88} \\approx 9.32\n\\end{align}\\]\nVarianzreduktion: $ _ = 86.88 - 67.31 = 19.57 $\ngewichtete SD nach Outlook: \\[\n\\text{SD}(M) = 9.32 \\\\[1ex]\n\\text{SD}_{\\text{split}} =\n\\frac{5}{14} \\cdot 9.30 + \\frac{4}{14} \\cdot 3.77 +\n\\frac{5}{14} \\cdot 10.07\n= 3.32 + 1.08 + 3.26 = 7.66 \\\\[1ex]\n\\]\n``gain’’ auf Basis SD: \\(\\text{gain}_\\text{SD} = 9.32 - 7.66 = 1.66\\)\nSplitkriterium: Wähle Attribut mit maximaler Varianzreduktion, oder basierend auf Standardabweichung\nBlattwert: arithmetisches Mittel der Zielwerte in jedem Blatt",
+    "text": "Beispiel: Fußball-Datensatz (Regression)\n\nGesamtvarianz (korrekt): \\(86.88\\) Gesamt-Std.-Abw. (wie im SB): \\(9.32\\)\ngewichtete Varianz nach Outlook: \\[\\begin{align}\n\\bar{y} &= \\frac{1}{14} \\sum_{i=1}^{14} y_i\n= \\frac{607}{14} \\approx 43.36 \\\\[1ex]\n\\text{Var}(M) &= \\frac{1}{14} \\sum_{i=1}^{14} (y_i - \\bar{y})^2\n= \\frac{1}{14} \\left[\n(25 - 43.36)^2 + (30 - 43.36)^2 + \\dots + (30 - 43.36)^2 \\right] \\\\\n&= \\frac{1}{14} \\cdot 1216.26 \\approx 86.88 \\\\[1ex]\n\\text{SD}(M) &= \\sqrt{86.88} \\approx 9.32\n\\end{align}\\]\nVarianzreduktion: \\[\n\\text{gain}_\\text{Var} = 86.88 - 67.31 = 19.57\n\\]\ngewichtete SD nach Outlook: \\[\n\\text{SD}(M) = 9.32 \\\\[1ex]\n\\text{SD}_{\\text{split}} =\n\\frac{5}{14} \\cdot 9.30 + \\frac{4}{14} \\cdot 3.77 +\n\\frac{5}{14} \\cdot 10.07\n= 3.32 + 1.08 + 3.26 = 7.66 \\\\[1ex]\n\\]\n‘’gain’’ auf Basis SD: \\(\\text{gain}_\\text{SD} = 9.32 - 7.66 = 1.66\\)\nSplitkriterium: Wähle Attribut mit maximaler Varianzreduktion, oder basierend auf Standardabweichung\nBlattwert: arithmetisches Mittel der Zielwerte in jedem Blatt",
     "crumbs": [
       "Zentrale Algorithmen der künstlichen Intelligenz",
       "Entscheidungsbäume"
@@ -456,6 +787,17 @@
     "title": "Grundlagen der Künstlichen Intelligenz (GKI)",
     "section": "Random Forest",
     "text": "Random Forest\n\nEnsemble von Entscheidungsbäumen\n\nRandom Forest kombiniert viele Entscheidungsbäume zu einem Modell\nIdee: Bootstrapping + zufällige Attributauswahl pro Split\njeder Baum wird auf einer Zufallsstichprobe der Daten trainiert\nbei jedem Split wird eine Zufallsauswahl von Attributen betrachtet\nVorhersage bei Regression vs. Klassifikation: \\[\n\\hat{y}_i = \\frac{1}{T} \\sum_{t=1}^T \\hat{y}_{it}\\;, \\quad\n\\hat{p}_i = \\frac{1}{T} \\sum_{t=1}^T I(\\hat{y}_{it} = 1)\n\\quad \\Rightarrow \\quad\n\\hat{y}_i =\n\\begin{cases}\n1, & \\hat{p}_i &gt; 0.5 \\\\\n0, & \\text{sonst}\n\\end{cases}\\;.\n\\]\n\n\n\nRandom Forest: Eigenschaften\n\nreduziert die Varianz einzelner Bäume durch Aggregation\nrobust gegenüber Rauschen und Overfitting\nkeine Pruning-Strategien notwendig\nkeine starke Parametrierung erforderlich (nur Anzahl Bäume \\(T\\) und Attributanzahl \\(m\\) pro Split)\nEnsemble-Vorhersagen sind oft genauer und stabiler als Einzelbäume\nNachteile: geringe Interpretierbarkeit, hoher Rechenaufwand bei vielen Bäumen",
+    "crumbs": [
+      "Zentrale Algorithmen der künstlichen Intelligenz",
+      "Entscheidungsbäume"
+    ]
+  },
+  {
+    "objectID": "include/02_02_entscheidungsbaeume.html#hyperparameter-optimierung-grundlagen",
+    "href": "include/02_02_entscheidungsbaeume.html#hyperparameter-optimierung-grundlagen",
+    "title": "Grundlagen der Künstlichen Intelligenz (GKI)",
+    "section": "Hyperparameter-Optimierung: Grundlagen",
+    "text": "Hyperparameter-Optimierung: Grundlagen\n\nParameter: durch den Datensatz bestimmt, vom Algorithmus gelernt (z. B. Regressionskoeffizienten, Gewichte im neuronalen Netz)\nHyperparameter: vom Anwender vor dem Training festgelegt, steuern das Lernverfahren\nZiel der HPO: Wahl von Hyperparametern, die Modellgüte maximieren\nes gibt Verfahren ohne Hyperparameter (lineare Regression) und Verfahren ohne lernbare Parameter (k-nearest-neighbour), aber keine ohne beides\ntypische HPO-Verfahren: grid search, random search, Bayessche Optimierung, gradientenbasierte Optimierung, evolutionäre Verfahren\n\n\nEntscheidungsbaum: kurzer Überblick\n\niterative Aufteilung des Datensatzes entlang Attributen bis zu Blättern\nKlassifikation: Datenpunkt folgt vom Wurzelknoten bis zum Blatt\nProblem: overfitting bei zu komplexen Bäumen\n\nZentrale Hyperparameter sind hier sog. Splittingkriterien\n\ncriterion: gini, entropy, log_loss\nmax_depth: maximale Tiefe des Baums zur Iomplexitätskontrolle\nmin_samples_split: minimale Anzahl Datenpunkte für einen split\n\n\n\nDatengrundlage für die Beispiele\n\nDatensatz: handgeschriebene Ziffern 0–9 (‘’Pen-Based Recognition of Handwritten Digits’’)\n16 attribute als 4 \\(\\times\\) 4-Pixel-Darstellung, werte 0–100\nUmfang: 10992 Beobachtungen, davon 7494 Trainings- und 3498 Test-Datenpunkte\nkeine Fehlwerte (missing values)\n\n\n\nGrid Search: Idee, Eigenschaften und Umsetzung für Entscheidungsbaum\n\nPrinzip: brute-force Prüfung aller Hyperparameter-kombinationen\ngarantiertes Auffinden der besten Kombination im Raster\nKomplexität: viele parameter \\(\\times\\) viele Ausprägungen \\(\\ra\\) rasches Wachstum der Kombinationszahl\nBeispiel: 5 Hyperparameter \\(\\times\\) 4 Werte \\(\\ra\\) \\(4^5 = 1\\,024\\) Kombinationen\nparallele Ausführung möglich, da Einzeltests unabhängig sind\ndaten splitten: training und test\nsuchraum\n\ncriterion \\(\\in \\{\\)gini, entropy, log_loss\\(\\}\\)\nmax_depth \\(\\in \\{1,\\dots,10\\}\\)\nmin_samples_split \\(\\in \\{2,\\dots,10\\}\\)\n\nSchleifen über alle Kombinationen, Modell trainieren, accuracy auf Testdaten berechnen, beste Kombination merken\noptional Reproduzierbarkeit: random_state = 123\n\n\n\nGrid Search: Beobachtung und Einsatzgrenzen\n\nLaufzeit steigt stark mit Suchraumgröße\ngut geeignet bei wenigen diskreten Hyperparametern\nErgebnisse variieren leicht durch zufallseffekte in Datensplitting und Baumerzeugung\nbeispielhafte Güte in der Anwendung: accuracy um ca. 88 % auf Testdaten",
     "crumbs": [
       "Zentrale Algorithmen der künstlichen Intelligenz",
       "Entscheidungsbäume"
@@ -476,7 +818,7 @@
     "href": "index.html",
     "title": "Grundlagen der Künstlichen Intelligenz (GKI)",
     "section": "",
-    "text": "Welcome! Hier findest du Skripte, Beispiele und Python‑Code (Notebooks) für den Kurs. Starte mit einem der Bereiche oder nutze die Suche links.\n\n Start: Studienbrief 01   Start: Studienbrief 02   Entscheidungsbäume   Neuronale Netze I: SLP   Neuronale Netze II: MLP   Altklausuren \n\n\n\n\n\n\n\n\n\nImportant\n\n\n\nWICHTIG: Alle relevanten und verbindlichen Informationen (Klausurtermine / Änderungen / Regularien) nur auf den HFH Seiten und im Webcampus \\(\\ra\\) regelmäßig vorbeischauen !\n\n\n\n\n\n\n\n\nCaution\n\n\n\nHinweise: Klausurtermin 01: 13.09.2025\n\n\n\n\n\n\n\n\nCaution\n\n\n\nHinweise: Klausurtermin 02: 13.12.2025\n\n\n\n\n\n\n\n\nTip\n\n\n\nHinweise: Folien und Notebooks werden laufend ergänzt. Bei Fragen oder Fehlern bitte im GitHub-Menü (links oben) melden.\n\n\n\n\n\nIlya Zarubin (M.Sc.)\nE‑mail: ilya.zarub@campus.hamburger-fh.de\n\nKontakt Über",
+    "text": "Welcome! Hier findest du Skripte, Beispiele und Python‑Code (Notebooks) für den Kurs. Starte mit einem der Bereiche oder nutze die Suche links.\n\n Start: Studienbrief 01   Start: Studienbrief 02   Entscheidungsbäume   Neuronale Netze I: SLP   Neuronale Netze II: MLP   Python Intro: Temperaturplots   Python Intro: Weinplots    Python: Einführung in Keras   Python Keras: MNIST-Datensatz   Baum-Klassifikation mit Python: Iris-Datensatz   Baum-Regression mit Python: Wein-Datensatz   Altklausuren \n\n\n\n\n\n\n\n\n\nImportant\n\n\n\nWICHTIG: Alle relevanten und verbindlichen Informationen (Klausurtermine / Änderungen / Regularien zur Prüfung bzw. Proctoring) nur auf den HFH Seiten und im Webcampus \\(\\ra\\) regelmäßig vorbeischauen !\n\n\n\n\n\n\n\n\nCaution\n\n\n\nHinweise:\n\nKlausurtermin 01: 13.09.2025\nKlausurtermin 02: 13.12.2025\n\n\n\n\n\n\n\n\n\nTip\n\n\n\nHinweise: Folien und Notebooks werden laufend ergänzt. Bei Fragen oder Fehlern bitte im GitHub-Menü (links oben) melden.\n\n\n\n\n\nIlya Zarubin (M.Sc.)\nE‑mail: ilya.zarub@campus.hamburger-fh.de\n\nKontakt Über",
     "crumbs": [
       "Home"
     ]
@@ -489,6 +831,162 @@
     "text": "Ablauf und Ziel\n\nKurzer Überblick über SB 01 – Fokus: potentielle Klausuraufgaben\nRest von SB 01 lässt sich eigenständig gut lesen und verstehen \\(\\ra\\) Zeit sparen !\nSB 02: Fokus auf Theorie von Entscheidungsbäumen und neuronalen Netzen\nSB 02: Klausuraufgaben bzgl. ID3 und Cart Bäume\nSB 03 und Beginn SB 04: Implementierung von Konzepten aus SB 02 in Python\nSB 03: Klausuraufgaben Programmierung\nSB 04: evolutionäre Algorithmen: Theorie und Anwedung/Programmierung zusammen\nSB 04: Klausuraufgaben\nSB 05: weitere evolutionäre Algorithmen: Theorie und Anwedung/Programmierung zusammen – Ameisen und particle swarm\nSB 05: Klausuraufgaben",
     "crumbs": [
       "Home"
+    ]
+  },
+  {
+    "objectID": "include/03_02_labeln_datenvorbereitung.html",
+    "href": "include/03_02_labeln_datenvorbereitung.html",
+    "title": "Klassifikation von Rot- und Weißwein mit Keras",
+    "section": "",
+    "text": "In diesem Notebook führen wir die vollständige Datenaufbereitung, Modellierung, Visualisierung und Evaluierung eines neuronalen Netzes zur Unterscheidung von Rot- und Weißwein durch.\nimport pandas as pd\nimport numpy as np\nimport keras as K\nimport matplotlib.pyplot as plt\nfrom sklearn.model_selection import train_test_split\nfrom sklearn.preprocessing import StandardScaler\n\n2025-08-15 16:16:39.062033: I external/local_xla/xla/tsl/cuda/cudart_stub.cc:31] Could not find cuda drivers on your machine, GPU will not be used.\n2025-08-15 16:16:39.106647: I tensorflow/core/platform/cpu_feature_guard.cc:210] This TensorFlow binary is optimized to use available CPU instructions in performance-critical operations.\nTo enable the following instructions: AVX2 FMA, in other operations, rebuild TensorFlow with the appropriate compiler flags.\n2025-08-15 16:16:41.176874: I external/local_xla/xla/tsl/cuda/cudart_stub.cc:31] Could not find cuda drivers on your machine, GPU will not be used.",
+    "crumbs": [
+      "Implementierung mit Hilfe von Python",
+      "Neuronale Netze mit Keras",
+      "Einführung in Keras"
+    ]
+  },
+  {
+    "objectID": "include/03_02_labeln_datenvorbereitung.html#einlesen-der-weindaten",
+    "href": "include/03_02_labeln_datenvorbereitung.html#einlesen-der-weindaten",
+    "title": "Klassifikation von Rot- und Weißwein mit Keras",
+    "section": "Einlesen der Weindaten",
+    "text": "Einlesen der Weindaten\nDie CSV-Dateien befinden sich im Unterordner data/processed. Sie enthalten standardisierte chemische Merkmale für Rot- und Weißweine.\n\nwhite = pd.read_csv('../data/processed/winequality-white.csv', sep=';')\nred = pd.read_csv('../data/processed/winequality-red.csv', sep=';')",
+    "crumbs": [
+      "Implementierung mit Hilfe von Python",
+      "Neuronale Netze mit Keras",
+      "Einführung in Keras"
+    ]
+  },
+  {
+    "objectID": "include/03_02_labeln_datenvorbereitung.html#labeln-und-zusammenführen-der-datensätze",
+    "href": "include/03_02_labeln_datenvorbereitung.html#labeln-und-zusammenführen-der-datensätze",
+    "title": "Klassifikation von Rot- und Weißwein mit Keras",
+    "section": "Labeln und Zusammenführen der Datensätze",
+    "text": "Labeln und Zusammenführen der Datensätze\nFür supervised learning bönitgen wir labels: - Rotwein erhält das Label 1 - Weißwein das Label 0\nDanach werden die Daten zusammengeführt.\n\nred['label'] = 1\nwhite['label'] = 0\nwines = pd.concat([red, white], ignore_index=True)",
+    "crumbs": [
+      "Implementierung mit Hilfe von Python",
+      "Neuronale Netze mit Keras",
+      "Einführung in Keras"
+    ]
+  },
+  {
+    "objectID": "include/03_02_labeln_datenvorbereitung.html#feature-matrix-und-zielvariable-erzeugen",
+    "href": "include/03_02_labeln_datenvorbereitung.html#feature-matrix-und-zielvariable-erzeugen",
+    "title": "Klassifikation von Rot- und Weißwein mit Keras",
+    "section": "Feature-Matrix und Zielvariable erzeugen",
+    "text": "Feature-Matrix und Zielvariable erzeugen\nDie ersten 11 Spalten (chemische Eigenschaften) dienen als Input-Variablen (Features). Die Zielvariable y ist das binäre Label (1 = Rotwein, 0 = Weißwein), und wird in 1D-Array umgewandelt.\n\nx = wines.iloc[:, 0:11]\ny = np.ravel(wines['label'])",
+    "crumbs": [
+      "Implementierung mit Hilfe von Python",
+      "Neuronale Netze mit Keras",
+      "Einführung in Keras"
+    ]
+  },
+  {
+    "objectID": "include/03_02_labeln_datenvorbereitung.html#aufteilung-in-trainings--und-testdaten",
+    "href": "include/03_02_labeln_datenvorbereitung.html#aufteilung-in-trainings--und-testdaten",
+    "title": "Klassifikation von Rot- und Weißwein mit Keras",
+    "section": "Aufteilung in Trainings- und Testdaten",
+    "text": "Aufteilung in Trainings- und Testdaten\nDer Datensatz wird im Verhältnis 70:30 in Trainings- und Testdaten aufgeteilt (70% Trainingsdaten).\n\nx_train, x_test, y_train, y_test = train_test_split(\n    x, y, test_size = 0.3, random_state = 42)",
+    "crumbs": [
+      "Implementierung mit Hilfe von Python",
+      "Neuronale Netze mit Keras",
+      "Einführung in Keras"
+    ]
+  },
+  {
+    "objectID": "include/03_02_labeln_datenvorbereitung.html#skalierung-der-merkmale",
+    "href": "include/03_02_labeln_datenvorbereitung.html#skalierung-der-merkmale",
+    "title": "Klassifikation von Rot- und Weißwein mit Keras",
+    "section": "Skalierung der Merkmale",
+    "text": "Skalierung der Merkmale\nDie Daten werden mit dem StandardScaler auf Mittelwert 0 und Standardabweichung 1 standardisiert. Unterschiedliche Skalen der Inputvariablen (z. B. pH vs. Alkohol) können das Training stören. Der Fit erfolgt nur auf dem Trainingsset, aber: Testdaten müssen auch transformiert werden.\n\nscaler = StandardScaler().fit(x_train)\nx_train = scaler.transform(x_train)\nx_test = scaler.transform(x_test)",
+    "crumbs": [
+      "Implementierung mit Hilfe von Python",
+      "Neuronale Netze mit Keras",
+      "Einführung in Keras"
+    ]
+  },
+  {
+    "objectID": "include/03_02_labeln_datenvorbereitung.html#klassifikation-von-weinen-rot-vs.-weiß-als-binäres-klassifikationsproblem",
+    "href": "include/03_02_labeln_datenvorbereitung.html#klassifikation-von-weinen-rot-vs.-weiß-als-binäres-klassifikationsproblem",
+    "title": "Klassifikation von Rot- und Weißwein mit Keras",
+    "section": "Klassifikation von Weinen (rot vs. weiß) als binäres Klassifikationsproblem",
+    "text": "Klassifikation von Weinen (rot vs. weiß) als binäres Klassifikationsproblem\nZiel: Vorhersage d. binären Labels (0 = rot, 1 = weiß) anhand chemischer Eigenschaften\nDas neuronale Netz wird an diese Problemstruktur angepasst: - ein einzelnes Ausgabeneuron mit Sigmoid-Aktivierung (für binäre Klassifikation) - Eingabedimension entspricht der Anzahl der Input-Features (hier: 11)",
+    "crumbs": [
+      "Implementierung mit Hilfe von Python",
+      "Neuronale Netze mit Keras",
+      "Einführung in Keras"
+    ]
+  },
+  {
+    "objectID": "include/03_02_labeln_datenvorbereitung.html#aufbau-des-neuronalen-netzes",
+    "href": "include/03_02_labeln_datenvorbereitung.html#aufbau-des-neuronalen-netzes",
+    "title": "Klassifikation von Rot- und Weißwein mit Keras",
+    "section": "Aufbau des neuronalen Netzes",
+    "text": "Aufbau des neuronalen Netzes\nWir definieren ein sequentielles Keras-Modell, , in dem Layer nacheinander hinzugefügt werden. Hyperparameter wie Anzahl der Hidden-Layer, Neuronenanzahl, Aktivierungsfunktionen etc. sind frei wählbar. Die Sturktur ist wie folgt: - Eingabeschicht: 12 Neuronen, ReLU, input_dim=11 - Hidden Layer: 8 Neuronen, ReLU - Ausgabeschicht: 1 Neuron, Sigmoid (für binäre Klassifikation)\n\nimport keras as K  # oder: from tensorflow import keras as K\n\nmodel = K.Sequential([\n    K.layers.Input(shape=(11,)),          # &lt;&lt;— Input-Layer\n    K.layers.Dense(12, activation='relu'),\n    K.layers.Dense(8,  activation='relu'),\n    K.layers.Dense(1,  activation='sigmoid')\n])\n# So wurde es SB 03 gemacht, aber veraltet ...\n# model = K.models.Sequential()\n# model.add(K.layers.Dense(units=12, activation='relu', input_dim=11))\n# model.add(K.layers.Dense(units=8, activation='relu'))\n# model.add(K.layers.Dense(units=1, activation='sigmoid'))\n\n2025-08-15 16:16:41.820203: E external/local_xla/xla/stream_executor/cuda/cuda_platform.cc:51] failed call to cuInit: INTERNAL: CUDA error: Failed call to cuInit: UNKNOWN ERROR (303)",
+    "crumbs": [
+      "Implementierung mit Hilfe von Python",
+      "Neuronale Netze mit Keras",
+      "Einführung in Keras"
+    ]
+  },
+  {
+    "objectID": "include/03_02_labeln_datenvorbereitung.html#weitere-hintergründe",
+    "href": "include/03_02_labeln_datenvorbereitung.html#weitere-hintergründe",
+    "title": "Klassifikation von Rot- und Weißwein mit Keras",
+    "section": "Weitere Hintergründe",
+    "text": "Weitere Hintergründe\n\nErstellen eines sequenziellen Keras-Modells\nErste Schicht (Input-Layer + erste Dense-Schicht)\n\n12 Neuronen als Startwert (guter Richtwert, entspricht etwa der Feature-Anzahl)\nAktivierungsfunktion: ReLU (Standard bei Hidden-Layern)\ninput_dim: 11, da 11 Input-Features (chemische Eigenschaften)\n\nZweite Schicht (Hidden-Layer)\n\n8 Neuronen (leichte Reduktion gegenüber erster Schicht)\nerneut ReLU-Aktivierung\n\nAusgabeschicht für binäre Klassifikation\n\n1 Neuron (0 = rot, 1 = weiß)\nAktivierungsfunktion: Sigmoid (liefert Werte zwischen 0 und 1 geeignet für binäre Klassen)\n\nFür mehrklassige Klassifikation würde man stattdessen:\n\nmehrere Ausgabeneuronen (entsprechend der Klassenzahl)\nund eine ‘softmax’-Aktivierung verwenden",
+    "crumbs": [
+      "Implementierung mit Hilfe von Python",
+      "Neuronale Netze mit Keras",
+      "Einführung in Keras"
+    ]
+  },
+  {
+    "objectID": "include/03_02_labeln_datenvorbereitung.html#kompilierung-des-modells",
+    "href": "include/03_02_labeln_datenvorbereitung.html#kompilierung-des-modells",
+    "title": "Klassifikation von Rot- und Weißwein mit Keras",
+    "section": "Kompilierung des Modells",
+    "text": "Kompilierung des Modells\nFestlegen von Optimierer, Verlustfunktion und Metriken\n\nOptimierer: Adam (state-of-the-art für viele Probleme, adaptiv)\nVerlustfunktion: binary_crossentropy (geeignet für binäre Klassifikation)\nMetrik: accuracy (Anteil korrekt klassifizierter Beispiele pro Epoche)\n\n\nmodel.compile(\n    optimizer='adam',\n    loss='binary_crossentropy',\n    metrics=['accuracy']\n)",
+    "crumbs": [
+      "Implementierung mit Hilfe von Python",
+      "Neuronale Netze mit Keras",
+      "Einführung in Keras"
+    ]
+  },
+  {
+    "objectID": "include/03_02_labeln_datenvorbereitung.html#modelltraining",
+    "href": "include/03_02_labeln_datenvorbereitung.html#modelltraining",
+    "title": "Klassifikation von Rot- und Weißwein mit Keras",
+    "section": "Modelltraining",
+    "text": "Modelltraining\nWir trainieren das Modell 20 Epochen lang mit validation_split=0.3.\n\nhist = model.fit(\n    x_train,\n    y_train,\n    epochs=20,\n    validation_split=0.3,\n    verbose=2\n)\n\nEpoch 1/20\n100/100 - 1s - 11ms/step - accuracy: 0.7206 - loss: 0.6057 - val_accuracy: 0.9223 - val_loss: 0.4833\nEpoch 2/20\n100/100 - 0s - 2ms/step - accuracy: 0.9503 - loss: 0.3391 - val_accuracy: 0.9626 - val_loss: 0.2183\nEpoch 3/20\n100/100 - 0s - 2ms/step - accuracy: 0.9714 - loss: 0.1415 - val_accuracy: 0.9780 - val_loss: 0.1041\nEpoch 4/20\n100/100 - 0s - 2ms/step - accuracy: 0.9830 - loss: 0.0769 - val_accuracy: 0.9868 - val_loss: 0.0676\nEpoch 5/20\n100/100 - 0s - 2ms/step - accuracy: 0.9884 - loss: 0.0539 - val_accuracy: 0.9905 - val_loss: 0.0516\nEpoch 6/20\n100/100 - 0s - 2ms/step - accuracy: 0.9909 - loss: 0.0432 - val_accuracy: 0.9927 - val_loss: 0.0431\nEpoch 7/20\n100/100 - 0s - 2ms/step - accuracy: 0.9925 - loss: 0.0374 - val_accuracy: 0.9919 - val_loss: 0.0392\nEpoch 8/20\n100/100 - 0s - 2ms/step - accuracy: 0.9928 - loss: 0.0334 - val_accuracy: 0.9919 - val_loss: 0.0366\nEpoch 9/20\n100/100 - 0s - 2ms/step - accuracy: 0.9934 - loss: 0.0309 - val_accuracy: 0.9927 - val_loss: 0.0352\nEpoch 10/20\n100/100 - 0s - 2ms/step - accuracy: 0.9934 - loss: 0.0289 - val_accuracy: 0.9927 - val_loss: 0.0346\nEpoch 11/20\n100/100 - 0s - 2ms/step - accuracy: 0.9934 - loss: 0.0271 - val_accuracy: 0.9934 - val_loss: 0.0327\nEpoch 12/20\n100/100 - 0s - 2ms/step - accuracy: 0.9940 - loss: 0.0257 - val_accuracy: 0.9941 - val_loss: 0.0325\nEpoch 13/20\n100/100 - 0s - 2ms/step - accuracy: 0.9947 - loss: 0.0245 - val_accuracy: 0.9949 - val_loss: 0.0324\nEpoch 14/20\n100/100 - 0s - 2ms/step - accuracy: 0.9953 - loss: 0.0235 - val_accuracy: 0.9934 - val_loss: 0.0321\nEpoch 15/20\n100/100 - 0s - 2ms/step - accuracy: 0.9950 - loss: 0.0226 - val_accuracy: 0.9934 - val_loss: 0.0319\nEpoch 16/20\n100/100 - 0s - 2ms/step - accuracy: 0.9953 - loss: 0.0221 - val_accuracy: 0.9941 - val_loss: 0.0317\nEpoch 17/20\n100/100 - 0s - 2ms/step - accuracy: 0.9953 - loss: 0.0212 - val_accuracy: 0.9934 - val_loss: 0.0329\nEpoch 18/20\n100/100 - 0s - 2ms/step - accuracy: 0.9956 - loss: 0.0207 - val_accuracy: 0.9941 - val_loss: 0.0326\nEpoch 19/20\n100/100 - 0s - 2ms/step - accuracy: 0.9953 - loss: 0.0202 - val_accuracy: 0.9941 - val_loss: 0.0329\nEpoch 20/20\n100/100 - 0s - 2ms/step - accuracy: 0.9959 - loss: 0.0196 - val_accuracy: 0.9941 - val_loss: 0.0324\n\n\n\nx_train, y_train sind die vorbereiteten Trainingsdaten\nepochs = 20: 20 Trainingsdurchläufe (kann bei Bedarf erhöht werden)\nvalidation_split = 0.3: 30% der Trainingsdaten werden zur Validierung abgezweigt\nAchtung: dies betrifft nur x_train/y_train, nicht die vorab separat gehaltenen Testdaten!",
+    "crumbs": [
+      "Implementierung mit Hilfe von Python",
+      "Neuronale Netze mit Keras",
+      "Einführung in Keras"
+    ]
+  },
+  {
+    "objectID": "include/03_02_labeln_datenvorbereitung.html#verlauf-der-genauigkeit-während-des-trainings",
+    "href": "include/03_02_labeln_datenvorbereitung.html#verlauf-der-genauigkeit-während-des-trainings",
+    "title": "Klassifikation von Rot- und Weißwein mit Keras",
+    "section": "Verlauf der Genauigkeit während des Trainings",
+    "text": "Verlauf der Genauigkeit während des Trainings\nDie Trainings- und Validierungsgenauigkeit werden für jede Epoche geplottet.\n\nplt.plot(hist.history['accuracy'], label='Train Accuracy')\nplt.plot(hist.history['val_accuracy'], label='Validation Accuracy')\nplt.xlabel('Epoche')\nplt.ylabel('Genauigkeit')\nplt.legend()\nplt.tight_layout()\nplt.show()\nplt.savefig('../figs/training_accuracy.png')\n\n\n\n\n\n\n\n\n&lt;Figure size 672x480 with 0 Axes&gt;",
+    "crumbs": [
+      "Implementierung mit Hilfe von Python",
+      "Neuronale Netze mit Keras",
+      "Einführung in Keras"
+    ]
+  },
+  {
+    "objectID": "include/03_02_labeln_datenvorbereitung.html#evaluation-auf-testdaten",
+    "href": "include/03_02_labeln_datenvorbereitung.html#evaluation-auf-testdaten",
+    "title": "Klassifikation von Rot- und Weißwein mit Keras",
+    "section": "Evaluation auf Testdaten",
+    "text": "Evaluation auf Testdaten\nNach dem Training evaluieren wir das Modell auf der echten Testmenge und geben die Loss- und Accuracy-Werte aus.\n\ntest_loss, test_acc = model.evaluate(x_test, y_test)\nprint(f\"Testverlust: {test_loss:.4f}\")\nprint(f\"Testgenauigkeit: {test_acc:.4f}\")\n\n\n 1/61 ━━━━━━━━━━━━━━━━━━━━ 0s 13ms/step - accuracy: 1.0000 - loss: 0.0320\n\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\n59/61 ━━━━━━━━━━━━━━━━━━━━ 0s 870us/step - accuracy: 0.9908 - loss: 0.0359\n\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\n61/61 ━━━━━━━━━━━━━━━━━━━━ 0s 1ms/step - accuracy: 0.9913 - loss: 0.0400  \n\nTestverlust: 0.0400\n\nTestgenauigkeit: 0.9913\n\n\n\n\nHinweis: - Die Validierung während des Trainings basiert auf validation_split - Die finale Testgenauigkeit stammt aus einer separaten, vorher unberührten Testmenge - Dadurch erhalten wir eine realistische Einschätzung der Generalisierungsfähigkeit",
+    "crumbs": [
+      "Implementierung mit Hilfe von Python",
+      "Neuronale Netze mit Keras",
+      "Einführung in Keras"
     ]
   },
   {
@@ -591,6 +1089,88 @@
     ]
   },
   {
+    "objectID": "include/99_altklausuren_A4.html",
+    "href": "include/99_altklausuren_A4.html",
+    "title": "Grundlagen der Künstlichen Intelligenz (GKI)",
+    "section": "",
+    "text": "Aufgabenstellung der Übungsklausur\n\n\n\n\n\nLösung zur Übungsklausur\n\n\n\n\n\n\n\n\nAufgabenstellung der Klausur vom 09.12.2023\n\n\n\n\n\nLösung zur Klausur vom 09.12.2023\n\n\n\n\n\n\n\n\nAufgabenstellung der Klausur vom 09.03.2024\n\n\n\n\n\nLösung zur Klausur vom 09.03.2024\n\n\n\n\n\n\n\n\nAufgabenstellung der Klausur vom 22.06.2024\n\n\n\n\n\nLösung zur Klausur vom 22.06.2024\n\n\n\n\n\n\n\n\nAufgabenstellung der Klausur vom 14.09.2024\n\n\n\n\n\nLösung zur Klausur vom 14.09.2024\n\n\n\n\n\n\n\n\nAufgabenstellung der Klausur vom 14.12.2024\n\n\n\n\n\nLösung zur Klausur vom 14.12.2024\n\n\n\n\n\n\n\n\nAufgabenstellung der Klausur vom 15.03.2025\n\n\n\n\n\nLösung zur Klausur vom 15.03.2025\n\n\n\n\n\n\n\n\nAufgabenstellung der Klausur vom 21.06.2025\n\n\n\n\n\nLösung zur Klausur vom 21.06.2025",
+    "crumbs": [
+      "Altklausuren",
+      "Aufgabentyp 4"
+    ]
+  },
+  {
+    "objectID": "include/99_altklausuren_A4.html#klausuraufgaben-sb-04",
+    "href": "include/99_altklausuren_A4.html#klausuraufgaben-sb-04",
+    "title": "Grundlagen der Künstlichen Intelligenz (GKI)",
+    "section": "",
+    "text": "Aufgabenstellung der Übungsklausur\n\n\n\n\n\nLösung zur Übungsklausur\n\n\n\n\n\n\n\n\nAufgabenstellung der Klausur vom 09.12.2023\n\n\n\n\n\nLösung zur Klausur vom 09.12.2023\n\n\n\n\n\n\n\n\nAufgabenstellung der Klausur vom 09.03.2024\n\n\n\n\n\nLösung zur Klausur vom 09.03.2024\n\n\n\n\n\n\n\n\nAufgabenstellung der Klausur vom 22.06.2024\n\n\n\n\n\nLösung zur Klausur vom 22.06.2024\n\n\n\n\n\n\n\n\nAufgabenstellung der Klausur vom 14.09.2024\n\n\n\n\n\nLösung zur Klausur vom 14.09.2024\n\n\n\n\n\n\n\n\nAufgabenstellung der Klausur vom 14.12.2024\n\n\n\n\n\nLösung zur Klausur vom 14.12.2024\n\n\n\n\n\n\n\n\nAufgabenstellung der Klausur vom 15.03.2025\n\n\n\n\n\nLösung zur Klausur vom 15.03.2025\n\n\n\n\n\n\n\n\nAufgabenstellung der Klausur vom 21.06.2025\n\n\n\n\n\nLösung zur Klausur vom 21.06.2025",
+    "crumbs": [
+      "Altklausuren",
+      "Aufgabentyp 4"
+    ]
+  },
+  {
+    "objectID": "include/03_01_weinplots.html",
+    "href": "include/03_01_weinplots.html",
+    "title": "Vergleich der Alkoholgehalte von Rot- und Weißwein",
+    "section": "",
+    "text": "In diesem Notebook erstellen wir zwei Histogramme, um die Verteilung des Alkoholvolumens von Rot- und Weißwein grafisch zu vergleichen.\nimport pandas as pd\nimport matplotlib.pyplot as plt",
+    "crumbs": [
+      "Implementierung mit Hilfe von Python",
+      "Datenvorverarbeitung",
+      "Weinplots"
+    ]
+  },
+  {
+    "objectID": "include/03_01_weinplots.html#einlesen-der-vorbereiteten-weindaten",
+    "href": "include/03_01_weinplots.html#einlesen-der-vorbereiteten-weindaten",
+    "title": "Vergleich der Alkoholgehalte von Rot- und Weißwein",
+    "section": "Einlesen der vorbereiteten Weindaten",
+    "text": "Einlesen der vorbereiteten Weindaten\nDie CSV-Dateien wurden bereits vorbereitet (Standardisierung, Spalten etc.) und befinden sich im Ordner data/processed.\n\nwhite = pd.read_csv('../data/processed/winequality-white.csv', sep=';')\nred = pd.read_csv('../data/processed/winequality-red.csv', sep=';')",
+    "crumbs": [
+      "Implementierung mit Hilfe von Python",
+      "Datenvorverarbeitung",
+      "Weinplots"
+    ]
+  },
+  {
+    "objectID": "include/03_01_weinplots.html#erstellung-der-plotstruktur-und-histogramme-für-alkoholverteilungen",
+    "href": "include/03_01_weinplots.html#erstellung-der-plotstruktur-und-histogramme-für-alkoholverteilungen",
+    "title": "Vergleich der Alkoholgehalte von Rot- und Weißwein",
+    "section": "Erstellung der Plotstruktur und Histogramme für Alkoholverteilungen",
+    "text": "Erstellung der Plotstruktur und Histogramme für Alkoholverteilungen\nWir verwenden zwei nebeneinanderliegende Subplots für den Vergleich:\n\nfig ist das gesamte Figure-Objekt, d.h. der container für beide subplots.\nax ist ein Array mit den zwei subplot Objekten.\n\nErzeugen der Histogramme. Die beiden zeigen jeweils die Häufigkeitsverteilung des Alkoholgehalts für Rotwein (links) und Weißwein (rechts).\n\nfig, ax = plt.subplots(1, 2)\nax[0].hist(red.alcohol, 10, facecolor='red', alpha=0.5, label='Rotwein')\nax[1].hist(white.alcohol, 10, facecolor='green', alpha=0.5, label='Weißwein')\n\n(array([ 37., 808., 969., 761., 765., 625., 427., 368., 110.,  28.]),\n array([ 8.  ,  8.62,  9.24,  9.86, 10.48, 11.1 , 11.72, 12.34, 12.96,\n        13.58, 14.2 ]),\n &lt;BarContainer object of 10 artists&gt;)",
+    "crumbs": [
+      "Implementierung mit Hilfe von Python",
+      "Datenvorverarbeitung",
+      "Weinplots"
+    ]
+  },
+  {
+    "objectID": "include/03_01_weinplots.html#feinjustierung-des-layouts-und-gemeinsamer-titel",
+    "href": "include/03_01_weinplots.html#feinjustierung-des-layouts-und-gemeinsamer-titel",
+    "title": "Vergleich der Alkoholgehalte von Rot- und Weißwein",
+    "section": "Feinjustierung des Layouts und gemeinsamer Titel",
+    "text": "Feinjustierung des Layouts und gemeinsamer Titel\nWir positionieren die Subplots passend im Gesamtbild und beschriften die Achsen: - gesamtplatzierung im Gesamt-figure object - setzen der Ober/Untergrenzen für den ersten plot der Rotweine (für Vergleichbarkeit mit Weißweinen, die häufiger vorkommen) - Achsenbeschriftungen und erzeugen der Überschrift des Gesamtplots\n\nfig.subplots_adjust(left=0.15, right=0.9, bottom=0.25, top=0.75,\n                    hspace=0.05, wspace=0.5)\nax[0].set_ylim([0, 1000])\nax[0].set_xlabel('Alkoholvolumen in %')\nax[0].set_ylabel('Häufigkeiten')\nax[1].set_xlabel('Alkoholvolumen in %')\nax[1].set_ylabel('Häufigkeiten')\nfig.suptitle('Verteilung nach Alkoholvolumen in %')\n\nfig",
+    "crumbs": [
+      "Implementierung mit Hilfe von Python",
+      "Datenvorverarbeitung",
+      "Weinplots"
+    ]
+  },
+  {
+    "objectID": "include/03_01_weinplots.html#dateiausgabe-speichern",
+    "href": "include/03_01_weinplots.html#dateiausgabe-speichern",
+    "title": "Vergleich der Alkoholgehalte von Rot- und Weißwein",
+    "section": "Dateiausgabe / Speichern",
+    "text": "Dateiausgabe / Speichern\nDie Visualisierung erhält einen gemeinsamen Titel und wird als PNG-Datei gespeichert.\n\nfig.savefig('../figs/alkoholverteilung.png')",
+    "crumbs": [
+      "Implementierung mit Hilfe von Python",
+      "Datenvorverarbeitung",
+      "Weinplots"
+    ]
+  },
+  {
     "objectID": "include/01_04_anwendungsmoeglichkeit_ki.html",
     "href": "include/01_04_anwendungsmoeglichkeit_ki.html",
     "title": "Grundlagen der Künstlichen Intelligenz (GKI)",
@@ -598,7 +1178,7 @@
     "text": "Computer Vision (CV) ist ein Teilgebiet der KI zur automatisierten Auswertung visueller Informationen wie Bilder oder Videos\nZiel: Interpretation visueller Daten auf einem Niveau, das menschlichem Sehen vergleichbar ist – für Klassifikation, Analyse, Steuerung\nzentrale Aufgabenbereiche:\n\nBildklassifikation: z. B. Diagnoseverfahren, Qualitätssicherung\nObjekterkennung: z. B. autonome Systeme, Sicherheitstechnik\nSegmentierung und Rekonstruktion: z. B. in Medizin und Robotik\n\nwichtige Unterscheidungen:\n\nBildverarbeitung: technische Modifikation von Bilddaten\nBilderkennung: interpretative Einordnung – entscheidungsrelevant\n\nDeep Learning ermöglicht z. B. automatische Klassifikation & visuelle Synthese",
     "crumbs": [
       "Einführung in die Künstliche Intelligenz",
-      "Anwendungsmöglichkeiten und Beispiele für Methoden der künstlichen Intelligenz"
+      "Anwendungsmöglichkeiten / Beispiele künstlicher Intelligenz"
     ]
   },
   {
@@ -609,7 +1189,7 @@
     "text": "Computer Vision (CV) ist ein Teilgebiet der KI zur automatisierten Auswertung visueller Informationen wie Bilder oder Videos\nZiel: Interpretation visueller Daten auf einem Niveau, das menschlichem Sehen vergleichbar ist – für Klassifikation, Analyse, Steuerung\nzentrale Aufgabenbereiche:\n\nBildklassifikation: z. B. Diagnoseverfahren, Qualitätssicherung\nObjekterkennung: z. B. autonome Systeme, Sicherheitstechnik\nSegmentierung und Rekonstruktion: z. B. in Medizin und Robotik\n\nwichtige Unterscheidungen:\n\nBildverarbeitung: technische Modifikation von Bilddaten\nBilderkennung: interpretative Einordnung – entscheidungsrelevant\n\nDeep Learning ermöglicht z. B. automatische Klassifikation & visuelle Synthese",
     "crumbs": [
       "Einführung in die Künstliche Intelligenz",
-      "Anwendungsmöglichkeiten und Beispiele für Methoden der künstlichen Intelligenz"
+      "Anwendungsmöglichkeiten / Beispiele künstlicher Intelligenz"
     ]
   },
   {
@@ -620,7 +1200,7 @@
     "text": "Anwendung: Computer Vision\n\nAndwendungsfälle aus Bildverarbeitung/-erkennung",
     "crumbs": [
       "Einführung in die Künstliche Intelligenz",
-      "Anwendungsmöglichkeiten und Beispiele für Methoden der künstlichen Intelligenz"
+      "Anwendungsmöglichkeiten / Beispiele künstlicher Intelligenz"
     ]
   },
   {
@@ -631,7 +1211,7 @@
     "text": "Anwendung: Natural Language Processing (NLP)\n\nGrundlagen und Anwendungsfelder\n\nNLP ermöglicht Maschinen das Verstehen, Interpretieren und Generieren menschlicher Sprache (Text & Audio)\ntypische Aufgaben:\n\nmaschinelle Übersetzung, Autokorrektur, Autovervollständigung\nStimmungsanalyse, Spracherkennung, Chatbots\n\nSprachverarbeitung = Kombination aus Linguistik, Statistik und KI\nmoderne NLP-Systeme basieren auf Deep Learning, v. a. Transformer-Architekturen\nSprachmodelle (z. B. GPT, LaMDA, Megatron) ermöglichen kontextsensitives Verstehen und Generieren ganzer Absätze",
     "crumbs": [
       "Einführung in die Künstliche Intelligenz",
-      "Anwendungsmöglichkeiten und Beispiele für Methoden der künstlichen Intelligenz"
+      "Anwendungsmöglichkeiten / Beispiele künstlicher Intelligenz"
     ]
   },
   {
@@ -642,7 +1222,7 @@
     "text": "Anwendung: Natural Language Processing (NLP)\n\nAnwendungsfelder",
     "crumbs": [
       "Einführung in die Künstliche Intelligenz",
-      "Anwendungsmöglichkeiten und Beispiele für Methoden der künstlichen Intelligenz"
+      "Anwendungsmöglichkeiten / Beispiele künstlicher Intelligenz"
     ]
   },
   {
@@ -653,7 +1233,7 @@
     "text": "Anwendung: Natural Language Processing (NLP)\n\nAnwendungsfelder",
     "crumbs": [
       "Einführung in die Künstliche Intelligenz",
-      "Anwendungsmöglichkeiten und Beispiele für Methoden der künstlichen Intelligenz"
+      "Anwendungsmöglichkeiten / Beispiele künstlicher Intelligenz"
     ]
   },
   {
@@ -664,7 +1244,7 @@
     "text": "NLP: Entwicklung großer Sprachmodelle\n\nEntwicklung Parameter Zahl der Modelle",
     "crumbs": [
       "Einführung in die Künstliche Intelligenz",
-      "Anwendungsmöglichkeiten und Beispiele für Methoden der künstlichen Intelligenz"
+      "Anwendungsmöglichkeiten / Beispiele künstlicher Intelligenz"
     ]
   },
   {
@@ -675,7 +1255,7 @@
     "text": "NLP: Entwicklung großer Sprachmodelle\n\nNeueste Entwicklungen (bis 2024)\n\nmoderne Sprachmodelle basieren auf Transformer-Architekturen\nstetiger Anstieg der Parameteranzahl seit 2018 (GPT-2: 0,1 Mrd. \\(\\ra\\) GPT-4: $$1 Bio. geschätzt)\nwichtige Meilensteine:\n\nGPT-3 (2020): 175 Mrd. Parameter\nGPT-4 (2023): multimodal, deutlich robuster, genaue Architektur nicht veröffentlicht\nGPT-4 Turbo (2023): kosteneffizientere Variante mit gleichem Verhalten\nClaude 2 (Anthropic), Gemini (Google), LLaMA 2 (Meta) als offene Alternativen\n\nTrends: multimodale Fähigkeiten, Tool-Integration (z. B. Code, Bilder, Audio), RLHF\nHerausforderungen: Bias, Halluzination, Energiebedarf, Erklärbarkeit",
     "crumbs": [
       "Einführung in die Künstliche Intelligenz",
-      "Anwendungsmöglichkeiten und Beispiele für Methoden der künstlichen Intelligenz"
+      "Anwendungsmöglichkeiten / Beispiele künstlicher Intelligenz"
     ]
   },
   {
@@ -686,7 +1266,7 @@
     "text": "Anwendung: Biologie – AlphaFold\n\nProteinfaltung und Strukturvorhersage\n\nProteine: Ketten aus Aminosäuren, deren 3D-Struktur ihre Funktion bestimmt\nProblem: experimentelle Strukturbestimmung ist teuer & langsam\nZiel: Strukturvorhersage allein aus Sequenzinformationen\nAlphaFold (DeepMind):\n\nverwendet neuronale Netze mit Attention & evolutionären Features\nVorhersage von Abständen & Winkeln zwischen Aminosäuren\ntrainiert auf 100.000+ bekannte Proteinstrukturen (PDB)\n\nValidierung durch CASP14 (2020):\n\nGDT (Global Distance Test): Metrik zur Strukturähnlichkeit (0–100)\nAlphaFold erreichte GDT-Werte $$90 – nahe experimenteller Genauigkeit",
     "crumbs": [
       "Einführung in die Künstliche Intelligenz",
-      "Anwendungsmöglichkeiten und Beispiele für Methoden der künstlichen Intelligenz"
+      "Anwendungsmöglichkeiten / Beispiele künstlicher Intelligenz"
     ]
   },
   {
@@ -697,7 +1277,7 @@
     "text": "AlphaFold: Ergebnisse im CASP14-Wettbewerb",
     "crumbs": [
       "Einführung in die Künstliche Intelligenz",
-      "Anwendungsmöglichkeiten und Beispiele für Methoden der künstlichen Intelligenz"
+      "Anwendungsmöglichkeiten / Beispiele künstlicher Intelligenz"
     ]
   },
   {
@@ -708,7 +1288,163 @@
     "text": "Anwendung: Autonomes Fahren\n\nKI in selbstfahrenden Fahrzeugen\n\nautonome Fahrzeuge (AVs) nutzen KI zur:\n\nWahrnehmung der Umgebung (Kameras, Lidar, Radar)\nLokalisierung & Kartierung (SLAM, GPS)\nEntscheidungsfindung (Routenplanung, Verhalten)\nKontrolle (Lenkung, Beschleunigung, Bremsen)\n\nzentrale Rolle von Deep Learning bei:\n\nObjekterkennung, Segmentierung, Fußgängerprognose\nSzenenverständnis, Vorausschau, Gefahrenerkennung\n\nVorreiter: Waymo, hervorgegangen aus dem Google-Auto-Projekt\n\nnutzt DNNs für Fußgängererkennung, Planung & Simulation\n\n10 Mio reale Kilometer + &gt;10 Mrd Simulationskilometer\n\n\nHerausforderungen:\n\nkomplexe urbane Szenarien, rare edge cases, ethische Entscheidungen\nRechenleistung (Edge), Latenz, Zertifizierung & Sicherheit",
     "crumbs": [
       "Einführung in die Künstliche Intelligenz",
-      "Anwendungsmöglichkeiten und Beispiele für Methoden der künstlichen Intelligenz"
+      "Anwendungsmöglichkeiten / Beispiele künstlicher Intelligenz"
+    ]
+  },
+  {
+    "objectID": "include/03_00_plots_allgemein.html",
+    "href": "include/03_00_plots_allgemein.html",
+    "title": "Temperaturverlauf über acht Tage",
+    "section": "",
+    "text": "In diesem Notebook werden Minimal- und Maximaltemperaturen über einen Zeitraum von acht Tagen grafisch dargestellt. Die Daten sind fiktiv und dienen der Übung von Plotfunktionen in Matplotlib.\nimport matplotlib.pyplot as plt",
+    "crumbs": [
+      "Implementierung mit Hilfe von Python",
+      "Datenvorverarbeitung",
+      "Temperaturplot"
+    ]
+  },
+  {
+    "objectID": "include/03_00_plots_allgemein.html#temperaturdaten-eingeben",
+    "href": "include/03_00_plots_allgemein.html#temperaturdaten-eingeben",
+    "title": "Temperaturverlauf über acht Tage",
+    "section": "Temperaturdaten eingeben",
+    "text": "Temperaturdaten eingeben\nWir definieren eine Liste von Tagen sowie jeweils eine Liste der Minimal- und Maximaltemperaturen.\n\nTage = list(range(1, 9))\nGrad_min = [19.6, 24.1, 26.7, 28.3, 27.5, 30.5, 32.8, 33.1]\nGrad_max = [24.8, 28.9, 31.3, 33.0, 34.9, 35.6, 38.4, 39.2]",
+    "crumbs": [
+      "Implementierung mit Hilfe von Python",
+      "Datenvorverarbeitung",
+      "Temperaturplot"
+    ]
+  },
+  {
+    "objectID": "include/03_00_plots_allgemein.html#plot-der-temperaturkurven-achsenbeschriftung-und-achsenskalierung-hinzufügen",
+    "href": "include/03_00_plots_allgemein.html#plot-der-temperaturkurven-achsenbeschriftung-und-achsenskalierung-hinzufügen",
+    "title": "Temperaturverlauf über acht Tage",
+    "section": "Plot der Temperaturkurven: Achsenbeschriftung und Achsenskalierung hinzufügen",
+    "text": "Plot der Temperaturkurven: Achsenbeschriftung und Achsenskalierung hinzufügen\n\nDie x-Achse steht für die Tagesnummer, die y-Achse für die Temperatur in Grad Celsius.\nZunächst zeichnen wir die Linien für Minimal- und Maximaltemperaturen. Anschließend fügen wir farbige Punkte hinzu, um die Daten besser sichtbar zu machen.\nDie Achsen sollen gleich bleiben, unabhängig von den Messwerten. Wir setzen manuell die Grenzen der x- und y-Achse.\n\n\nplt.xlabel('Tag')\nplt.ylabel('Temperatur in Grad Celsius')\n\nplt.plot(Tage, Grad_min)\nplt.plot(Tage, Grad_min, 'oy')   # Punkte Min\nplt.plot(Tage, Grad_max)\nplt.plot(Tage, Grad_max, 'or')   # Punkte Max\n\nxmin, xmax, ymin, ymax = 0, 10, 14, 45\nplt.axis((xmin, xmax, ymin, ymax))",
+    "crumbs": [
+      "Implementierung mit Hilfe von Python",
+      "Datenvorverarbeitung",
+      "Temperaturplot"
+    ]
+  },
+  {
+    "objectID": "include/03_00_plots_allgemein.html#plot-anzeigen-und-speichern-objektorientierte-variante",
+    "href": "include/03_00_plots_allgemein.html#plot-anzeigen-und-speichern-objektorientierte-variante",
+    "title": "Temperaturverlauf über acht Tage",
+    "section": "Plot anzeigen und speichern: objektorientierte Variante",
+    "text": "Plot anzeigen und speichern: objektorientierte Variante\nDie Darstellung erfolgt zunächst im Notebook. Danach speichern wir den Plot als PNG-Datei in den Ordner figs/.\n\nimport matplotlib.pyplot as plt\n\nfig, ax = plt.subplots()\n\nax.plot(Tage, Grad_min)\nax.plot(Tage, Grad_min, 'oy')\nax.plot(Tage, Grad_max)\nax.plot(Tage, Grad_max, 'or')\n\nxmin, xmax, ymin, ymax = 0, 10, 14, 45\nax.set_xlim(xmin, xmax)\nax.set_ylim(ymin, ymax)\n\n\n\n\n\n\n\n\n\nfig.savefig('../figs/temperaturverlauf.png')",
+    "crumbs": [
+      "Implementierung mit Hilfe von Python",
+      "Datenvorverarbeitung",
+      "Temperaturplot"
+    ]
+  },
+  {
+    "objectID": "include/03_04_iris_structured_classification.html",
+    "href": "include/03_04_iris_structured_classification.html",
+    "title": "Entscheidungsbaum-Klassifikation mit dem Iris-Datensatz",
+    "section": "",
+    "text": "In diesem Notebook wird ein Entscheidungsbaum mit dem Iris-Datensatz trainiert, evaluiert und visualisiert. Der Fokus liegt auf Interpretierbarkeit und praktischer Anwendung klassischer ML-Methoden.",
+    "crumbs": [
+      "Implementierung mit Hilfe von Python",
+      "Entscheidungsbäume",
+      "Klassifikation: Iris-Datensatz"
+    ]
+  },
+  {
+    "objectID": "include/03_04_iris_structured_classification.html#bibliotheken-importieren-und-daten-laden",
+    "href": "include/03_04_iris_structured_classification.html#bibliotheken-importieren-und-daten-laden",
+    "title": "Entscheidungsbaum-Klassifikation mit dem Iris-Datensatz",
+    "section": "Bibliotheken importieren und Daten laden",
+    "text": "Bibliotheken importieren und Daten laden\n\nimport pandas as pd\nfile_path = '../data/processed/iris.csv'\ndf = pd.read_csv(file_path, sep = ',')\n\nDer Iris-Datensatz stammt aus dem UCI Machine Learning Repository. Er enthält Messdaten zu Kelch- und Blütenblättern dreier Iris-Arten. Ziel ist die Vorhersage der Art (‘species’) anhand von vier Merkmalen:\n\nsepal_length, sepal_width, petal_length, petal_width\n\nDie Daten werden aus einer CSV-Datei geladen: - ‘file_path’ muss auf die CSV-Datei zeigen - Trennzeichen ist Semikolon (;)\nFür die spätere Modellierung mit einem Entscheidungsbaum: - X enthält alle erklärenden Variablen - y enthält das Klassenlabel (species)",
+    "crumbs": [
+      "Implementierung mit Hilfe von Python",
+      "Entscheidungsbäume",
+      "Klassifikation: Iris-Datensatz"
+    ]
+  },
+  {
+    "objectID": "include/03_04_iris_structured_classification.html#feature-ziel-trennung",
+    "href": "include/03_04_iris_structured_classification.html#feature-ziel-trennung",
+    "title": "Entscheidungsbaum-Klassifikation mit dem Iris-Datensatz",
+    "section": "Feature-Ziel-Trennung",
+    "text": "Feature-Ziel-Trennung\nAufteilen in Merkmale (X) und Zielvariable (y) - die Zielvariable ‘species’ soll vorhergesagt werden - alle anderen Spalten werden als Prädiktoren verwendet\n\nfeatures = [c for c in df.columns if c != 'species']\nX = df[features]\ny = df['species']",
+    "crumbs": [
+      "Implementierung mit Hilfe von Python",
+      "Entscheidungsbäume",
+      "Klassifikation: Iris-Datensatz"
+    ]
+  },
+  {
+    "objectID": "include/03_04_iris_structured_classification.html#aufteilen-in-trainings--und-testdaten",
+    "href": "include/03_04_iris_structured_classification.html#aufteilen-in-trainings--und-testdaten",
+    "title": "Entscheidungsbaum-Klassifikation mit dem Iris-Datensatz",
+    "section": "Aufteilen in Trainings- und Testdaten",
+    "text": "Aufteilen in Trainings- und Testdaten\nWichtig: Testdaten dürfen nicht im Training verwendet werden, um mögliches Overfitting zu erkennen\n\nfrom sklearn.model_selection import train_test_split\nX_tr, X_tst, y_tr, y_tst = train_test_split(\n    X, y, test_size = 0.2, random_state = 42, stratify = y\n)\n\nDie Funktion train_test_split mischt die Daten zufällig und teilt sie auf: - X_tr, y_tr: Trainingsdaten (80 %) - X_tst, y_tst: Testdaten (20 %) - random_state sorgt für Reproduzierbarkeit - stratify = y sorgt für gleiche Klassenverteilung in Train und Test",
+    "crumbs": [
+      "Implementierung mit Hilfe von Python",
+      "Entscheidungsbäume",
+      "Klassifikation: Iris-Datensatz"
+    ]
+  },
+  {
+    "objectID": "include/03_04_iris_structured_classification.html#entscheidungsbaum-definieren-und-trainieren",
+    "href": "include/03_04_iris_structured_classification.html#entscheidungsbaum-definieren-und-trainieren",
+    "title": "Entscheidungsbaum-Klassifikation mit dem Iris-Datensatz",
+    "section": "Entscheidungsbaum definieren und trainieren",
+    "text": "Entscheidungsbaum definieren und trainieren\n\nImportieren des DecisionTreeClassifier aus scikit-learn\ndiese Klasse implementiert den CART-Algorithmus zur Klassifikation\nstandardmäßig wird das Kriterium “gini” verwendet (Gini-Unreinheit)\nAlternative: z. B. ‘entropy’ für die ID3-ähnliche Variante\n\nTrainieren des Modells mit den Trainingsdaten - X_tr: Merkmale der Trainingsdaten (n_samples x n_features) - y_tr: Klassenlabels der Trainingsdaten (n_samples)\nDie Methode .fit() baut den Entscheidungsbaum rekursiv auf: - wählt pro Knoten das optimale Feature zur Aufteilung - verwendet dabei ein Gütemaß (Gini oder Entropie) - stoppt, wenn Tiefe oder Datenmenge zu gering wird\n\nfrom sklearn.tree import DecisionTreeClassifier\nmodel = DecisionTreeClassifier()\nmodel.fit(X_tr, y_tr)\n\nDecisionTreeClassifier()In a Jupyter environment, please rerun this cell to show the HTML representation or trust the notebook. On GitHub, the HTML representation is unable to render, please try loading this page with nbviewer.org.DecisionTreeClassifier?Documentation for DecisionTreeClassifieriFitted\n        \n            \n                Parameters\n                \n\n\n\n\ncriterion \n'gini'\n\n\n\nsplitter \n'best'\n\n\n\nmax_depth \nNone\n\n\n\nmin_samples_split \n2\n\n\n\nmin_samples_leaf \n1\n\n\n\nmin_weight_fraction_leaf \n0.0\n\n\n\nmax_features \nNone\n\n\n\nrandom_state \nNone\n\n\n\nmax_leaf_nodes \nNone\n\n\n\nmin_impurity_decrease \n0.0\n\n\n\nclass_weight \nNone\n\n\n\nccp_alpha \n0.0\n\n\n\nmonotonic_cst \nNone\n\n\n\n\n            \n        \n    \n\n\n\nHinweise:\nDer DecisionTreeClassifier basiert auf dem CART-Algorithmus: - “Greedy”-Verfahren: trifft lokal optimale Entscheidungen beim Splitten - verwendet standardmäßig den Gini-Index zur Messung der Reinheit\nAlternative Kriterien: - criterion = 'entropy': verwendet Informationsgewinn, ähnlich ID3 - geeignet für kategoriale Merkmale, erzeugt aber oft tiefere Bäume\nWichtige Parameter zur Steuerung der Baumkomplexität: - max_depth: maximale Tiefe des Baumes - min_samples_split: minimale Anzahl von Beispielen, um einen Knoten zu teilen - min_samples_leaf: minimale Anzahl von Beispielen in einem Blatt - max_features: maximale Anzahl der Merkmale, die beim Split berücksichtigt werden - ccp_alpha: Kostenkomplexitäts-Pruning-Parameter (zur Vermeidung von Overfitting)\nBeispiel für Pruning: model = DecisionTreeClassifier(ccp_alpha = 0.05)\nWichtig: - .fit(X, y) darf nur auf den Trainingsdaten aufgerufen werden! - Ein mehrfaches Aufrufen mit verschiedenen Daten führt zu Overfitting",
+    "crumbs": [
+      "Implementierung mit Hilfe von Python",
+      "Entscheidungsbäume",
+      "Klassifikation: Iris-Datensatz"
+    ]
+  },
+  {
+    "objectID": "include/03_04_iris_structured_classification.html#vorhersage-auf-testdaten",
+    "href": "include/03_04_iris_structured_classification.html#vorhersage-auf-testdaten",
+    "title": "Entscheidungsbaum-Klassifikation mit dem Iris-Datensatz",
+    "section": "Vorhersage auf Testdaten",
+    "text": "Vorhersage auf Testdaten\n\ndas Modell ist bisher nur auf den Trainingsdaten X_tr, y_tr trainiert worden\nnun wenden wir es auf neue, ungesehene Daten an, um seine Generalisierbarkeit zu prüfen\npredict() nimmt als Input die Merkmalsmatrix X_tst (Form: [n_samples, n_features]) und gibt ein 1D-Array mit den vorhergesagten Klassenlabels zurück\n\n\ny_predicted = model.predict(X_tst)",
+    "crumbs": [
+      "Implementierung mit Hilfe von Python",
+      "Entscheidungsbäume",
+      "Klassifikation: Iris-Datensatz"
+    ]
+  },
+  {
+    "objectID": "include/03_04_iris_structured_classification.html#konfusionsmatrix-erstellen",
+    "href": "include/03_04_iris_structured_classification.html#konfusionsmatrix-erstellen",
+    "title": "Entscheidungsbaum-Klassifikation mit dem Iris-Datensatz",
+    "section": "Konfusionsmatrix erstellen",
+    "text": "Konfusionsmatrix erstellen\nDie Matrix ist quadratisch: (n_classes x n_classes) - die confusion_matrix vergleicht wahre Klassenlabels (y_tst) - mit den vom Modell vorhergesagten Labels (y_predicted) - Zeilen: wahre Klassen - Spalten: vorhergesagte Klassen - Diagonalelemente: korrekt klassifizierte Instanzen - Off-Diagonalelemente: Fehlklassifikationen\n\nfrom sklearn.metrics import confusion_matrix\nmatrix = confusion_matrix(y_tst, y_predicted)\nprint('Confusion Matrix:')\nprint(matrix)\n\nConfusion Matrix:\n[[10  0  0]\n [ 0  9  1]\n [ 0  0 10]]\n\n\n\nInterpretation:\n\nJe höher die Diagonaleinträge im Vergleich zu den Nebendiagonalen, desto besser\nAnalyse zeigt, welche Klassen verwechselt werden\nBesonders wichtig bei Klassen mit ähnlicher Ausprägung oder bei Imbalancen",
+    "crumbs": [
+      "Implementierung mit Hilfe von Python",
+      "Entscheidungsbäume",
+      "Klassifikation: Iris-Datensatz"
+    ]
+  },
+  {
+    "objectID": "include/03_04_iris_structured_classification.html#klassifikationsbericht",
+    "href": "include/03_04_iris_structured_classification.html#klassifikationsbericht",
+    "title": "Entscheidungsbaum-Klassifikation mit dem Iris-Datensatz",
+    "section": "Klassifikationsbericht",
+    "text": "Klassifikationsbericht\n\nclassification_report gibt eine Übersicht über die wichtigsten Metriken:\nprecision: Anteil der korrekt vorhergesagten Positiven = TP / (TP + FP)\nrecall (Sensitivität): Anteil der erkannten Positiven unter allen tatsächlichen Positiven = TP / (TP + FN)\nf1-score: harmonisches Mittel aus precision und recall\nsupport: Anzahl der wahren Instanzen pro Klasse\n\n\nfrom sklearn.metrics import classification_report\nreport = classification_report(\n    y_tst, y_predicted, digits = 3) #3 Nachkommastellen\nprint('Classification Report:')\nprint(report)\n\nClassification Report:\n                 precision    recall  f1-score   support\n\n    Iris-setosa      1.000     1.000     1.000        10\nIris-versicolor      1.000     0.900     0.947        10\n Iris-virginica      0.909     1.000     0.952        10\n\n       accuracy                          0.967        30\n      macro avg      0.970     0.967     0.967        30\n   weighted avg      0.970     0.967     0.967        30\n\n\n\n\nDetaillierte Erläuterungen zu den Metriken\n\nPrecision: Gibt an, wie zuverlässig positive Vorhersagen sind. Wichtig, wenn falsch-positive Ergebnisse vermieden werden sollen. Beispiele:\n\n\nSpamfilter (falsch-positive = wichtige Mails fälschlich als Spam)\nmedizinische Tests (gesunde Patienten fälschlich als krank)\nBetrugserkennung (legitime Transaktionen blockiert)\n\n\nRecall: Gibt an, wie viele der tatsächlichen Positiven erkannt wurden. Wichtig, wenn falsch-negative Ergebnisse vermieden werden sollen. Beispiele:\n\n\nCybersicherheit (unerkannter Angriff = großes Risiko)\nKrankheitsdiagnose (kranker Patient nicht erkannt)\nVerbrechensaufdeckung (unerkannte Straftat)\n\n\nF1-Score: Kombiniert precision und recall -&gt; Kompromissmaß. Sinnvoll bei:\n\n\nImbalancierten Klassen\nZielkonflikten zwischen precision und recall\n\n\nmacro avg: Ungewichteter Durchschnitt der Metriken über alle Klassen weighted avg: Durchschnitt über Klassen unter Berücksichtigung des supports (Klassenhäufigkeit)\n\n\n\nGesamtziel:\n\nhohe Werte bei precision, recall und f1-score -&gt; gutes, ausgewogenes Modell\nEinseitige Schwächen (z. B. recall niedrig bei einer Klasse) -&gt; gezielte Nachjustierung nötig",
+    "crumbs": [
+      "Implementierung mit Hilfe von Python",
+      "Entscheidungsbäume",
+      "Klassifikation: Iris-Datensatz"
+    ]
+  },
+  {
+    "objectID": "include/03_04_iris_structured_classification.html#visualisierung-des-entscheidungsbaums",
+    "href": "include/03_04_iris_structured_classification.html#visualisierung-des-entscheidungsbaums",
+    "title": "Entscheidungsbaum-Klassifikation mit dem Iris-Datensatz",
+    "section": "Visualisierung des Entscheidungsbaums",
+    "text": "Visualisierung des Entscheidungsbaums\n\nImport der benötigten Visualisierungsbibliotheken\nErzeugen einer neuen Figure für den Plot\n\nmit plt.figure() wird ein neuer Grafikbereich erzeugt\nder Parameter figsize steuert die Abmessung in Zoll: (Breite, Höhe)\nhier: 12 Zoll breit, 8 Zoll hoch -&gt; gut geeignet für größere Bäume\n\nplot_tree() erzeugt eine visuelle Darstellung des gesamten Entscheidungsbaums\nParameter:\n\nmodel: das trainierte DecisionTreeClassifier-Modell\nfeature_names: Liste mit Namen der Eingabemerkmale (X-Spaltennamen)\nclass_names: Klassenbezeichner für die Zielvariable\nfilled = True: Knoten werden eingefärbt nach dominierender Klasse\nrounded = True: Knoten haben abgerundete Ecken → bessere Lesbarkeit\nfontsize = 6: Schriftgröße innerhalb der Baumknoten\n\nAnzeigen der Grafik: plt.show() öffnet ein neues Fenster (oder zeigt inline in Jupyter die Grafik); ohne plt.show() wird der Baum zwar intern erstellt, aber nicht sichtbar gemacht\n\n\nOptional:\nPlot als Datei speichern (nach plt.show()) - das Format wird automatisch aus dem Dateinamen abgeleitet - Beispiel: PNG für Präsentationen, PDF für Publikationen - Parameter: + dpi = 300: hohe Auflösung, gut für Druck + bbox_inches = 'tight': reduziert unnötigen Rand\n\nfrom sklearn.tree import plot_tree\nimport matplotlib.pyplot as plt\n\nplt.figure(figsize=(12, 8))\nplot_tree(\n    model,\n    feature_names=features,\n    class_names=model.classes_,\n    filled=True,\n    rounded=True,\n    fontsize=6\n)\nplt.show()\nplt.savefig('../figs/baumstruktur.png', dpi=300, bbox_inches='tight')\n\n\n\n\n\n\n\n\n&lt;Figure size 672x480 with 0 Axes&gt;\n\n\n\n\nZusatzhinweise zur Interpretation und Verwendung\nDie Darstellung hilft, das Entscheidungsverhalten des Modells nachzuvollziehen: - Jeder Knoten zeigt die Aufspaltung basierend auf einem Merkmal (feature) - “gini” zeigt die Unreinheit im Knoten (je näher an 0, desto reiner) - “samples”: Anzahl der Trainingsdaten im Knoten - “value”: Verteilung der Klassen im Knoten - Farbe: stärker gefärbte Knoten = klar dominierende Klasse - ccp_alpha kann verwendet werden, um Pruning zu steuern und Overfitting zu vermeiden\nEinsatzmöglichkeiten: - Modellinterpretation (z. B. bei erklärungsbedürftigen Anwendungen) - Fehleranalyse (z. B. bei Überanpassung durch zu tiefe Bäume) - Kommunikation in Präsentationen oder Berichten\nAlternative Ausgabe:\nFalls du eine PDF-Datei des Baums erzeugen willst, kannst du auch export_graphviz() mit graphviz verwenden (z. B. für komplexere Bäume). Dies ist besonders nützlich bei tiefen Bäumen, die mit plot_tree() schwer lesbar sind.",
+    "crumbs": [
+      "Implementierung mit Hilfe von Python",
+      "Entscheidungsbäume",
+      "Klassifikation: Iris-Datensatz"
     ]
   },
   {
@@ -800,80 +1536,91 @@
     ]
   },
   {
-    "objectID": "include/02_04_MLP.html",
-    "href": "include/02_04_MLP.html",
+    "objectID": "include/01_02_themenfelder_kuenstliche_intelligenz.html",
+    "href": "include/01_02_themenfelder_kuenstliche_intelligenz.html",
     "title": "Grundlagen der Künstlichen Intelligenz (GKI)",
     "section": "",
-    "text": "Lineare Modelle wie das Perzeptron sind begrenzt\n\nKönnen nur linear separierbare Daten klassifizieren\n\nBeispiel: XOR ist nicht linear trennbar\n\nLösung: Komposition einfacher nichtlinearer Funktionen\n\n\\(\\ra\\) Einführung verdeckter Schichten (Hidden Layer)\n\n\n\n\n\nEingabe: \\(\\bs{x}_i \\in \\mathbb{R}^d\\)\n\nHidden Layer: Dimension \\(h_1\\)\n\nAusgang: \\(\\hat{y}_i \\in (0,1)\\)\n\n\n\n\n\nEingabe \\(\\rightarrow\\) Hidden: \\(\\bs{W}^{(1)} \\in \\mathbb{R}^{h_1 \\times d},\\quad \\bs{b}^{(1)} \\in \\mathbb{R}^{h_1}\\)\nHidden \\(\\rightarrow\\) Output: \\(\\bs{W}^{(2)} \\in \\mathbb{R}^{1 \\times h_1},\\quad b^{(2)} \\in \\mathbb{R}\\)\n\n\n\n\n\nHidden Layer: \\(\\bs{a}_i^{(1)} = \\bs{W}^{(1)} \\bs{x}_i + \\bs{b}^{(1)} \\in \\mathbb{R}^{h_1}\\) und \\(\\bs{h}_i = \\phi\\left( \\bs{a}_i^{(1)} \\right) \\in \\mathbb{R}^{h_1}\\)\nOutput Layer: \\(z_i^{(2)} = \\bs{W}^{(2)} \\bs{h}_i + b^{(2)} \\in \\mathbb{R}\\) und \\(\\hat{y}_i = \\sigma(z_i^{(2)}) \\in (0,1)\\)",
+    "text": "Teilgebiet der KI: Programme verbessern sich durch Erfahrung\nDefinition (Tom M. Mitchell, 1997):\n\nA computer program learns from experience \\(E\\) w. r. t. tasks \\(T\\) and performance \\(P\\)\nif its performance at \\(T\\), measured by \\(P\\), improves with \\(E\\)\n\nML-Algorithmen erkennen Muster in Daten und lernen daraus\nUnterschied zu klassischen Programmen: Lernen durch Rückkopplung\nhier könnte Abbildung 2.1 stehen\n\n\n\n\n\nTrainingsdaten \\(\\ra\\) Hypothese \\(\\ra\\) Ergebnis \\(\\ra\\) Feedback\nZiel: Optimierung der Hypothese durch Rückkopplung\nzwei Modi:\n\nOffline-Lernen: Training einmalig vor Anwendung\nOnline-Lernen: kontinuierliche Anpassung im Betrieb",
     "crumbs": [
-      "Zentrale Algorithmen der künstlichen Intelligenz",
-      "Neuronale Netze II: MLP"
+      "Einführung in die Künstliche Intelligenz",
+      "Themenfelder der Künstlichen Intelligenz"
     ]
   },
   {
-    "objectID": "include/02_04_MLP.html#motivation-multilayer-perceptron-mlp-und-kernidee",
-    "href": "include/02_04_MLP.html#motivation-multilayer-perceptron-mlp-und-kernidee",
+    "objectID": "include/01_02_themenfelder_kuenstliche_intelligenz.html#maschinelles-lernen-themenfelder-und-überblick",
+    "href": "include/01_02_themenfelder_kuenstliche_intelligenz.html#maschinelles-lernen-themenfelder-und-überblick",
     "title": "Grundlagen der Künstlichen Intelligenz (GKI)",
     "section": "",
-    "text": "Lineare Modelle wie das Perzeptron sind begrenzt\n\nKönnen nur linear separierbare Daten klassifizieren\n\nBeispiel: XOR ist nicht linear trennbar\n\nLösung: Komposition einfacher nichtlinearer Funktionen\n\n\\(\\ra\\) Einführung verdeckter Schichten (Hidden Layer)\n\n\n\n\n\nEingabe: \\(\\bs{x}_i \\in \\mathbb{R}^d\\)\n\nHidden Layer: Dimension \\(h_1\\)\n\nAusgang: \\(\\hat{y}_i \\in (0,1)\\)\n\n\n\n\n\nEingabe \\(\\rightarrow\\) Hidden: \\(\\bs{W}^{(1)} \\in \\mathbb{R}^{h_1 \\times d},\\quad \\bs{b}^{(1)} \\in \\mathbb{R}^{h_1}\\)\nHidden \\(\\rightarrow\\) Output: \\(\\bs{W}^{(2)} \\in \\mathbb{R}^{1 \\times h_1},\\quad b^{(2)} \\in \\mathbb{R}\\)\n\n\n\n\n\nHidden Layer: \\(\\bs{a}_i^{(1)} = \\bs{W}^{(1)} \\bs{x}_i + \\bs{b}^{(1)} \\in \\mathbb{R}^{h_1}\\) und \\(\\bs{h}_i = \\phi\\left( \\bs{a}_i^{(1)} \\right) \\in \\mathbb{R}^{h_1}\\)\nOutput Layer: \\(z_i^{(2)} = \\bs{W}^{(2)} \\bs{h}_i + b^{(2)} \\in \\mathbb{R}\\) und \\(\\hat{y}_i = \\sigma(z_i^{(2)}) \\in (0,1)\\)",
+    "text": "Teilgebiet der KI: Programme verbessern sich durch Erfahrung\nDefinition (Tom M. Mitchell, 1997):\n\nA computer program learns from experience \\(E\\) w. r. t. tasks \\(T\\) and performance \\(P\\)\nif its performance at \\(T\\), measured by \\(P\\), improves with \\(E\\)\n\nML-Algorithmen erkennen Muster in Daten und lernen daraus\nUnterschied zu klassischen Programmen: Lernen durch Rückkopplung\nhier könnte Abbildung 2.1 stehen\n\n\n\n\n\nTrainingsdaten \\(\\ra\\) Hypothese \\(\\ra\\) Ergebnis \\(\\ra\\) Feedback\nZiel: Optimierung der Hypothese durch Rückkopplung\nzwei Modi:\n\nOffline-Lernen: Training einmalig vor Anwendung\nOnline-Lernen: kontinuierliche Anpassung im Betrieb",
     "crumbs": [
-      "Zentrale Algorithmen der künstlichen Intelligenz",
-      "Neuronale Netze II: MLP"
+      "Einführung in die Künstliche Intelligenz",
+      "Themenfelder der Künstlichen Intelligenz"
     ]
   },
   {
-    "objectID": "include/02_04_MLP.html#modelaufbau",
-    "href": "include/02_04_MLP.html#modelaufbau",
+    "objectID": "include/01_02_themenfelder_kuenstliche_intelligenz.html#ml-teilbereiche-und-abgrenzung",
+    "href": "include/01_02_themenfelder_kuenstliche_intelligenz.html#ml-teilbereiche-und-abgrenzung",
     "title": "Grundlagen der Künstlichen Intelligenz (GKI)",
-    "section": "Modelaufbau",
-    "text": "Modelaufbau\n\nKomponenten des Modells\n\n\\(\\phi\\): Aktivierungsfunktion im Hidden Layer (z. B. ReLU, \\(\\tanh\\), Sigmoid)\n\n\\(\\sigma\\): Aktivierung im Output Layer (typisch Sigmoid bei binärer Klassifikation)\n\n\n\nDimensionsüberprüfung\n\n\\(\\bs{x}_i \\in \\mathbb{R}^d\\)\n\n\\(\\bs{W}^{(1)} \\bs{x}_i \\in \\mathbb{R}^{h_1}\\)\n\n\\(\\bs{h}_i \\in \\mathbb{R}^{h_1}\\)\n\n\\(\\hat{y}_i = \\sigma(\\bs{W}^{(2)} \\bs{h}_i + b^{(2)}) \\in (0,1)\\)\n\n\n\nBeispiel\n\nBeispielhafte Netzstruktur:\n\\[\n\\bs{x}_i \\rightarrow \\text{Linear}(\\bs{W}^{(1)}) \\rightarrow \\phi()\n\\rightarrow \\text{Linear}(\\bs{W}^{(2)}) \\rightarrow \\sigma() \\rightarrow \\hat{y}_i\n\\]\nAnzahl der Parameter:\n\\[\nh_1 \\cdot d + h_1 + h_1 + 1 = h_1(d + 2) + 1\n\\]\nDoppelt \\(h_1\\): Bias im Hidden Layer und Gewichte im Output\n\n\n\nKlarstellung: Warum \\(\\bs{W}^{(2)} \\in \\mathbb{R}^{1 \\times h_1}\\)?\n\nDie Form von \\(\\bs{W}^{(2)}\\) hängt nicht von der Aktivierungsfunktion \\(\\phi\\) ab\n\n\\(\\phi\\) wirkt elementweise auf Vektoren in \\(\\mathbb{R}^{h_1}\\)\n\n\\(\\phi\\) verlangt keine Skalareingabe im Output-Layer\n\n\n\nKlarstellung: Outputstruktur bestimmt Form von \\(\\bs{W}^{(2)}\\)\n\nZiel: skalare Ausgabe \\(\\hat{y}_i \\in (0,1)\\)\n\nDazu: \\(\\bs{W}^{(2)}\\) muss \\(\\bs{h}_i \\in \\mathbb{R}^{h_1}\\) zu Skalar kombinieren:\n\\[\nz_i^{(2)} = \\bs{W}^{(2)} \\bs{h}_i + b^{(2)} \\in \\mathbb{R}\n\\]\nDeshalb: \\(\\bs{W}^{(2)} \\in \\mathbb{R}^{1 \\times h_1}\\)\n\n\n\nAchtung: Erweiterung auf \\(C\\) Klassen (Softmax)\n\nBei Klassifikation mit \\(C\\) Klassen:\n\nOutput ist Vektor \\(\\hat{\\bs{y}}_i \\in \\mathbb{R}^C\\)\nGewichtsmatrix: \\(\\bs{W}^{(2)} \\in \\mathbb{R}^{C \\times h_1}\\)\n\nSoftmax erzeugt Wahrscheinlichkeitsverteilung über \\(C\\) Klassen\n\nFazit: Form von \\(\\bs{W}^{(2)}\\) ergibt sich aus gewünschter Ausgabedimension",
+    "section": "ML: Teilbereiche und Abgrenzung",
+    "text": "ML: Teilbereiche und Abgrenzung\n\n\nÜberblick\n\nUnsupervised Learning (UL): lernt aus nicht gelabelten Daten (z. B. Clustering)\nSupervised Learning (SL): lernt aus gelabelten Beispielen (z. B. Klassifikation, Regression)\nReinforcement Learning (RL): lernt durch Belohnung/Strafe in Interaktion mit Umwelt\n\n\n\nSupervised Learning (SL)\n\ngelabelte Trainingsdaten: \\((x_i, y_i)\\) bekannt für alle \\(i\\)\nZiel: Modell zur Vorhersage von \\(y\\) aus \\(x\\)\nzwei Problemtypen: Regression (z. B. Temperatur) und Klassifikation (z. B. medizinische Diagnose)\ntypische Anwendungen: Spracherkennung, Chatbots, Predictive Maintenance\ntypische Algorithmen: KNN, Random Forest, SVM, Neuronale Netze\n\n\n\nUnsupervised Learning (UL)\n\nkeine Zielvariable \\(y\\) – nur Merkmalsdaten \\(x\\)\nZiel: versteckte Muster oder Strukturen erkennen\nwichtigste Technik: Clustering\nBeispiele: Marktsegmente, soziale Gruppen, Themen in Texten\ntypische Algorithmen: K-Means, hierarchisches Clustering, spektrales Clustering\nAnwendung u. a. bei Empfehlungssystemen (z. B. Netflix)\n\n\n\nReinforcement Learning (RL)\n\nAgent lernt durch Interaktion mit einer Umgebung\nAktionen \\(a_t\\) verändern Zustand \\(s_t\\) und führen zu Reward \\(r_t\\)\nLernen basiert auf Trial & Error ohne vollständiges Umweltwissen\nZiel: Policy, die langfristig Belohnung maximiert\nzentrale Herausforderung: Exploration vs. Exploitation\ntypische Algorithmen: Q-Learning, SARSA, Monte Carlo, Temporal Difference\n\n\n\nTeilbereiche des ML (Überblick)\n\n\nACHTUNG: Auch diese Tabelle ist regelmäßig klausurrelevant",
     "crumbs": [
-      "Zentrale Algorithmen der künstlichen Intelligenz",
-      "Neuronale Netze II: MLP"
+      "Einführung in die Künstliche Intelligenz",
+      "Themenfelder der Künstlichen Intelligenz"
     ]
   },
   {
-    "objectID": "include/02_04_MLP.html#vorwärtspropagation-im-mlp",
-    "href": "include/02_04_MLP.html#vorwärtspropagation-im-mlp",
+    "objectID": "include/01_02_themenfelder_kuenstliche_intelligenz.html#robotik",
+    "href": "include/01_02_themenfelder_kuenstliche_intelligenz.html#robotik",
     "title": "Grundlagen der Künstlichen Intelligenz (GKI)",
-    "section": "Vorwärtspropagation im MLP",
-    "text": "Vorwärtspropagation im MLP\n\nZiel\n\nVollständige Vorwärtspropagation im MLP formal darstellen\n\nNotation:\n\n\\(\\bs{x}_i \\in \\mathbb{R}^d\\): Eingabevektor\n\n\\(h_1\\): Dimension des Hidden Layers\n\n\\(\\phi\\): Aktivierung im Hidden Layer\n\n\\(\\sigma\\): Aktivierung im Output Layer\n\n\n\n\nGewichtsmatrizen und Biasvektoren\n\n\\(\\bs{W}^{(1)} \\in \\mathbb{R}^{h_1 \\times d}\\), \\(\\bs{b}^{(1)} \\in \\mathbb{R}^{h_1}\\)\n\n\\(\\bs{W}^{(2)} \\in \\mathbb{R}^{1 \\times h_1}\\), \\(b^{(2)} \\in \\mathbb{R}\\)\n\n\n\nVorwärtspass: Hidden Layer\n\nAffiner Schritt:\n\\[\n\\bs{a}_i^{(1)} = \\bs{W}^{(1)} \\bs{x}_i + \\bs{b}^{(1)} \\in \\mathbb{R}^{h_1}\n\\]\nAktivierung (elementweise):\n\\[\n\\bs{h}_i = \\phi\\left( \\bs{a}_i^{(1)} \\right) \\in \\mathbb{R}^{h_1}\n\\]\n\n\n\nVorwärtspass: Output Layer\n\nAffiner Schritt:\n\\[\nz_i^{(2)} = \\bs{W}^{(2)} \\bs{h}_i + b^{(2)} \\in \\mathbb{R}\n\\]\nAktivierung:\n\\[\n\\hat{y}_i = \\sigma(z_i^{(2)}) \\in (0,1)\n\\]\n\n\n\nGesamtmodell als Funktion\n\nKomposition der Schritte:\n\\[\n\\hat{y}_i = \\sigma\\left( \\bs{W}^{(2)} \\cdot \\phi\\left( \\bs{W}^{(1)} \\bs{x}_i + \\bs{b}^{(1)} \\right) + b^{(2)} \\right)\n\\]\nFunktion \\(f_\\theta: \\mathbb{R}^d \\ra (0,1)\\) mit Parametern:\n\\[\n\\theta = \\left\\{ \\bs{W}^{(1)}, \\bs{b}^{(1)}, \\bs{W}^{(2)}, b^{(2)} \\right\\}\n\\]",
+    "section": "Robotik",
+    "text": "Robotik\n\nEinführung\n\nRobotik ist Teilbereich der KI, eng verbunden mit Maschinenbau und Informatik\nFokus: Interaktion mit physischer Welt über Sensoren und Aktoren\nzentrale Rolle in Industrie 4.0, z. B. durch fahrerlose Transportsysteme\ntypische Einsatzbereiche: automatisierte Produktion, Materialfluss, Mensch-Maschine-Kooperation\nzwei zentrale Robotertypen:\n\nCobots – kollaborative Roboter\nFTS/AMR – autonome Transportfahrzeuge\n\n\n\n\nCobots: kollaborative Roboter\n\nCobots arbeiten direkt mit Menschen ohne Schutzvorrichtung zusammen\nzentrale Idee: Kombination menschlicher Flexibilität mit robotischer Ausdauer\nvier Haupttypen nach ISO 10218:\n\nSicherheitsüberwachter Stopp\nGeschwindigkeit/Abstandsüberwachung\nLeistungs- und Kraftbegrenzung\nHandführung\n\n\n\n\nACHTUNG: Klausur (14.09.2024): bisher einmalig folgende Tabelle abgefragt:\n\n\n\nRobotik: Anwendungen kollaborativer Roboter\n\nPick & Place: Objekte greifen, bewegen, neu positionieren\nMaschinenversorgung: z. B. CNC-, Spritzgieß- oder Stanzmaschinen\nProzessunterstützung: Kleben, Bohren, Schweißen mit Endeffektor\nFertigstellung: Polieren, Schleifen, Entgraten mit Kraftsensor\nQualitätskontrolle: Bilderfassung & Sortierung mit maschinellem Sehen\nVerpackung: Entlastung bei monotonen Routineaufgaben\nGesundheitswesen:\n\nUnterstützung bei Hygiene, Vitaldaten, Blutabnahme\nautomatisierte Reha-Maßnahmen",
     "crumbs": [
-      "Zentrale Algorithmen der künstlichen Intelligenz",
-      "Neuronale Netze II: MLP"
+      "Einführung in die Künstliche Intelligenz",
+      "Themenfelder der Künstlichen Intelligenz"
     ]
   },
   {
-    "objectID": "include/02_04_MLP.html#vorwärtspropagation-im-mlp-beispiel",
-    "href": "include/02_04_MLP.html#vorwärtspropagation-im-mlp-beispiel",
+    "objectID": "include/01_02_themenfelder_kuenstliche_intelligenz.html#autonome-transportsysteme",
+    "href": "include/01_02_themenfelder_kuenstliche_intelligenz.html#autonome-transportsysteme",
     "title": "Grundlagen der Künstlichen Intelligenz (GKI)",
-    "section": "Vorwärtspropagation im MLP: Beispiel",
-    "text": "Vorwärtspropagation im MLP: Beispiel\n\nBeispiel: Hidden Layer\n\n\\(d = 2\\), \\(h_1 = 3\\)\n\n\\(\\bs{x}_i = \\begin{pmatrix} 1 \\\\ -1 \\end{pmatrix}\\)\n\n\\(\\bs{W}^{(1)} = \\begin{pmatrix} 1 & 0 \\\\ 0 & -1 \\\\ 1 & 1 \\end{pmatrix}\\),\n\\(\\bs{b}^{(1)} = \\begin{pmatrix} 0 \\\\ 1 \\\\ 0 \\end{pmatrix}\\)\n\nAktivierung: \\(\\phi = \\text{ReLU}\\)\n\n\\[\n\\bs{a}_i^{(1)} =\n\\begin{pmatrix} 1 & 0 \\\\ 0 & -1 \\\\ 1 & 1 \\end{pmatrix}\n\\begin{pmatrix} 1 \\\\ -1 \\end{pmatrix}\n+\n\\begin{pmatrix} 0 \\\\ 1 \\\\ 0 \\end{pmatrix}\n=\n\\begin{pmatrix} 1 \\\\ 2 \\\\ 0 \\end{pmatrix}\n\\]\n\\[\n\\bs{h}_i = \\text{ReLU}\\left( \\bs{a}_i^{(1)} \\right) =\n\\begin{pmatrix} 1 \\\\ 2 \\\\ 0 \\end{pmatrix}\n\\]\n\n\nBeispiel: Output Layer\n\n\\(\\bs{W}^{(2)} = \\begin{pmatrix} 1 & -1 & 2 \\end{pmatrix}\\), \\(b^{(2)} = 0\\)\n\n\\[\nz_i^{(2)} =\n\\begin{pmatrix} 1 & -1 & 2 \\end{pmatrix}\n\\begin{pmatrix} 1 \\\\ 2 \\\\ 0 \\end{pmatrix}\n= 1 \\cdot 1 + (-1) \\cdot 2 + 2 \\cdot 0 = -1\n\\]\n\\[\n\\hat{y}_i = \\sigma(-1) \\approx 0.2689\n\\]\n\n\nInterpretation\n\nHidden Layer \\(\\ra\\) nichtlineare Repräsentation der Eingabe\n\nOutput Layer \\(\\ra\\) linearer Schritt + Sigmoid \\(\\ra\\) Wahrscheinlichkeit\n\nGesamtmodell ist vollständig differenzierbar",
+    "section": "Autonome Transportsysteme",
+    "text": "Autonome Transportsysteme\n\nEinführung: Fahrerlose Transportsysteme (FTS)\n\nselbstgesteuerte Fahrzeuge für Lager, Produktion, Logistik\nzwei Typen:\n\nAGV (automated guided vehicle): folgen Leitlinien (z. B. Magnetband)\nAMR (autonomous mobile robot): navigieren frei per Sensorik\n\nVorteile: effizienter Materialfluss, geringe Personalkosten, hohe Präzision\n\n\n\n\nACHTUNG: Klausur (14.09.2024): bisher einmalig folgende Tabelle abgefragt:\n\n\n\nUnterschiede AGV vs. AMR\n\nNavigation: AGV folgt externer Infrastruktur, AMR navigiert eigenständig\nHindernisse: AGV wird blockiert, AMR umfährt\nFlexibilität: AMR kann spontan neue Ziele anfahren\nKosten: AMR teurer, aber geringere Installationskosten\nSicherheit: AGV sicher bei klarer Spur, AMR benötigt Sicherheitsprotokolle",
     "crumbs": [
-      "Zentrale Algorithmen der künstlichen Intelligenz",
-      "Neuronale Netze II: MLP"
+      "Einführung in die Künstliche Intelligenz",
+      "Themenfelder der Künstlichen Intelligenz"
     ]
   },
   {
-    "objectID": "include/02_04_MLP.html#backpropagation",
-    "href": "include/02_04_MLP.html#backpropagation",
+    "objectID": "include/01_02_themenfelder_kuenstliche_intelligenz.html#evolutionäre-algorithmen-genetische-verfahren",
+    "href": "include/01_02_themenfelder_kuenstliche_intelligenz.html#evolutionäre-algorithmen-genetische-verfahren",
     "title": "Grundlagen der Künstlichen Intelligenz (GKI)",
-    "section": "Backpropagation",
-    "text": "Backpropagation\n\nZiel\n\nEffizienter Gradient der Verlustfunktion bezüglich aller Modellparameter:\n\\[\n\\theta = \\left\\{ \\bs{W}^{(1)}, \\bs{b}^{(1)}, \\bs{W}^{(2)}, b^{(2)} \\right\\}\n\\]\nZentrale Methode: Backpropagation basierend auf Kettenregel der Ableitung\n\n\n\nWiederholung: Vorwärtspass\n\\[\n\\bs{a}_i^{(1)} = \\bs{W}^{(1)} \\bs{x}_i + \\bs{b}^{(1)} \\in \\mathbb{R}^{h_1}\n\\] \\[\n\\bs{h}_i = \\phi\\left( \\bs{a}_i^{(1)} \\right) \\in \\mathbb{R}^{h_1}\n\\] \\[\nz_i^{(2)} = \\bs{W}^{(2)} \\bs{h}_i + b^{(2)} \\in \\mathbb{R}\n\\] \\[\n\\hat{y}_i = \\sigma(z_i^{(2)}) \\in (0,1)\n\\]\n\\[\n\\mathcal{L}_i = -\\left[ y_i \\log \\hat{y}_i + (1 - y_i) \\log(1 - \\hat{y}_i) \\right]\n\\]\n\n\nSchritt 1: Ableitung am Output\n\nGesucht:\n\\[\n\\frac{\\partial \\mathcal{L}_i}{\\partial z_i^{(2)}}\n\\]\nHerleitung:\n\n\\(\\mathcal{L}_i\\) hängt von \\(\\hat{y}_i = \\sigma(z_i^{(2)})\\) ab\n\n\\(\\frac{d}{dz} \\mathcal{L}_i = (\\sigma(z_i^{(2)}) - y_i) \\cdot \\sigma'(z_i^{(2)})\\)\n\nmit \\(\\sigma'(z) = \\sigma(z)(1 - \\sigma(z))\\)\n\nErgibt: \\[\n\\frac{\\partial \\mathcal{L}_i}{\\partial z_i^{(2)}} = \\hat{y}_i - y_i\n\\]\n\n\n\nSchritt 2: Gradienten Output Layer\n\nFür \\(\\bs{W}^{(2)} \\in \\mathbb{R}^{1 \\times h_1}\\): \\[\n\\frac{\\partial \\mathcal{L}_i}{\\partial \\bs{W}^{(2)}} = (\\hat{y}_i - y_i) \\cdot \\bs{h}_i^\\top\n\\]\nFür \\(b^{(2)} \\in \\mathbb{R}\\): \\[\n\\frac{\\partial \\mathcal{L}_i}{\\partial b^{(2)}} = \\hat{y}_i - y_i\n\\]\n\n\n\nSchritt 3: Fehlerterm im Hidden Layer\n\nFehlerterm wird rückwärts weitergegeben: \\[\n\\bs{\\delta}_i^{(1)} = (\\hat{y}_i - y_i) \\cdot \\bs{W}^{(2)\\top} \\circ \\phi'\\left( \\bs{a}_i^{(1)} \\right)\n\\]\n\\(\\circ\\): Hadamard-Produkt (elementweise Multiplikation)\n\n\\(\\phi'(\\bs{a}_i^{(1)})\\): Ableitung der Aktivierungsfunktion pro Neuron\n\n\n\nSchritt 4: Gradienten Hidden Layer\n\nFür \\(\\bs{W}^{(1)} \\in \\mathbb{R}^{h_1 \\times d}\\): \\[\n\\frac{\\partial \\mathcal{L}_i}{\\partial \\bs{W}^{(1)}} = \\bs{\\delta}_i^{(1)} \\cdot \\bs{x}_i^\\top\n\\]\nFür \\(\\bs{b}^{(1)} \\in \\mathbb{R}^{h_1}\\): \\[\n\\frac{\\partial \\mathcal{L}_i}{\\partial \\bs{b}^{(1)}} = \\bs{\\delta}_i^{(1)}\n\\]\n\n\n\nGesamtalgorithmus: Backpropagation\n\nFür jedes \\(i = 1, \\dots, N\\):\n\nVorwärtspass: berechne \\(\\hat{y}_i\\)\n\nFehlerterm: \\(\\delta_i^{(2)} = \\hat{y}_i - y_i\\)\n\nRückpropagation: berechne \\(\\bs{\\delta}_i^{(1)}\\)\n\nGradienten für alle Gewichte und Bias berechnen\n\nSGD-Update: \\[\n\\theta \\leftarrow \\theta - \\eta \\cdot \\nabla_\\theta \\mathcal{L}_i\n\\]",
+    "section": "Evolutionäre Algorithmen: genetische Verfahren",
+    "text": "Evolutionäre Algorithmen: genetische Verfahren\n\nGenetische Algorithmen (GA): Grundprinzip\n\nheuristische Optimierung basierend auf Darwin’scher Selektion\nLösung = Chromosom; Variable = Gen\nZiel: mit Selektion, Crossover und Mutation bessere Lösungen erzeugen\nFitnessfunktion bewertet Qualität jeder Lösung\n\n\n\n\nOperatoren: Selektion, Crossover, Mutation\n\nSelektion: fittere Individuen haben höhere Auswahlwahrscheinlichkeit\nCrossover: Austausch von Genen zur Kombination guter Eigenschaften\nMutation: zufällige Genänderung zur Vermeidung lokaler Minima\nElitismus: beste Lösungen direkt in nächste Generation übernommen\n\n\n\n\nACHTUNG: Klausurrelevant mehrmals – Definitionen\nBeachte die jeweiligen einzeln hervorgehoen Sätze !\n\nKreuzung (Crossover):\nDie natürliche Selektion ermöglicht die Auswahl von Individuen als Eltern für den Crossover-Schritt. Dieser Schritt ermöglicht den Austausch von Genen zwischen Individuen, um neue Lösungen zu erzeugen. In der Literatur gibt es verschiedene Crossover-Methoden. Bei der einfachsten Methode werden die Chromosomen an zwei oder drei Stellen geteilt. Anschließend werden dann die Gene zwischen zwei Chromosomen ausgetauscht.\nMutation:\nMit Hilfe der Mutation werden zufällige Veränderungen in den Genen erzeugt. Es gibt einen Parameter namens Mutationswahrscheinlichkeit \\((P_m)\\), der für jedes Gen in einem Kinderchromosom verwendet wird, das in der Crossover-Phase erzeugt wird. Dieser Parameter ist eine Zahl im Intervall von \\([0,1]\\). Für jedes Gen im neuen Kindchromosom wird eine Zufallszahl im gleichen Intervall erzeugt. Wenn diese Zufallszahl kleiner als \\(P_m\\) ist, wird dem Gen eine Zufallszahl mit der unteren und oberen Grenze zugewiesen.",
     "crumbs": [
-      "Zentrale Algorithmen der künstlichen Intelligenz",
-      "Neuronale Netze II: MLP"
+      "Einführung in die Künstliche Intelligenz",
+      "Themenfelder der Künstlichen Intelligenz"
     ]
   },
   {
-    "objectID": "include/02_04_MLP.html#training-und-praktische-aspekte",
-    "href": "include/02_04_MLP.html#training-und-praktische-aspekte",
+    "objectID": "include/01_02_themenfelder_kuenstliche_intelligenz.html#schwarmintelligenz",
+    "href": "include/01_02_themenfelder_kuenstliche_intelligenz.html#schwarmintelligenz",
     "title": "Grundlagen der Künstlichen Intelligenz (GKI)",
-    "section": "Training und praktische Aspekte",
-    "text": "Training und praktische Aspekte\n\nWahl von Lernrate und Initialisierung\n\nZu große Lernrate \\(\\eta\\) \\(\\rightarrow\\) Divergenz\n\nZu kleine Lernrate \\(\\rightarrow\\) langsames Lernen\n\nHäufig: Start mit moderatem \\(\\eta\\) und Reduktion über Epochen\n\nInitialisierung der Gewichte:\n\nKleine Zufallswerte (z. B. Normalverteilung)\n\nVermeidung von Symmetrie: nicht alle Gewichte = 0\n\n\n\n\nOverfitting und Generalisierung\n\nZu hohe Modellkapazität \\(\\rightarrow\\) Anpassung an Rauschen in den Trainingsdaten\n\nSymptome:\n\nTraining loss sinkt weiter, Validation loss steigt\n\nKlassifikationsfehler im Test höher als erwartet\n\nLösung: Regularisierung oder Early Stopping\n\n\n\nMini-Batch Training und SGD\n\nSGD: Gewichtsupdate nach jedem Datenpunkt\n\nBatch Gradient Descent: über alle Daten summieren\n\nMini-Batch SGD:\n\nReduzierter Rechenaufwand pro Schritt\n\nStabilerer Verlauf durch Mittelung über kleine Teilmengen\n\n\nTypische Batchgrößen: \\(B = 32, 64, 128\\)\n\n\n\nRegularisierung\n\nL2-Regularisierung (Ridge): \\[\n\\mathcal{L}_\\text{reg} = \\mathcal{L} + \\lambda \\|\\bs{W}\\|_2^2\n\\]\nKontrolliert die Größe der Gewichte, verhindert Überanpassung\nDropout:\n\nZufälliges Deaktivieren von Neuronen während des Trainings\n\nErhöht Robustheit, reduziert Abhängigkeit einzelner Pfade\n\n\n\n\nGrenzen klassischer MLPs\n\nKeine Gedächtnisstruktur \\(\\rightarrow\\) nicht geeignet für zeitabhängige Daten\n\nEingaben müssen fester Länge sein \\(\\rightarrow\\) keine sequenzielle Verarbeitung\n\nTraining bei tieferen Architekturen problematisch:\n\nVanishing Gradient\n\nRechenaufwand steigt stark\n\nDeshalb: CNNs für Bilddaten, RNNs/LSTMs für Sequenzen",
+    "section": "Schwarmintelligenz",
+    "text": "Schwarmintelligenz\n\nGrundprinzip\n\nkollektives Verhalten einfacher Agenten (z. B. Insekten, Vögel)\nSystemverhalten entsteht durch lokale Interaktion & Selbstorganisation\nkein zentrales Steuerungselement, aber globale Zielerreichung möglich\nrobust gegenüber Ausfällen, sehr flexibel einsetzbar\n\n\n\nAmeisenalgorithmus (Ant Colony Optimization, ACO)\n\nVorbild: reale Ameisen suchen effizient kürzeste Wege\nKommunikation über Pheromonspuren – Stigmergie\nBestandteile:\n\nkünstliche Ameisen als Lösungskonstrukte\nPheromon-Aktualisierung (Verstärkung & Verdunstung)\noptional: Daemon-Strategien zur Sicherung guter Lösungen\n\ngeeignet für kombinatorische Optimierung (z. B. Routing-Probleme)",
     "crumbs": [
-      "Zentrale Algorithmen der künstlichen Intelligenz",
-      "Neuronale Netze II: MLP"
+      "Einführung in die Künstliche Intelligenz",
+      "Themenfelder der Künstlichen Intelligenz"
+    ]
+  },
+  {
+    "objectID": "include/01_02_themenfelder_kuenstliche_intelligenz.html#expertensysteme-es-und-multiagentensysteme-mas",
+    "href": "include/01_02_themenfelder_kuenstliche_intelligenz.html#expertensysteme-es-und-multiagentensysteme-mas",
+    "title": "Grundlagen der Künstlichen Intelligenz (GKI)",
+    "section": "Expertensysteme (ES) und Multiagentensysteme (MAS)",
+    "text": "Expertensysteme (ES) und Multiagentensysteme (MAS)\n\nAufbau und Arbeitsweise\n\nwissensbasierte Systeme: simulieren Expertenwissen\nbestehen aus:\n\nWissensbasis: Fakten, Regeln, Heuristiken\nInferenzmaschine: Schlussfolgerung durch Verkettung\nBenutzeroberfläche: Eingabe/Interaktion\n\nVorwärtsverkettung: datengetriebene Ableitung\nRückwärtsverkettung: hypothesengeleitete Prüfung\n\n\n\n\nEigenschaften und Herausforderungen\n\nNetzwerk autonomer Agenten zur Lösung komplexer Probleme\nzentrale Merkmale:\n\nSituiertheit, Autonomie, Inferenzfähigkeit, Reaktivität\nProaktivität, soziales Verhalten\n\nVorteile: Robustheit, Skalierbarkeit, Wiederverwendbarkeit\nHerausforderungen: Koordination, Abstraktion, Konfliktlösung",
+    "crumbs": [
+      "Einführung in die Künstliche Intelligenz",
+      "Themenfelder der Künstlichen Intelligenz"
     ]
   }
 ]
