@@ -24,23 +24,34 @@ jobs:
     permissions:
       contents: write
     steps:
+      # 1. Repository auschecken
       - name: Check out repository
         uses: actions/checkout@v4
         with:
-          fetch-depth: 1  # shallow clone for speed
+          fetch-depth: 1  # schneller durch shallow clone
 
+      # 2. Python installieren
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.10"
+
+      # 3. Python-Abhängigkeiten installieren
+      - name: Install Python dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      # 4. Quarto installieren
       - name: Set up Quarto
         uses: quarto-dev/quarto-actions/setup@v2
-        # optionally pin a version for reproducibility:
-        # with:
-        #   version: "1.5.57"
+        with:
+          version: "1.4.550"  # stabile Version mit Jupyter-Unterstützung
 
+      # 5. Rendern & Publizieren
       - name: Render and Publish
         uses: quarto-dev/quarto-actions/publish@v2
         with:
           target: gh-pages
-          # If you commit rendered output (_site or docs) to the repo,
-          # you can skip rendering here to go even faster:
-          # render: false
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

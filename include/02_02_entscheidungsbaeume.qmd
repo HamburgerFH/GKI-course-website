@@ -164,8 +164,8 @@
 
 
 
-- gegeben seien $K=2$ Klassen: ``sick'' und ``healthy'' mit $p_1$ als 
-  Anteil der Objekte in Klasse ``sick'', $p_2 = 1 - p_1$ für eine Menge von 
+- gegeben seien $K=2$ Klassen: ''sick'' und ''healthy'' mit $p_1$ als 
+  Anteil der Objekte in Klasse ''sick'', $p_2 = 1 - p_1$ für eine Menge von 
   Objekten M
 - **Informationsgehalt** eines Ereignisses $z$ mit $p(z)$ ist:
   $$
@@ -197,7 +197,7 @@
   $$
   \text{gain}(A) = H(M) - H_A(M)
   $$
-- hoher Informationsgewinn von $A$ erzeugt möglichst ``reinere'' 
+- hoher Informationsgewinn von $A$ erzeugt möglichst ''reinere'' 
   Teilmengen
 - Ziel: maximale Reduktion der Unreinheit durch Auswahl des besten $A^*$
 
@@ -345,8 +345,8 @@ gain(Temperature)=0.029, gain(Humidity)=0.152, gain(Wind)=0.048
   mit Menge von Attributwerten $\mathcal{A}_i$, sodass eine optimale
   Aufspaltung von $M_q$ entsteht
   - $\hookrightarrow$ **_Optimalitätsmaß:_** nicht Entropie sondern *Gini-Index* !
-- es werden **binäre Partitionen**
-  $\mathcal{A}_i^L \cup \mathcal{A}_i^R = \mathcal{A}_i$, ~~ 
+- es werden **binäre Partitionen**, d.h. Partitionen mit den Eigenschaften 
+  $\mathcal{A}_i^L \cup \mathcal{A}_i^R = \mathcal{A}_i$, und 
   $\mathcal{A}_i^L \cap \mathcal{A}_i^R = \emptyset$ betrachtet; diese
   definieren dann auch eine Zerlegung von $M_q$ zwei ebenfalls disjunkte
   Teilmengen:
@@ -375,6 +375,7 @@ gain(Temperature)=0.029, gain(Humidity)=0.152, gain(Wind)=0.048
 - Aufteilung von $M_q$ in zwei Mengen über Zerlegung
   $\mathcal{A}_i^L, \mathcal{A}_i^R$ und Berechnung eines gewichteten 
   Gini-Index nach Aufteilung:
+
   \begin{align}
   wGini(M_q, \mathcal{A}_i^L) &= p_{iL}^q \cdot
   Gini(L_q^i(\mathcal{A}_i^L)) + p_{iR}^q \cdot
@@ -485,7 +486,7 @@ gain(Temperature)=0.029, gain(Humidity)=0.152, gain(Wind)=0.048
 Spieleranzahl*
 
 - Ziel: Vorhersage der Spieleranzahl (numerisch) $\rightarrow$
-  Beispielattribut ``Outlook'' mit drei Ausprägungen
+  Beispielattribut ''Outlook'' mit drei Ausprägungen
 
 | **Outlook** | **Anzahl** | **Mittelwert** | **Varianz** | **Std.-Abw.** |
 |:-----------:|-----------:|---------------:|------------:|--------------:|
@@ -520,9 +521,9 @@ $$
   \text{SD}(M) &= \sqrt{86.88} \approx 9.32
   \end{align}
 - **_Varianzreduktion:_**
-  $
+  $$
   \text{gain}_\text{Var} = 86.88 - 67.31 = 19.57
-  $
+  $$
 - gewichtete SD nach Outlook:
   $$
   \text{SD}(M) = 9.32 \\[1ex]
@@ -531,7 +532,7 @@ $$
   \frac{5}{14} \cdot 10.07 
   = 3.32 + 1.08 + 3.26 = 7.66 \\[1ex]
   $$
-- **_``gain'' auf Basis SD:_** $\text{gain}_\text{SD} = 9.32 - 7.66 = 1.66$
+- **_''gain'' auf Basis SD:_** $\text{gain}_\text{SD} = 9.32 - 7.66 = 1.66$
 - **Splitkriterium**: Wähle Attribut mit maximaler Varianzreduktion, 
   oder basierend auf Standardabweichung
 - **Blattwert**: arithmetisches Mittel der Zielwerte in jedem Blatt
@@ -575,36 +576,36 @@ $$
 
 ## Hyperparameter-Optimierung: Grundlagen
 
-- **parameter**: durch den Datensatz bestimmt, vom Algorithmus gelernt
+- **Parameter**: durch den Datensatz bestimmt, vom Algorithmus gelernt
   (z. B. Regressionskoeffizienten, Gewichte im neuronalen Netz)
-- **hyperparameter**: vom anwender vor dem training festgelegt, steuern
-  das lernverfahren
-- ziel der HPO: wahl von hyperparametern, die die modellgüte maximieren
-- es gibt verfahren ohne hyperparameter (lineare regression) und
-  verfahren ohne lernbare parameter (k-nearest-neighbour), aber keine
+- **Hyperparameter**: vom Anwender vor dem Training festgelegt, steuern
+  das Lernverfahren
+- Ziel der HPO: Wahl von Hyperparametern, die Modellgüte maximieren
+- es gibt Verfahren ohne Hyperparameter (lineare Regression) und
+  Verfahren ohne lernbare Parameter (k-nearest-neighbour), aber keine
   ohne beides
-- typische HPO-verfahren: grid search, random search, bayessche
-  optimierung, gradientenbasierte optimierung, evolutionäre verfahren
+- typische HPO-Verfahren: grid search, random search, Bayessche
+  Optimierung, gradientenbasierte Optimierung, evolutionäre Verfahren
 
 ### Entscheidungsbaum: kurzer Überblick {.unlisted} 
 
-- iterative aufteilung des datensatzes entlang attributen bis zu blättern
-- klassifikation: datenpunkt folgt vom wurzelknoten bis zum blatt
-- problem: overfitting bei zu komplexen bäumen
+- iterative Aufteilung des Datensatzes entlang Attributen bis zu Blättern
+- Klassifikation: Datenpunkt folgt vom Wurzelknoten bis zum Blatt
+- Problem: overfitting bei zu komplexen Bäumen
 
 
 Zentrale Hyperparameter sind hier sog. **Splittingkriterien**
 
 - **criterion**: gini, entropy, log_loss
-- **max_depth**: maximale tiefe des baums zur komplexitätskontrolle
-- **min_samples_split**: minimale anzahl datenpunkte für einen split
+- **max_depth**: maximale Tiefe des Baums zur Iomplexitätskontrolle
+- **min_samples_split**: minimale Anzahl Datenpunkte für einen split
 
 ### Datengrundlage für die Beispiele {.unlisted}
 
-- Datensatz: handgeschriebene Ziffern 0–9 (``Pen-Based Recognition of
+- Datensatz: handgeschriebene Ziffern 0–9 (''Pen-Based Recognition of
   Handwritten Digits'')
-- 16 attribute als 4$\times$4-pixel-darstellung, werte 0–100
-- Umfang: 10 992 Beobachtungen, davon 7 494 training und 3 498 test
+- 16 attribute als 4 $\times$ 4-Pixel-Darstellung, werte 0–100
+- Umfang: 10992 Beobachtungen, davon 7494 Trainings- und 3498 Test-Datenpunkte
 - keine Fehlwerte (missing values)
 
 
