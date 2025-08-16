@@ -1,0 +1,193 @@
+## Evolutionäre Algorithmen - Grundlagen
+
+### Biomimikry {.unlisted}
+
+* Japanischer Hochgeschwindigkeitszug **_Shinkansen_**:
+  - Design am Eisvogel-Schnabel orientiert
+  - Tunnellärm und Energiebedarf sanken ($\approx -15\,\%$)
+  - Geschwindigkeit stieg ($\approx +10\,\%$)
+
+### Grundideen {.unlisted}
+
+* Übertragung von Naturprinzipien auf neue Kontexte
+  - Evolutionäre Algorithmen (EA) sind **populationsbasiert**
+  - imitieren natürliche Evolution: Variation + Selektion
+  - "bessere" (Fitness) Individuen vermehren sich häufiger
+  - vorteilhafte Eigenschaften werden vererbt, nachteilige verschwinden
+
+* Charakter
+  - EA sind **Heuristiken** -- nicht zwingend optimal,
+    aber in kurzer Zeit sehr gute Lösungen
+
+* Einordnung und Fokus
+  - Untergruppen: genetische Algorithmen, Evolutionsstrategien,
+    evolutionäres Programmieren, genetisches Programmieren
+  - in diesem Studienbrief Fokus: **genetische Algorithmen**
+
+* Anwendung im ML
+  - EA eignen sich zur **Hyperparameteroptimierung** von
+    Verfahren des maschinellen Lernens
+
+* EA = **Variation** + **Selektion** $\ra$ Weiterentwicklung der Population
+  - initiale Population
+  - Variation je Generation
+  - Ziel: (lokales) Optimum, Annäherung an globales Optimum
+
+* Bezug zur Natur (DARWIN)
+  - fittere Individuen vermehren sich häufiger
+  - vorteilhafte Eigenschaften werden vererbt, nachteilige verschwinden
+
+* Untergruppen: genetische Algorithmen, Evolutionsstrategien,
+  evolutionäres Programmieren, genetisches Programmieren
+* Fokus hier: **genetischer Algorithmus** für **Hyperparameteroptimierung**
+
+
+### Natürliche Evolution {.unlisted}
+
+* Grundbegriffe: 
+    - Genom: alle Gene 
+    - Allel: konkrete Ausprägung eines Gens
+    - Genpool: Gesamtheit aller Allele in einer Population
+
+* Genom wird auch Genotyp genannt $\ra$ Bauplan
+
+* Phänotyp $\ra$ Erscheinungsform (Fellfarbe bei Hasen)
+
+* Gesamtheit Phänotyp und Genotyp: ein Individuum
+
+* Verändert sich der Genotyp, so ändert ggfs. Phänotyp und damit das Individuum
+
+* Änderung des Genotyps: durch **_Mutation_** und/oder **_Rekombination_**
+
+### Genetische Operatoren & Selektion {.unlisted}
+
+* **Mutation**: zufällige Veränderung des Genotyps
+    * Ursache: Fehler beim Kopieren (z.B. Zellteilung)
+    * Effekt: kann Phänotyp signifikant ändern oder wirkungslos sein
+
+* **Rekombination**: Mischung zweier Genotypen (Eltern $\ra$ Kinder)
+    * Resultat: Nachkommen erhalten gemischten Genotyp der Eltern
+
+* Mutation + Rekombination $\ra$ **Diversifizierung** des Genpools
+
+* **Fitness**: vorteilhafte Eigenschaften, die Überleben & Rekombination fördern
+    * Konzept: **_"Survival of the fittest"_** (DARWIN)
+    * Definition "fittest": bestens an die Umwelt angepasst
+    * Beispiel: **_weißer Hase im Schnee_** $\ra$ höhere Überlebenschance
+
+* **Selektion**: sichert "Survival of the fittest"
+    * Wirkt an zwei Punkten:
+        1.  **Bei Rekombination**: Phänotyp beeinflusst Paarungswahrscheinlichkeit
+        2.  **Überlebenschance**: Phänotyp beeinflusst Lebensdauer & weitere Rekombinationen
+
+Absolut. Hier ist die überarbeitete Zusammenfassung von Kapitel 3.1.2 im angepassten Stil:
+
+### Elemente von EAs {.unlisted}
+
+* **Grundprinzip**: Simulation der Evolution im Computer, wobei das Problem in ein formales Modell überführt wird
+
+* **Individuum**: Stellt einen einzelnen Lösungskandidaten für das Problem dar
+
+    * **Genotyp**: Die Bauanleitung der Lösung, oft als Datenstruktur wie ein Array repräsentiert
+    
+    * **Phänotyp**: Die "fertig gebaute", bewertbare Lösung, die aus dem Genotyp interpretiert wird
+
+* **Population**: Die Gesamtmenge der verschiedenen Lösungskandidaten (Individuen)
+
+* **Fitnessbewertung**: Ordnet jedem Individuum einen numerischen Fitness-Score zu, um die Qualität der Lösung mess- und vergleichbar zu machen
+
+* **Genetische Operatoren**: Steuern die Suche über ein Wechselspiel aus **Diversifikation** (breite Suche) und **Intensivierung** (Suche in vielversprechenden Bereichen)
+
+    * **Selektion**: Wählt Individuen basierend auf ihrer Fitness für die Rekombination und das Überleben aus
+
+    * **Rekombination**: Kombiniert vorteilhafte Eigenschaften von Eltern, um potenziell überlegene Nachkommen zu erzeugen
+
+    * **Mutation**: Erzeugt zufällige Änderungen im Genpool, um neue Variationen zu schaffen und das Feststecken in lokalen Optima zu verhindern
+
+
+### Ablauf evolutionärer Algorithmen {.unlisted}
+
+* Im Gegensatz zur chaotischen, asynchronen natürlichen Evolution folgt ein Evolutionärer Algorithmus (EA) einem fest vordefinierten und synchronen Ablauf
+
+* **Synchroner Prozess**: Alle Individuen einer Population durchlaufen die verschiedenen Evolutionsphasen gleichzeitig und im Gleichschritt
+
+* **Struktur**: Der Prozess gliedert sich in drei übergeordnete Stufen. Die letzten beiden, **Modifikation** und **Selektion**, bilden zusammen eine **Generation**
+
+* **Wiederholung**: Dieser Generationszyklus wird wiederholt, bis ein vorher festgelegtes Abbruchkriterium, wie eine maximale Anzahl an Generationen oder die erreichte Güte der Lösung, erfüllt ist
+
+
+![](/figs/04_03_evol_algos_01.png)
+
+* **Generationsentwicklung**: Die Population entwickelt sich schrittweise über mehrere Generationen hinweg
+
+* **Übergang**: Eine neue Generation entsteht, indem Nachkommen aus dem genetischen Material der aktuellen Generation erzeugt werden und nur die fittesten Individuen überleben
+
+* **Lösung**: Nach Abschluss des gesamten Evolutionsprozesses wird das fitteste gefundene Individuum als die Lösung für das Problem interpretiert
+
+
+![](/figs/04_03_evol_algos_02.png)
+
+
+#### Überblick über den Gesamtcode 
+
+```python
+import matplotlib.pyplot as plt
+from statistics import mean
+
+# Annahme: Die folgenden Funktionen sind an anderer Stelle definiert:
+# initialisierung(), anfangspopulation(), fitness(), roulette(),
+# selektion(), rekombination(), mutation()
+
+
+def main():
+    """
+    Führt einen evolutionären Algorithmus zur Hyperparameteroptimierung aus.
+    """
+    # 1. Initialisierung
+    (popsize, x, y, x_test, y_test, generationen,
+     best, score, score_n, nachkommen) = initialisierung()
+
+    population = anfangspopulation(popsize)
+    score = fitness(population, popsize, x, y, score)
+    start = mean(fitness(population, popsize, x_test, y_test, score))
+
+    # 2. Evolutionsschleife über alle Generationen
+    for gen in range(generationen):
+        roul = roulette(score)
+
+        # Erzeuge Nachkommen durch Selektion und Rekombination
+        for j in range(0, popsize, 2):
+            elter_1, elter_2 = selektion(popsize, population, roul)
+            nachkommen[j], nachkommen[j + 1] = rekombination(elter_1, elter_2)
+
+        # Wende Mutation auf die neuen Nachkommen an
+        nachkommen = mutation(nachkommen, popsize)
+
+        # Bewerte die Fitness der Nachkommen
+        score_n = fitness(nachkommen, popsize, x, y, score_n)
+
+        # 3. Selektion für die nächste Generation (Plus-Strategie)
+        # Kombiniere alte Population und Nachkommen
+        population += nachkommen
+        score += score_n
+
+        # Wähle die besten Individuen für die nächste Generation aus
+        top_indices = sorted(range(len(score)), key=lambda i: score[i])
+        top_indices = top_indices[-popsize:]
+
+        population = [population[j] for j in top_indices]
+        score = [score[j] for j in top_indices]
+
+        best[gen] = max(score)
+
+    # 4. Evaluierung und Visualisierung
+    ende = fitness(population, popsize, x_test, y_test, score)
+    print(f"Verbesserung der Fitness: {ende[popsize - 1] - start:.4f}")
+
+    plt.plot(best)
+    plt.title("Beste Fitness pro Generation")
+    plt.xlabel("Generation")
+    plt.ylabel("Fitness (Accuracy)")
+    plt.grid(True)
+    plt.show()
+```

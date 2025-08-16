@@ -1,0 +1,208 @@
+## Initialisierung
+
+1. Algorithmus spezifizieren:
+    - problemspezifische und problemunspezifische Parameter des Algorithmus festlegen
+    - Erstellung der Individuen für die Anfangspopulation
+
+2. Codebaustein: es wird lediglich main aufgerufen
+
+```python
+if __name__ == '__main__'
+
+  main()
+```
+
+### Theoretisch insgesamt folgende Schritt {.unlisted}
+
+1. Problemanalyse
+2. Auswahl des Evolutionsverfahrens
+3. Spezifikation eines Individuums
+4. Definition der Fitness eines Individuums
+5. Initialisierungsstrategie und Terminierungskriterium
+6. Festlegung des Selektionsverfahrens
+7. Festlegung des Modifikationsverfahrens
+8. Festlegung des Ersetzungsverfahrens
+
+
+#### Problemanalyse:
+
+
+Bezugsrahmen des Algorithmus $\Leftrightarrow$  Hyperparameteroptimierung des Entscheidungsbaumverfahrens optimieren:
+
+- Splittingkriterium
+- Maximale Tiefe des Baums
+- Minimale Anzahl von Datenpunkten, um einen Split durchzuführen
+
+#### Auswahl des Evolutionsverfahrens:
+
+Evolutionsverfahren:
+
+- genetische Algorithmen
+- evolutionäre Strategien
+- genetische Programmierung
+- evolutionäre Programmierung
+
+Hier lediglich: genetische Algorithmen vs. evolutionäre Strategien, da Fokus auf Hyperparameteroptimierungen
+
+Der wesentliche Unterschied liegt in der Art der Hyperparameter:
+
+* **Genetische Algorithmen** erfordern **diskrete** Parameter (ganzzahlig oder nominal).
+
+* **Evolutionsstrategien** können auch **kontinuierliche** Parameter verarbeiten.
+
+Für den beschriebenen Anwendungsfall (Optimierung eines Entscheidungsbaums) ist der **genetische Algorithmus** die passende Wahl, da alle Hyperparameter diskret sind:
+
+* **Splittingkriterium**: Nominal (Gini, Entropie, etc.)
+
+* **Maximale Tiefe**: Ganzzahlig
+
+* **Minimale Anzahl für Split**: Ganzzahlig
+
+#### Spezifikation eines Individuums:
+
+Die drei Gene des Genotyps sind bereits bekannt als die zu optimierenden Hyperparameter:
+
+![](/figs/04_03_evol_algos_03.png)
+
+
+Der zugehörige Phänotyp ist der Entscheidungsbaum, der mit den Parameterausprägungen des Genotyps gebaut wurde:
+
+![](/figs/04_03_evol_algos_04.png)
+
+Dieser Phänotyp soll im weiteren Verlauf auf seine Fitness bewertet werden
+
+#### Definition der Fitness eines Individuums:
+
+Fitness: wie gut löst Individuum das Problem
+
+Hier also Kennzahlen, die vom Optimierungsziel abhängen:
+
+* **Klassifikationsprobleme**: Accuracy, Precision, Recall
+* **Regressionsprobleme**: Abweichungsmaße
+
+Konkret: **Accuracy** -- der Anteil an richtig klassifizierten Datenpunkten -- des Phänotyps als Fitnessmaß
+
+
+#### Initialisierungsstrategie und Terminierungskriterium:
+
+Initialstrategie: Auswahl der Populationsgröße
+
+* Definiert Anzahl Individuen in Initialpopulation & Folgenden
+* GA klassisch: große Populationen
+* ES: kleinere Populationen
+
+Terminierung des EA: Kriterien
+
+* **Anzahl an Generationen**: hier als frei einstellbares Kriterium
+* **Güte der Lösungskandidaten**: Fitness des besten Lösungskandidaten in der Population oder Durchschnitts-Fitness
+* **Konvergenz der Population**: Beenden bei lokalem Optimum: Individuen sehr ähnlich basierend auf einem Maß der Unterschiedlichkeit
+
+Warnung: Bei Güte & Konvergenz kann falsches Ambitionsniveau zu Endlosschleifen führen.
+
+#### Festlegung des Selektionsverfahrens:
+
+Selektionsverfahren: Auswahl der Individuen (fitness-basiert), die für die Rekombination in Frage kommen und Eigenschaften an nächste Generation weitergeben dürfen. Im Folgenden drei Beispiele:
+
+* **Roulette-Wheel-Methode**: Auswahlwahrscheinlichkeit proportional zur Fitness
+    * Mechanismus: Individuen erhalten proportional zu ihrer Fitness einen Bereich auf einem Rouletterad. Zwei "Würfe" wählen zwei Elternteile.
+    * Bereichsgröße für jedes der $k=1,\ldots,I=8$ Individuen entspricht dem Anteil an der Gesamtfitness: $$\frac{\text{Fitness}(k)}{\sum_{i=1}^{I} \text{Fitness}(i)}$$
+    * Voraussetzung: Keine negativen Fitnesswerte
+
+![](/figs/04_03_evol_algos_05.png)
+
+* **Turnierverfahren**: Das fitteste Individuum einer zufälligen Untermenge gewinnt
+    * Mechanismus: Zufällige, gleichverteilte Auswahl einer Teilmenge; das beste Individuum wird Elternteil. Ein neues Turnier findet für den zweiten Elternteil statt.
+    * Effekt: Erhält Diversität, da nicht immer das global beste Individuum gewinnt.
+    * **Selektionsdruck**: Abhängig von der Größe der Untermenge (kleine Teilmenge -> geringer Druck; große Teilmenge -> hoher Druck).
+
+* **Rangbasiertes Verfahren**: Auswahlwahrscheinlichkeit basiert auf dem Fitness-Rang
+    * Mechanismus: Erstellung einer Rangliste nach Fitness (Rang 1 = fitteste). Der Rang bestimmt die Auswahlwahrscheinlichkeit.
+    * Effekt: Große Fitness-Abstände werden reduziert, kleine vergrößert.
+    * Vorteil: Verhindert die Dominanz von Ausreißern mit sehr hoher Fitness.
+
+![](/figs/04_03_evol_algos_06.png)
+
+
+Im Folgenden: **Roulette-Wheel-Methode**
+
+#### Festlegung des Modifikationsverfahrens:
+
+Modifikationsverfahren bei EA: zwei Gruppen
+
+* **Rekombination**
+* **Mutation**
+
+Bei genetischen Algorithmen erfolgt Rekombination i.d.R. per **Crossover**.
+
+**Crossover**: _Kreuzung von Genbestandteilen_ der Eltern, um ein oder zwei Nachkommen zu erzeugen.
+
+* **n-Punkt-Crossover**: n definiert die _Anzahl an zufälligen Schnitten_ in den Elterngenomen, die die zu kreuzenden Teile ergeben.
+
+Hier, zwei bereits selektierte Eltern:
+
+![](/figs/04_03_evol_algos_07_A.png)
+
+* **Beispiel 1-Punkt-Crossover**:
+    * Jedes Elternteil wird an einer _zufällig bestimmten Stelle_ einmal durchschnitten.
+    * Im folgenden Beispiel wird eine 3 gewürfelt, der Schnitt erfolgt also an Position 3.
+
+![](/figs/04_03_evol_algos_07_B.png)
+
+
+**Mutation**: Zweites Modifikationsverfahren neben der **Rekombination**.
+
+* **Zweck**: _Zufällige Veränderung_ von Genen einzelner Individuen, um aus _lokalen Optima auszubrechen_ und den Lösungsraum umfassend abzusuchen.
+
+* **Auswahl**: Individuum und Gen werden i.d.R. zufällig gewählt.
+
+* **Mutationswahrscheinlichkeit**:
+    * Zu Beginn festgelegter Parameter (0-100%), der die _Anzahl der zu mutierenden Individuen_ steuert.
+    * Sollte in GAs _relativ klein_ sein, da eine zu hohe Rate die **Konvergenz** verhindert.
+
+Ist ein Individuum zur Mutation ausgewählt, wird ein zufälliges Gen des Individuums verändert. Alternativ können auch mehrere Gene pro Individuum verändert werden:
+
+![](/figs/04_03_evol_algos_08.png)
+
+**Problem: Unzulässige Nachkommen**
+Mutation kann Individuen außerhalb des Lösungsraums erzeugen. Dafür gibt es drei Lösungsstrategien:
+
+* **Vermeidungsstrategie**: Verhindert die Generierung unzulässiger Individuen von vornherein.
+    * _Nachteil_: Kann sehr komplex und langsam sein.
+
+* **Reparaturstrategie**: Unzulässige Individuen werden nach der Mutation so "repariert", dass sie wieder im Lösungsraum liegen.
+    * _Nachteil_: Kann ebenfalls sehr komplex und langsam sein.
+
+* **Bestrafungsstrategie**: Unzulässige Individuen werden zugelassen, aber mit einer _sehr schlechten Fitness_ versehen, sodass sie aussterben.
+    * _Risiko_: Unzulässige Eigenschaften können durch Rekombination weitervererbt werden.
+
+#### Festlegung des Ersetzungsverfahrens:
+
+**Ersetzungsstrategie**: Zweites Selektionsverfahren, das bestimmt, welche Individuen in die nächste Generation _übernommen werden_ (_Überleben_).
+
+* **Zweck**: Steuerung von **Diversifikation** und **Intensivierung**, um die durchschnittliche Qualität der Population zu erhöhen.
+
+* **Ausgangslage**: Übergroße Population aus `m` bisherigen Individuen und `k` Nachkommen.
+
+Es wird zwischen zwei Strategien unterschieden:
+
+**1. Plus-Strategie `(m + k)`**
+
+* **Mechanismus**: Die besten `m` Individuen aus der _Gesamtmenge_ von Eltern und Kindern (`m + k`) überleben.
+
+* **Folge**: Die Qualität der Population ist **monoton steigend** (kann sich nicht verschlechtern).
+
+* **Gefahr**: Zu schnelle **Konvergenz** und rascher Verlust der **Diversität**.
+
+* **Varianten**:
+    * **Maximalalter**: Individuen sterben nach einer bestimmten Anzahl von Generationen.
+    * **Kindergarten**: Nachkommen sind für einige Generationen vor der Selektion geschützt.
+
+**2. Komma-Strategie `(m, k)`**
+
+* **Mechanismus**: Eltern überleben nicht. Die nächste Generation wird _nur aus den Kindern_ gebildet.
+
+* **Bedingung**: Es müssen mindestens so viele Kinder wie Eltern erzeugt werden (`k >= m`), um die Populationsgröße zu erhalten. Sind es mehr, werden die besten `m` aus `k` Kindern ausgewählt.
+
+* **Folge**: Eine Verschlechterung der Qualität zwischen Generationen ist möglich.
+
+* **Vorteil**: Ermöglicht _Erforschung unbekannter Lösungsräume_ durch temporäre Akzeptanz schlechterer Fitness. Die **Konvergenzgeschwindigkeit** sinkt und die **Diversität** bleibt länger erhalten.
