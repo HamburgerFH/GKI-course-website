@@ -1,0 +1,766 @@
+## Evolutionäre Algorithmen - Grundlagen
+
+### Biomimikry {.unlisted}
+
+* Japanischer Hochgeschwindigkeitszug **_Shinkansen_**:
+  - Design am Eisvogel-Schnabel orientiert
+  - Tunnellärm und Energiebedarf sanken ($\approx -15\,\%$)
+  - Geschwindigkeit stieg ($\approx +10\,\%$)
+
+### Grundideen {.unlisted}
+
+* Übertragung von Naturprinzipien auf neue Kontexte
+  - Evolutionäre Algorithmen (EA) sind **populationsbasiert**
+  - imitieren natürliche Evolution: Variation + Selektion
+  - "bessere" (Fitness) Individuen vermehren sich häufiger
+  - vorteilhafte Eigenschaften werden vererbt, nachteilige verschwinden
+
+* Charakter
+  - EA sind **Heuristiken** -- nicht zwingend optimal,
+    aber in kurzer Zeit sehr gute Lösungen
+
+* Einordnung und Fokus
+  - Untergruppen: genetische Algorithmen, Evolutionsstrategien,
+    evolutionäres Programmieren, genetisches Programmieren
+  - in diesem Studienbrief Fokus: **genetische Algorithmen**
+
+* Anwendung im ML
+  - EA eignen sich zur **Hyperparameteroptimierung** von
+    Verfahren des maschinellen Lernens
+
+* EA = **Variation** + **Selektion** $\ra$ Weiterentwicklung der Population
+  - initiale Population
+  - Variation je Generation
+  - Ziel: (lokales) Optimum, Annäherung an globales Optimum
+
+* Bezug zur Natur (DARWIN)
+  - fittere Individuen vermehren sich häufiger
+  - vorteilhafte Eigenschaften werden vererbt, nachteilige verschwinden
+
+* Untergruppen: genetische Algorithmen, Evolutionsstrategien,
+  evolutionäres Programmieren, genetisches Programmieren
+* Fokus hier: **genetischer Algorithmus** für **Hyperparameteroptimierung**
+
+
+### Natürliche Evolution {.unlisted}
+
+* Grundbegriffe: 
+    - Genom: alle Gene 
+    - Allel: konkrete Ausprägung eines Gens
+    - Genpool: Gesamtheit aller Allele in einer Population
+
+* Genom wird auch Genotyp genannt $\ra$ Bauplan
+
+* Phänotyp $\ra$ Erscheinungsform (Fellfarbe bei Hasen)
+
+* Gesamtheit Phänotyp und Genotyp: ein Individuum
+
+* Verändert sich der Genotyp, so ändert ggfs. Phänotyp und damit das Individuum
+
+* Änderung des Genotyps: durch **_Mutation_** und/oder **_Rekombination_**
+
+### Genetische Operatoren & Selektion {.unlisted}
+
+* **Mutation**: zufällige Veränderung des Genotyps
+    * Ursache: Fehler beim Kopieren (z.B. Zellteilung)
+    * Effekt: kann Phänotyp signifikant ändern oder wirkungslos sein
+
+* **Rekombination**: Mischung zweier Genotypen (Eltern $\ra$ Kinder)
+    * Resultat: Nachkommen erhalten gemischten Genotyp der Eltern
+
+* Mutation + Rekombination $\ra$ **Diversifizierung** des Genpools
+
+* **Fitness**: vorteilhafte Eigenschaften, die Überleben & Rekombination fördern
+    * Konzept: **_"Survival of the fittest"_** (DARWIN)
+    * Definition "fittest": bestens an die Umwelt angepasst
+    * Beispiel: **_weißer Hase im Schnee_** $\ra$ höhere Überlebenschance
+
+* **Selektion**: sichert "Survival of the fittest"
+    * Wirkt an zwei Punkten:
+        1.  **Bei Rekombination**: Phänotyp beeinflusst Paarungswahrscheinlichkeit
+        2.  **Überlebenschance**: Phänotyp beeinflusst Lebensdauer & weitere Rekombinationen
+
+Absolut. Hier ist die überarbeitete Zusammenfassung von Kapitel 3.1.2 im angepassten Stil:
+
+### Elemente von EAs {.unlisted}
+
+* **Grundprinzip**: Simulation der Evolution im Computer, wobei das Problem in ein formales Modell überführt wird
+
+* **Individuum**: Stellt einen einzelnen Lösungskandidaten für das Problem dar
+
+    * **Genotyp**: Die Bauanleitung der Lösung, oft als Datenstruktur wie ein Array repräsentiert
+    
+    * **Phänotyp**: Die "fertig gebaute", bewertbare Lösung, die aus dem Genotyp interpretiert wird
+
+* **Population**: Die Gesamtmenge der verschiedenen Lösungskandidaten (Individuen)
+
+* **Fitnessbewertung**: Ordnet jedem Individuum einen numerischen Fitness-Score zu, um die Qualität der Lösung mess- und vergleichbar zu machen
+
+* **Genetische Operatoren**: Steuern die Suche über ein Wechselspiel aus **Diversifikation** (breite Suche) und **Intensivierung** (Suche in vielversprechenden Bereichen)
+
+    * **Selektion**: Wählt Individuen basierend auf ihrer Fitness für die Rekombination und das Überleben aus
+
+    * **Rekombination**: Kombiniert vorteilhafte Eigenschaften von Eltern, um potenziell überlegene Nachkommen zu erzeugen
+
+    * **Mutation**: Erzeugt zufällige Änderungen im Genpool, um neue Variationen zu schaffen und das Feststecken in lokalen Optima zu verhindern
+
+
+### Ablauf evolutionärer Algorithmen {.unlisted}
+
+* Im Gegensatz zur chaotischen, asynchronen natürlichen Evolution folgt ein Evolutionärer Algorithmus (EA) einem fest vordefinierten und synchronen Ablauf
+
+* **Synchroner Prozess**: Alle Individuen einer Population durchlaufen die verschiedenen Evolutionsphasen gleichzeitig und im Gleichschritt
+
+* **Struktur**: Der Prozess gliedert sich in drei übergeordnete Stufen. Die letzten beiden, **Modifikation** und **Selektion**, bilden zusammen eine **Generation**
+
+* **Wiederholung**: Dieser Generationszyklus wird wiederholt, bis ein vorher festgelegtes Abbruchkriterium, wie eine maximale Anzahl an Generationen oder die erreichte Güte der Lösung, erfüllt ist
+
+
+![](/figs/04_03_evol_algos_01.png)
+
+* **Generationsentwicklung**: Die Population entwickelt sich schrittweise über mehrere Generationen hinweg
+
+* **Übergang**: Eine neue Generation entsteht, indem Nachkommen aus dem genetischen Material der aktuellen Generation erzeugt werden und nur die fittesten Individuen überleben
+
+* **Lösung**: Nach Abschluss des gesamten Evolutionsprozesses wird das fitteste gefundene Individuum als die Lösung für das Problem interpretiert
+
+
+![](/figs/04_03_evol_algos_02.png)
+
+
+#### Überblick über den Gesamtcode 
+
+```python
+import matplotlib.pyplot as plt
+from statistics import mean
+
+# Annahme: Die folgenden Funktionen sind an anderer Stelle definiert:
+# initialisierung(), anfangspopulation(), fitness(), roulette(),
+# selektion(), rekombination(), mutation()
+
+
+def main():
+    """
+    Führt einen evolutionären Algorithmus zur Hyperparameteroptimierung aus.
+    """
+    # 1. Initialisierung
+    (popsize, x, y, x_test, y_test, generationen,
+     best, score, score_n, nachkommen) = Initialisierung()
+
+    population = anfangspopulation(popsize)
+    score = fitness(population, popsize, x, y, score)
+    start = mean(fitness(population, popsize, x_test, y_test, score))
+
+    # 2. Evolutionsschleife über alle Generationen
+    for gen in range(generationen):
+        roul = roulette(score)
+
+        # Erzeuge Nachkommen durch Selektion und Rekombination
+        for j in range(0, popsize, 2):
+            elter_1, elter_2 = selektion(popsize, population, roul)
+            nachkommen[j], nachkommen[j + 1] = rekombination(elter_1, elter_2)
+
+        # Wende Mutation auf die neuen Nachkommen an
+        nachkommen = mutation(nachkommen, popsize)
+
+        # Bewerte die Fitness der Nachkommen
+        score_n = fitness(nachkommen, popsize, x, y, score_n)
+
+        # 3. Selektion für die nächste Generation (Plus-Strategie)
+        # Kombiniere alte Population und Nachkommen
+        population += nachkommen
+        score += score_n
+
+        # Wähle die besten Individuen für die nächste Generation aus
+        top_indices = sorted(range(len(score)), key=lambda i: score[i])
+        top_indices = top_indices[-popsize:]
+
+        population = [population[j] for j in top_indices]
+        score = [score[j] for j in top_indices]
+
+        best[gen] = max(score)
+
+    # 4. Evaluierung und Visualisierung
+    ende = fitness(population, popsize, x_test, y_test, score)
+    print(f"Verbesserung der Fitness: {ende[popsize - 1] - start:.4f}")
+
+    plt.plot(best)
+    plt.title("Beste Fitness pro Generation")
+    plt.xlabel("Generation")
+    plt.ylabel("Fitness (Accuracy)")
+    plt.grid(True)
+    plt.show()
+```
+
+## Algorithmusspezifikation
+
+1. Algorithmus spezifizieren:
+    - problemspezifische und problemunspezifische Parameter des Algorithmus festlegen
+    - Erstellung der Individuen für die Anfangspopulation
+
+2. Codebaustein: es wird lediglich main aufgerufen
+
+```python
+if __name__ == '__main__'
+
+  main()
+```
+
+### Theoretisch insgesamt folgende Schritt {.unlisted}
+
+1. Problemanalyse
+2. Auswahl des Evolutionsverfahrens
+3. Spezifikation eines Individuums
+4. Definition der Fitness eines Individuums
+5. Initialisierungsstrategie und Terminierungskriterium
+6. Festlegung des Selektionsverfahrens
+7. Festlegung des Modifikationsverfahrens
+8. Festlegung des Ersetzungsverfahrens
+
+
+#### Problemanalyse:
+
+
+Bezugsrahmen des Algorithmus $\Leftrightarrow$  Hyperparameteroptimierung des Entscheidungsbaumverfahrens optimieren:
+
+- Splittingkriterium
+- Maximale Tiefe des Baums
+- Minimale Anzahl von Datenpunkten, um einen Split durchzuführen
+
+#### Auswahl des Evolutionsverfahrens:
+
+Evolutionsverfahren:
+
+- genetische Algorithmen
+- evolutionäre Strategien
+- genetische Programmierung
+- evolutionäre Programmierung
+
+Hier lediglich: genetische Algorithmen vs. evolutionäre Strategien, da Fokus auf Hyperparameteroptimierungen
+
+Der wesentliche Unterschied liegt in der Art der Hyperparameter:
+
+* **Genetische Algorithmen** erfordern **diskrete** Parameter (ganzzahlig oder nominal).
+
+* **Evolutionsstrategien** können auch **kontinuierliche** Parameter verarbeiten.
+
+Für den beschriebenen Anwendungsfall (Optimierung eines Entscheidungsbaums) ist der **genetische Algorithmus** die passende Wahl, da alle Hyperparameter diskret sind:
+
+* **Splittingkriterium**: Nominal (Gini, Entropie, etc.)
+
+* **Maximale Tiefe**: Ganzzahlig
+
+* **Minimale Anzahl für Split**: Ganzzahlig
+
+#### Spezifikation eines Individuums:
+
+Die drei Gene des Genotyps sind bereits bekannt als die zu optimierenden Hyperparameter:
+
+![](/figs/04_03_evol_algos_03.png)
+
+
+Der zugehörige Phänotyp ist der Entscheidungsbaum, der mit den Parameterausprägungen des Genotyps gebaut wurde:
+
+![](/figs/04_03_evol_algos_04.png)
+
+Dieser Phänotyp soll im weiteren Verlauf auf seine Fitness bewertet werden
+
+#### Definition der Fitness eines Individuums:
+
+Fitness: wie gut löst Individuum das Problem
+
+Hier also Kennzahlen, die vom Optimierungsziel abhängen:
+
+* **Klassifikationsprobleme**: Accuracy, Precision, Recall
+* **Regressionsprobleme**: Abweichungsmaße
+
+Konkret: **Accuracy** -- der Anteil an richtig klassifizierten Datenpunkten -- des Phänotyps als Fitnessmaß
+
+
+#### Initialisierungsstrategie und Terminierungskriterium:
+
+Initialstrategie: Auswahl der Populationsgröße
+
+* Definiert Anzahl Individuen in Initialpopulation & Folgenden
+* GA klassisch: große Populationen
+* ES: kleinere Populationen
+
+Terminierung des EA: Kriterien
+
+* **Anzahl an Generationen**: hier als frei einstellbares Kriterium
+* **Güte der Lösungskandidaten**: Fitness des besten Lösungskandidaten in der Population oder Durchschnitts-Fitness
+* **Konvergenz der Population**: Beenden bei lokalem Optimum: Individuen sehr ähnlich basierend auf einem Maß der Unterschiedlichkeit
+
+Warnung: Bei Güte & Konvergenz kann falsches Ambitionsniveau zu Endlosschleifen führen.
+
+#### Festlegung des Selektionsverfahrens:
+
+Selektionsverfahren: Auswahl der Individuen (fitness-basiert), die für die Rekombination in Frage kommen und Eigenschaften an nächste Generation weitergeben dürfen. Im Folgenden drei Beispiele:
+
+* **Roulette-Wheel-Methode**: Auswahlwahrscheinlichkeit proportional zur Fitness
+    * Mechanismus: Individuen erhalten proportional zu ihrer Fitness einen Bereich auf einem Rouletterad. Zwei "Würfe" wählen zwei Elternteile.
+    * Bereichsgröße für jedes der $k=1,\ldots,I=8$ Individuen entspricht dem Anteil an der Gesamtfitness: $$\frac{\text{Fitness}(k)}{\sum_{i=1}^{I} \text{Fitness}(i)}$$
+    * Voraussetzung: Keine negativen Fitnesswerte
+
+![](/figs/04_03_evol_algos_05.png)
+
+* **Turnierverfahren**: Das fitteste Individuum einer zufälligen Untermenge gewinnt
+    * Mechanismus: Zufällige, gleichverteilte Auswahl einer Teilmenge; das beste Individuum wird Elternteil. Ein neues Turnier findet für den zweiten Elternteil statt.
+    * Effekt: Erhält Diversität, da nicht immer das global beste Individuum gewinnt.
+    * **Selektionsdruck**: Abhängig von der Größe der Untermenge (kleine Teilmenge -> geringer Druck; große Teilmenge -> hoher Druck).
+
+* **Rangbasiertes Verfahren**: Auswahlwahrscheinlichkeit basiert auf dem Fitness-Rang
+    * Mechanismus: Erstellung einer Rangliste nach Fitness (Rang 1 = fitteste). Der Rang bestimmt die Auswahlwahrscheinlichkeit.
+    * Effekt: Große Fitness-Abstände werden reduziert, kleine vergrößert.
+    * Vorteil: Verhindert die Dominanz von Ausreißern mit sehr hoher Fitness.
+
+![](/figs/04_03_evol_algos_06.png)
+
+
+Im Folgenden: **Roulette-Wheel-Methode**
+
+#### Festlegung des Modifikationsverfahrens:
+
+Modifikationsverfahren bei EA: zwei Gruppen
+
+* **Rekombination**
+* **Mutation**
+
+Bei genetischen Algorithmen erfolgt Rekombination i.d.R. per **Crossover**.
+
+**Crossover**: _Kreuzung von Genbestandteilen_ der Eltern, um ein oder zwei Nachkommen zu erzeugen.
+
+* **n-Punkt-Crossover**: n definiert die _Anzahl an zufälligen Schnitten_ in den Elterngenomen, die die zu kreuzenden Teile ergeben.
+
+Hier, zwei bereits selektierte Eltern:
+
+![](/figs/04_03_evol_algos_07_A.png)
+
+* **Beispiel 1-Punkt-Crossover**:
+    * Jedes Elternteil wird an einer _zufällig bestimmten Stelle_ einmal durchschnitten.
+    * Im folgenden Beispiel wird eine 3 gewürfelt, der Schnitt erfolgt also an Position 3.
+
+![](/figs/04_03_evol_algos_07_B.png)
+
+
+**Mutation**: Zweites Modifikationsverfahren neben der **Rekombination**.
+
+* **Zweck**: _Zufällige Veränderung_ von Genen einzelner Individuen, um aus _lokalen Optima auszubrechen_ und den Lösungsraum umfassend abzusuchen.
+
+* **Auswahl**: Individuum und Gen werden i.d.R. zufällig gewählt.
+
+* **Mutationswahrscheinlichkeit**:
+    * Zu Beginn festgelegter Parameter (0-100%), der die _Anzahl der zu mutierenden Individuen_ steuert.
+    * Sollte in GAs _relativ klein_ sein, da eine zu hohe Rate die **Konvergenz** verhindert.
+
+Ist ein Individuum zur Mutation ausgewählt, wird ein zufälliges Gen des Individuums verändert. Alternativ können auch mehrere Gene pro Individuum verändert werden:
+
+![](/figs/04_03_evol_algos_08.png)
+
+**Problem: Unzulässige Nachkommen**
+Mutation kann Individuen außerhalb des Lösungsraums erzeugen. Dafür gibt es drei Lösungsstrategien:
+
+* **Vermeidungsstrategie**: Verhindert die Generierung unzulässiger Individuen von vornherein.
+    * _Nachteil_: Kann sehr komplex und langsam sein.
+
+* **Reparaturstrategie**: Unzulässige Individuen werden nach der Mutation so "repariert", dass sie wieder im Lösungsraum liegen.
+    * _Nachteil_: Kann ebenfalls sehr komplex und langsam sein.
+
+* **Bestrafungsstrategie**: Unzulässige Individuen werden zugelassen, aber mit einer _sehr schlechten Fitness_ versehen, sodass sie aussterben.
+    * _Risiko_: Unzulässige Eigenschaften können durch Rekombination weitervererbt werden.
+
+#### Festlegung des Ersetzungsverfahrens:
+
+**Ersetzungsstrategie**: Zweites Selektionsverfahren, das bestimmt, welche Individuen in die nächste Generation _übernommen werden_ (_Überleben_).
+
+* **Zweck**: Steuerung von **Diversifikation** und **Intensivierung**, um die durchschnittliche Qualität der Population zu erhöhen.
+
+* **Ausgangslage**: Übergroße Population aus `m` bisherigen Individuen und `k` Nachkommen.
+
+Es wird zwischen zwei Strategien unterschieden:
+
+**1. Plus-Strategie `(m + k)`**
+
+* **Mechanismus**: Die besten `m` Individuen aus der _Gesamtmenge_ von Eltern und Kindern (`m + k`) überleben.
+
+* **Folge**: Die Qualität der Population ist **monoton steigend** (kann sich nicht verschlechtern).
+
+* **Gefahr**: Zu schnelle **Konvergenz** und rascher Verlust der **Diversität**.
+
+* **Varianten**:
+    * **Maximalalter**: Individuen sterben nach einer bestimmten Anzahl von Generationen.
+    * **Kindergarten**: Nachkommen sind für einige Generationen vor der Selektion geschützt.
+
+**2. Komma-Strategie `(m, k)`**
+
+* **Mechanismus**: Eltern überleben nicht. Die nächste Generation wird _nur aus den Kindern_ gebildet.
+
+* **Bedingung**: Es müssen mindestens so viele Kinder wie Eltern erzeugt werden (`k >= m`), um die Populationsgröße zu erhalten. Sind es mehr, werden die besten `m` aus `k` Kindern ausgewählt.
+
+* **Folge**: Eine Verschlechterung der Qualität zwischen Generationen ist möglich.
+
+* **Vorteil**: Ermöglicht _Erforschung unbekannter Lösungsräume_ durch temporäre Akzeptanz schlechterer Fitness. Die **Konvergenzgeschwindigkeit** sinkt und die **Diversität** bleibt länger erhalten.
+
+
+## Erstellung Initialpopulation
+
+Die Initialisierung dient der Vorbereitung des EA. Zunächst folgende fünf Schritte:
+
+1. Einrichtung der Programmierumgebung
+2. Laden des Datensatzes
+3. Algorithmusspezifizierung operationalisieren
+4. Einführung von notwendiger Datenstrukturen
+5. Erstellung der Initialpopulation
+
+Wir brauchen nun folgende Codeblöcke:
+
+- Einrichtung der Programmierumgebung:
+
+    ```python
+    import numpy as np
+    from sklearn.datasets import load_digits
+    import random
+    from sklearn import tree
+    from sklearn.model_selection import cross_val_score
+    from sklearn.model_selection import train_test_split
+    from statistics import mean
+    ```
+
+    Dann kommt der bereits vorgestelle Teil:
+    
+    ```python
+    def main():
+    (popsize, x, y, x_test, y_test, generationen,best, score, score_n, Nachkommen) = Initialisierung()
+    population = anfangspopulation(popsize)
+    ...
+    ```
+
+- Nun kommt die Definition der Funtion `Initialisierung()` wo auch der Datensatz geladen wird:
+
+    ```python
+    def Initialisierung():
+    digits = load_digits()
+    X, X_test, y, y_test = train_test_split(digits.data, digits.target, test_size = 0.2)
+    popsize = 10
+    generationen = 10
+    best = [None] * generationen
+    score = [0] * popsize
+    scoreN = [0] * popsize
+    Nachkommen = [None] * popsize
+    return popsize, X, y, X_test, y_test, generationen, best, score, scoreN, Nachkommen
+    ```
+
+- **Erstellung der Individuen**
+    Fokus liegt auf der Erstellung des **Genotyps**. Der **Phänotyp** wird erst im Rahmen der Fitnessbewertung erstellt.
+
+    Die **Genotypen** der Initialpopulation werden _zufällig generiert_:
+        * Für jeden Hyperparameter (Gen) wird das Allel "gewürfelt".
+        * Der _Rahmen der Zufälligkeit_ ist dabei vorher abgesteckt, um die Erzeugung **unzulässiger Individuen** zu vermeiden.
+
+    Der code dazu ist:
+
+    ```python
+    def Anfangspopulation(popsize):
+        population = []
+        c = ['gini','entropy','log_loss']
+        for i in range(0,popsize):
+            crit = random.choice(c)
+            max = int(round(random.random()*9+1))
+            min = int(round(random.random()*9+2))
+            individuum = [crit,max,min]
+            population.append(individuum)
+        return population
+    ```
+
+## Rekombination
+
+**Rekombination**
+
+* **Ziel**:
+    * _Diversifizierung_ der Population durch Erzeugung neuer **Genotypen** mittels Kreuzung.
+    * _Intensivierung_ der Suche in vielversprechenden Lösungsräumen, da meist fitte Individuen gekreuzt werden.
+
+* **Voraussetzung**: Vor der Rekombination müssen **Fitnessbewertung** und **Elternselektion** stattfinden.
+
+
+### Fitnessbewertung {.unlisted}
+
+Siehe `main()` Funktion:
+
+```python
+population = Anfangspopulation(popsize)
+score = fitness(population, popsize, X, y, score)
+start = mean(fitness(population, popsize, X_test, y_test, score))
+```
+
+Wobei die Bewertung durch die folgende Funktion vorgenommen wird:
+
+```python
+def fitness(population, popsize, X, y, score):
+    for i in range(0,popsize):
+        clf = tree.DecisionTreeClassifier(criterion=population[i][0], max_depth=population[i][1], min_samples_split=population[i][2])
+        score[i] = mean(cross_val_score(clf,X,y,cv=3))
+    return score
+```
+
+Die Fitness eines Individuums setzt sich zusammen aus:
+
+  * **Zielfunktion**: Beschreibt, wie gut das Individuum (mit seinen Hyperparametern) eine _Vorhersage treffen kann_.
+  
+  * Potentielle **Strafkosten** für _unzulässige Individuen_.
+
+**Prozess der Bewertung**:
+
+  1. Aus dem **Genotyp** wird der **Phänotyp** erzeugt.
+  2. Mittels **Cross-Validation** wird der Entscheidungsbaum trainiert und bewertet.
+  3. Die Fitnessbewertung findet für jedes Individuum in der Population statt (siehe `for`-loop bis `popsize`)
+
+  **Cross-Validation-Verfahren** (Kreuzvalidierungsverfahren)
+
+  * **Zweck**:
+    - ermöglicht _mehrere Auswertungen_ des Entscheidungsbaums auf dem gleichen Datensatz durch Nutzung unterschiedlicher Teilmengen
+    - durch die Kreuzvalidierung wird Overfitting vermieden werden
+    - Overfitting:
+      - gekennzeichnet dadurch, dass das maschinelle Lernverfahren auf den
+      Daten, welche zum Training und Testen verwendet wurde, gut abschneidet
+      - jedoch bei unbekannten Daten schlecht abschneidet -- Grund: Algorithmus hat die bekannten Daten verinnerlicht, kann aber nicht generalisieren
+
+  * **Prozess**:
+      * Der Datensatz wird in `n` gleich große Teile aufgeteilt.
+      * Die Evaluierung des Entscheidungsbaums erfolgt `n`-mal.
+      * Pro Evaluierung wird einer der `n` Teile als **Testmenge** und die restlichen Teile werden als **Trainingsdaten** genutzt.
+
+Bei jedem Durchgang wird ein anderer Teil als Testmenge genutzt, sodass bei einem $n=3$ (als Beispiel) folgendes Bild entsteht:
+
+![](/figs/04_03_evol_algos_09.png)
+
+Aus den drei Ergebnissen der Kreuzvalidierung wird der Mittelwert gebildet, was bei uns die Fitness des Individuums ist.
+
+Die Fitnessbewertung wird einmal initial durchgeführt, wobei hier `X_test` und `y_test` als Datengrundlage genutzt werden: Ausgangspunkt der Optimierung mit ermitteltem mittleren Fitnesswert über die gesamte Population in der Variablen `start`.
+
+**Überprüfung der Optimierung**
+
+* Am Ende wird die **Fitness** erneut mit den _Testdaten_ gemessen.
+* **Ziel 1**: Überprüfen, ob der Algorithmus die Hyperparameter optimiert hat.
+* **Ziel 2**: Überprüfen auf **Overfitting**, da die Testdaten nicht Teil der Optimierung waren.
+* **Erfolgskriterium**: Fitness auf dem Testdatensatz muss nach dem Algorithmus _gestiegen sein_.
+
+
+### Elterselektion {.unlisted}
+
+Nun gehen wir auf folgenden code Teil ein:
+
+
+```python
+for gen in range(generationen):
+        roul = roulette(score)
+        for j in range(0, popsize, 2):
+            Elter_1, Elter_2 = selektion(popsize, population, roul)
+            Nachkommen[j], Nachkommen[j + 1] = rekombination(Elter_1, Elter_2)
+```
+
+Nach der Bestimmung der Fitness sollen nun die Eltern für die Rekombination ausgewählt werden.
+
+Wir brauchen demnach ein "Rouletterad", welches die bekannte Formel anwendet, die den Anteil eines Individuums an der Gesamtfitness ermittelt, welcher zwischen 0 und 1 liegt.
+
+$$\frac{\text{Fitness}(k)}{\sum_{i=1}^{I} \text{Fitness}(i)}$$
+
+Implementierung z.B. so:
+
+```python
+def roulette(score):
+  score = score / sum(score)
+  roul = np.cumsum(score)
+  return roul
+```
+Das Ergebnis könnte z.B. so aussehen
+
+![](/figs/04_03_evol_algos_10.png)
+
+und in eine Liste eingeordentÖ
+
+![](/figs/04_03_evol_algos_11.png)
+
+
+**Roulette-Wheel-Verfahren: Mechanismus**
+
+* **Erstellung des Rouletterads**:
+    * Die Einträge des Rads bestehen aus der _kumulierten Summe_ der Fitnessanteile der Individuen.
+    * Der erste Eintrag ist der Anteil von Individuum 1; der zweite ist die Summe der Anteile von Individuum 1 und 2, usw. Der letzte Eintrag ist immer 1.
+
+* **Auswahlprozess**:
+    * Eine _Zufallszahl_ zwischen 0 und 1 wird erzeugt (die "Kugel").
+    * Das Individuum wird ausgewählt, dessen Eintrag der _nächstgrößere_ zur Zufallszahl ist.
+    * **Beispiel**: Eine Zufallszahl von `0,52` wählt das fünfte Individuum aus.
+
+* **Visualisierung**: Die Breite des Bereichs für ein Individuum stellt dessen Fitnessanteil dar. Ein schmaler Bereich bedeutet eine geringe Fitness und damit eine _unwahrscheinliche Auswahl_.
+
+* **Voraussetzungen**:
+    * Keine **negativen Fitnesswerte**.
+    * Das Verfahren ist auf eine **Maximierung** der Fitness ausgelegt.
+    * Bei Minimierungszielen oder negativen Werten muss das Verfahren _angepasst werden_.
+
+![](/figs/04_03_evol_algos_12.png)
+
+
+**Elter-Selektion**
+
+Erfolgt über zwei Funktionen, die obiges Roulettesystem implementieren:
+
+```python
+def elterselektion(roul,popsize):
+    zufallszahl = random.random()
+    Elter = 0
+    for i in range(0,popsize):
+      if (zufallszahl >= roul[i]):
+        Elter = i + 1
+    return Elter
+```
+
+```python
+def selektion(popsize,population,roul):
+    Elter1 = population[elterselektion(roul,popsize)]
+    Elter2 = population[elterselektion(roul,popsize)]
+    return Elter1, Elter2
+```
+
+### Rekombinationsverfahren {.unlisted}
+
+In jedem Schleifendurchgang werden zwei Eltern ausgewählt werden und auch zwei Nachkommen erstellt:
+
+```python
+for j in range(0, popsize, 2):
+    Elter1, Elter2 = selektion(popsize,population, roul)
+    Nachkommen[j], Nachkommen[j + 1] = rekombination(Elter1, Elter2)
+```
+
+Dabei wird die Rekombination implementiert durch:
+
+```python
+def rekombination(Elter1, Elter2):
+    crossover = int(round(random.random()+1)) # der zufällige Crossover-Punkt, 1 oder 2
+    Kind1 = Elter1[0:crossover] + Elter2[crossover:] # Nachkommenerzeugung
+    Kind2 = Elter2[0:crossover] + Elter1[crossover:] # Nachkommenerzeugung
+    return Kind1, Kind2 # Ausgabe
+```
+
+### Mutation {.unlisted}
+
+* **Problem**: **Selektion** und **Rekombination** führen zur **Konvergenz** des Genpools
+
+  - gute Individuen setzen sich durch und die Population gleicht sich immer mehr an
+
+  - potenziell bessere Lösungsräume werden nicht mehr betrachtet
+
+* **Zweck der Mutation**: Soll den _Genpool erweitern_ und neue Entwicklungsimpulse in die Population bringen.
+
+* **Aufbau der Mutation**:
+  
+    1.  **Individuenselektion** (Auswahl des Individuums)
+  
+    2.  **Mutationsverfahren** (Art der Mutation)
+
+**1. Individuenselektion**
+
+* **Mechanismus**: Erfolgt i.d.R. über eine _Zufallsauswahl_.
+
+* **Parameter**: Die **Mutationswahrscheinlichkeit** bestimmt die Chance eines jeden Individuums, zur Mutation ausgewählt zu werden.
+
+* **Wichtig**: Sie legt nur fest, _ob_ ein Individuum mutiert, nicht _wie stark_.
+
+**2. Mutationsverfahren**
+
+* **Ablauf**: Nach der Auswahl des Individuums wird zufällig bestimmt, _welches Gen_ mutiert werden soll.
+
+* **Implementierung hier**: Es wird nur _ein Gen pro Individuum_ mutiert.
+
+* **Grund**: Die Mutation mehrerer Gene führt tendenziell zu einer schlechteren Fitness und zum schnellen Aussterben, was den Effekt der Genpoolerweiterung verringert.
+
+Im Hauptcode:
+
+```python
+Nachkommen[j], Nachkommen[j + 1] = rekombination(Elter1, Elter2)
+Nachkommen = mutation(Nachkommen,popsize)
+```
+
+Dabei 
+
+```python
+def mutation(population,popsize):
+    Mutationswahrscheinlichkeit = 0.2
+    for i in range(0,popsize):
+        if random.random() < Mutationswahrscheinlichkeit:
+            Allel = int(round(random.random()*2))
+            if Allel == 0:
+                c = ['gini','entropy','log_loss']
+                crit = int(round(random.random()*2))
+                population[i][Allel] = c[crit]
+            elif Allel == 1:
+                population[i][Allel] = int(round(random.random()*9+1))
+            elif Allel == 2: population[i][Allel] = int(round(random.random()*9+2))
+    return population
+```
+
+### Selektion {.unlisted}
+
+* **Zweck**: Auswahl der Individuen für die nächste Generation mittels **Ersetzungsstrategien**.
+
+* **Grundlage**: Die hier betrachteten Strategien basieren auf der **Fitnessbewertung**, da Ansätze ohne Fitness einer _zufälligen Suche_ ähneln und schlechtere Ergebnisse liefern.
+
+* **Prozess**:
+
+    1.  Fitnessbewertung der _übergroßen Population_ (bestehende Individuen + Nachkommen)
+
+    2.  Anwendung der Ersetzungsstrategie auf Basis der Fitnesswerte
+
+Im Hauptcode:
+
+```python
+Nachkommen = mutation(Nachkommen, popsize)
+score_n = fitness(Nachkommen, popsize, x, y, score_n)
+population += Nachkommen
+score += score_n
+population = [population[j] for j in sorted(range(len(score)), key=lambda i: score[i])[-popsize:]]
+score = [score[j] for j in sorted(range(len(score)), key=lambda i: score[i])[-popsize:]]
+```
+
+### Evaluierung {.unlisted}
+
+Im Hauptcode:
+
+```python
+score = [score[j] for j in sorted(range(len(score)), key=lambda i: score[i])[-popsize:]]
+best[gen] = max(score)
+ende = fitness(population, popsize, x_test, y_test, score)
+print(ende[popsize-1]-start)
+plt.plot(best)
+plt.show()
+```
+
+* **Verlaufskontrolle**: Die höchste Fitness der Population auf den **Trainingsdaten** wird über die Generationen in einem Graphen dargestellt. Dabei 10 Verläufe der Fitness, wenn 100 Individuen 100 Generationen lang entwickelt werden. Alle weiteren Parameter entsprechen den festgelegten Parametern aus dem obigen Code.
+
+![](/figs/04_03_evol_algos_13.png)
+
+Die Graphen bestätigen, dass der Fitnesswert des besten Individuums im Generationsverlauf nicht sinken kann. Der Wert ist monoton steigend. Bei jedem Graph ist auf der X-Achse die Generation und auf der Y-Achse der Fitnesswert abgetragen. Während die X-Achse für alle Läufe identisch ist, variiert die Skalierung der Y- Achse je nach Evolutionsverlauf und startet mindestens bei 0,805 und endet bei maximal `0,8325`. Da die Fitness der Accuracy entspricht, bedeutet dass das beste Individuum (ausgewählt anhand des Trainingsdatensatzes) in 80,5 % bis 83,25 % der Fälle die richtige Klassifikation des Buchstabens schafft.
+
+* **Erwartung (Plus-Strategie)**: Da eine **Plus-Strategie** genutzt wird, muss der Graph **monoton steigend** sein.
+
+* **Problem**: Die Fitness / Accuracy auf den Trainingsdaten ist _nicht die tatsächliche Leistung_. Gründe:
+
+    1.  Die Bäume sind nur auf den **Trainingsdatensatz** optimiert.
+
+    2.  Es wurde immer nur der _beste Baum_ der Generation betrachtet.
+
+* **Qualitätskontrolle**:
+
+    * Zur validen Bewertung wird der **Testdatensatz** genutzt.
+
+    * Es wird der Entscheidungsbaum getestet, der auf den Trainingsdaten am besten war, unter der Annahme, dass die Performance nicht durch **Overfitting** beeinflusst ist.
+
+![](/figs/04_03_evol_algos_14.png)
+
+* **Ergebnis**:
+
+    * Obwohl die Fitnesswerte auf den Testdaten geringer sind, ist _stets eine Verbesserung_ durch die Optimierung ersichtlich.
+
+    * Im Mittel verbessert sich die Accuracy um **9 Prozentpunkte**.
