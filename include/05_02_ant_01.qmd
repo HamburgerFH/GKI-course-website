@@ -1,1 +1,80 @@
 ## Adaption aus der Natur {.unlisted}
+
+### Ameisenalgorithmen Einführung {.unlisted }
+
+* **Definition**: Eine **Metaheuristik** aus dem Bereich der künstlichen Intelligenz, die sich am _Verhalten von Ameisen_ orientiert, um komplexe Optimierungsprobleme zu lösen
+* **Konzept**: Künstliche Ameisen führen _lokale Informationssammlung_ durch, um durch Kooperation eine _globale Optimierung_ zu erreichen
+* **Stärke**: Findet optimale Lösungen für komplexe Probleme mit vielen Lösungsmöglichkeiten, ohne dass eine detaillierte Kenntnis der Problemstruktur erforderlich ist
+* **Anwendungen**: Logistik, Ressourcenplanung, Netzwerkdesign
+
+### 2.2 Adaption aus der Natur {.unlisted}
+
+Das Verhalten basiert auf der Ameisenkoordination bei der Futtersuche
+
+* **Mechanismus**: Ameisen hinterlassen auf dem Weg von einer Futterquelle zum Nest eine **Pheromonspur**
+* **Verstärkung**: Je mehr Ameisen einen Weg nutzen, desto stärker wird die Pheromonkonzentration und desto wahrscheinlicher folgen weitere Ameisen
+* **Verdunstung**: Pheromone verflüchtigen sich mit der Zeit. Kürzere Wege können öfter begangen werden, was zu einer _höheren Pheromonkonzentration_ führt, während längere Wege verblassen
+* **Ergebnis**: Es entsteht kollektiv eine **Ameisenstraße** auf dem kürzesten Pfad, während nur noch wenige Ameisen alternative Wege erkunden
+
+![](/figs/05_02_ant_01.png)
+
+**Ablauf des Ameisenalgorithmus**
+
+1.  **Futtersuche**: Ameisen starten mit einem _zufälligen Spaziergang_ (random walk)
+2.  **Pheromonerkennung**: Treffen Ameisen auf eine Pheromonspur, folgen sie dieser
+3.  **Futter gefunden**: Eine Ameise kehrt zum Nest zurück und markiert den Pfad mit Pheromonen
+4.  **Rückkehr zum Nest**: Andere Ameisen nehmen die verstärkte Spur wahr und folgen ihr, was den Pfad weiter verstärkt
+5.  **Verdunsten von Pheromonen**: Pfade, die nicht mehr genutzt werden, verschwinden allmählich
+
+Dieser Prozess aus **Pheromonverstärkung** und **Verdunstung** führt zur Entstehung eines Pfadmusters, das die kürzeste Verbindung darstellt. Dies ist ein Beispiel für **Emergenz**, bei dem einfache Regeln einzelner Agenten zur Lösung einer komplexen Aufgabe führen
+
+
+### Algortihmusbeschreibung: Pseudocode {.unlisted}
+
+![](/figs/05_02_ant_02.png)
+
+### Mathematische Darstellung {.unlisted}
+
+**Wahrscheinlichkeit der Kantenauswahl**
+
+* Ein Agent $k$ befindet sich in Stadt $r$ und wählt die nächste Stadt $s$ aus der Liste der noch zu besuchenden Städte $J_k(r)$
+* Die Wahrscheinlichkeit $p_k(r,s)$ für diesen Übergang wird wie folgt berechnet:
+$$p_k(r,s) = \begin{cases} \frac{t(r,s)^a \cdot h(r,s)^b}{\sum_{u \in J_k(r)} t(r,u)^a \cdot h(r,u)^b} & \text{wenn } s \in J_k(r) \\ 0 & \text{sonst} \end{cases}$$
+* **$t(r,s)$**: Pheromonkonzentration auf der Kante zwischen $r$ und $s$
+* **$h(r,s)$**: Wert, der die Distanz zwischen den Städten darstellt (normalerweise der Kehrwert)
+
+**Zustandsübergangsregel**
+
+* Die Regel bestimmt, welche Stadt $x$ als nächstes besucht wird:
+$$x = \begin{cases} \arg\max_{u \in J_k(r)} \{ p_k(r,u) \} & \text{wenn } q \le q_0 \\ s & \text{sonst} \end{cases}$$
+* **$s$**: eine zufällige Auswahl, die anhand der Wahrscheinlichkeiten $p_k(r,s)$ getroffen wird
+* **$q$**: eine gleichverteilte Zufallsvariable im Intervall $[0,1]$
+* **$q_0$**: ein Parameter ($0 \le q_0 \le 1$), der die Balance zwischen _Ausnutzung_ (höchste Wahrscheinlichkeit wählen) und _Erkundung_ (zufällige Wahl) steuert
+
+**Lokales Pheromon-Update**
+
+* Nachdem alle $K$ Agenten ihre Tour beendet haben, werden die Pheromonwerte auf den Kanten aktualisiert (_lokales Update_)
+* **Verdunstung**:
+$$t_{neu}(r,s) = (1-a) \cdot t(r,s) + \Delta t_k(r,s)$$
+* **$a$**: Verflüchtigungsparameter ($0 \le a \le 1$), der auf die bisherige Pheromon-
+konzentration $t(r,s)$ wirkt
+* **Pheromon-Ablagerung**:
+Die Änderung der Pheromonkonzentration $\Delta t_k(r,s)$ ergibt sich aus der Nutzung der entsprechenden Kante durch die Agenten wobei gilt
+$$\Delta t_k(r,s) = \begin{cases} \sum_{k=1}^{K} (L_k)^{-1} & \text{wenn Agent } k \text{ die Kante } (r,s) \text{ benutzt} \\ 0 & \text{sonst} \end{cases}$$
+* **$L_k$**: Die Gesamtlänge der Tour von Agent $k$
+* _Kürzere Touren_ führen zu einer _stärkeren_ Pheromonablagerung
+
+**Globales Pheromon-Update**
+
+* Nach dem lokalen Update erfolgt ein globales Update, das die bisher beste Lösung der aktuellen Iteration berücksichtigt
+$$t_{neu-global}(r,s) = (1-a) \cdot t_{neu}(r,s) + L_{best-local}^{-1}$$
+* Kanten, die auf der besten Route der letzten Iteration ($L_{best-local}$) liegen, erhalten einen zusätzlichen Pheromon-Bonus, um sie für Agenten attraktiv zu halten
+* Das Endergebnis des Verfahrens ist die iterationsübergreifende beste Lösung $L_{best-global}$
+
+[**Zusammenfassend können wir die mathematische Formulierung in unseren Pseudocode einsetzen und erhalten folgenden Ablauf:**]{.underline}
+
+![](/figs/05_02_ant_03.png)
+
+### Numerisches Beispiel und Implementierung {.unlisted}
+
+Hier nicht näher betrachtet, siehe dazu Unterkapitel 2.2.2 und Unterkapitel 2.3.
