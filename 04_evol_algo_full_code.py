@@ -82,33 +82,9 @@ def mutation(population,popsize):
                 population[i][Allel] = c[crit]
             elif Allel == 1:
                 population[i][Allel] = int(round(random.random()*9+1))
-            elif Allel == 2: population[i][Allel] = int(round(random.random()*9+2))
+            elif Allel == 2:
+                population[i][Allel] = int(round(random.random()*9+2))
     return population
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
