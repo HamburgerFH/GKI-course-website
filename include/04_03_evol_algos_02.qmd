@@ -1,4 +1,4 @@
-## Initialisierung
+## Algorithmusspezifikation
 
 1. Algorithmus spezifizieren:
     - problemspezifische und problemunspezifische Parameter des Algorithmus festlegen
@@ -206,3 +206,74 @@ Es wird zwischen zwei Strategien unterschieden:
 * **Folge**: Eine Verschlechterung der Qualität zwischen Generationen ist möglich.
 
 * **Vorteil**: Ermöglicht _Erforschung unbekannter Lösungsräume_ durch temporäre Akzeptanz schlechterer Fitness. Die **Konvergenzgeschwindigkeit** sinkt und die **Diversität** bleibt länger erhalten.
+
+
+## Erstellung Initialpopulation
+
+Die Initialisierung dient der Vorbereitung des EA. Zunächst folgende fünf Schritte:
+
+1. Einrichtung der Programmierumgebung
+2. Laden des Datensatzes
+3. Algorithmusspezifizierung operationalisieren
+4. Einführung von notwendiger Datenstrukturen
+5. Erstellung der Initialpopulation
+
+Wir brauchen nun folgende Codeblöcke:
+
+- Einrichtung der Programmierumgebung:
+
+    ```python
+    import numpy as np
+    from sklearn.datasets import load_digits
+    import random
+    from sklearn import tree
+    from sklearn.model_selection import cross_val_score
+    from sklearn.model_selection import train_test_split
+    from statistics import mean
+    ```
+
+    Dann kommt der bereits vorgestelle Teil:
+    
+    ```python
+    def main():
+    (popsize, x, y, x_test, y_test, generationen,best, score, score_n, Nachkommen) = Initialisierung()
+    population = anfangspopulation(popsize)
+    ...
+    ```
+
+- Nun kommt die Definition der Funtion `Initialisierung()` wo auch der Datensatz geladen wird:
+
+    ```python
+    def Initialisierung():
+    digits = load_digits()
+    X, X_test, y, y_test = train_test_split(digits.data, digits.target, test_size = 0.2)
+    popsize = 10
+    generationen = 10
+    best = [None] * generationen
+    score = [0] * popsize
+    scoreN = [0] * popsize
+    Nachkommen = [None] * popsize
+    return popsize, X, y, X_test, y_test, generationen, best, score, scoreN, Nachkommen
+    ```
+
+- **Erstellung der Individuen**
+    Fokus liegt auf der Erstellung des **Genotyps**. Der **Phänotyp** wird erst im Rahmen der Fitnessbewertung erstellt.
+
+    Die **Genotypen** der Initialpopulation werden _zufällig generiert_:
+        * Für jeden Hyperparameter (Gen) wird das Allel "gewürfelt".
+        * Der _Rahmen der Zufälligkeit_ ist dabei vorher abgesteckt, um die Erzeugung **unzulässiger Individuen** zu vermeiden.
+
+    Der code dazu ist:
+
+    ```python
+    def Anfangspopulation(popsize):
+        population = []
+        c = ['gini','entropy','log_loss']
+        for i in range(0,popsize):
+            crit = random.choice(c)
+            max = int(round(random.random()*9+1))
+            min = int(round(random.random()*9+2))
+            individuum = [crit,max,min]
+            population.append(individuum)
+        return population
+    ```
