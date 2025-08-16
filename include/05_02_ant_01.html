@@ -84,6 +84,35 @@ ul.task-list li input[type="checkbox"] {
   };
 </script>
 
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
 
 <link rel="stylesheet" href="../styles.css">
 </head>
@@ -454,8 +483,79 @@ ul.task-list li input[type="checkbox"] {
 
 <section id="adaption-aus-der-natur" class="level2 unlisted">
 <h2 class="unlisted anchored" data-anchor-id="adaption-aus-der-natur">Adaption aus der Natur</h2>
+<section id="ameisenalgorithmen-einführung" class="level3 unlisted">
+<h3 class="unlisted anchored" data-anchor-id="ameisenalgorithmen-einführung">Ameisenalgorithmen Einführung</h3>
+<ul>
+<li><strong>Definition</strong>: Eine <strong>Metaheuristik</strong> aus dem Bereich der künstlichen Intelligenz, die sich am <em>Verhalten von Ameisen</em> orientiert, um komplexe Optimierungsprobleme zu lösen</li>
+<li><strong>Konzept</strong>: Künstliche Ameisen führen <em>lokale Informationssammlung</em> durch, um durch Kooperation eine <em>globale Optimierung</em> zu erreichen</li>
+<li><strong>Stärke</strong>: Findet optimale Lösungen für komplexe Probleme mit vielen Lösungsmöglichkeiten, ohne dass eine detaillierte Kenntnis der Problemstruktur erforderlich ist</li>
+<li><strong>Anwendungen</strong>: Logistik, Ressourcenplanung, Netzwerkdesign</li>
+</ul>
+</section>
+<section id="adaption-aus-der-natur-1" class="level3 unlisted">
+<h3 class="unlisted anchored" data-anchor-id="adaption-aus-der-natur-1">2.2 Adaption aus der Natur</h3>
+<p>Das Verhalten basiert auf der Ameisenkoordination bei der Futtersuche</p>
+<ul>
+<li><strong>Mechanismus</strong>: Ameisen hinterlassen auf dem Weg von einer Futterquelle zum Nest eine <strong>Pheromonspur</strong></li>
+<li><strong>Verstärkung</strong>: Je mehr Ameisen einen Weg nutzen, desto stärker wird die Pheromonkonzentration und desto wahrscheinlicher folgen weitere Ameisen</li>
+<li><strong>Verdunstung</strong>: Pheromone verflüchtigen sich mit der Zeit. Kürzere Wege können öfter begangen werden, was zu einer <em>höheren Pheromonkonzentration</em> führt, während längere Wege verblassen</li>
+<li><strong>Ergebnis</strong>: Es entsteht kollektiv eine <strong>Ameisenstraße</strong> auf dem kürzesten Pfad, während nur noch wenige Ameisen alternative Wege erkunden</li>
+</ul>
+<p><img src="../figs/05_02_ant_01.png" class="img-fluid"></p>
+<p><strong>Ablauf des Ameisenalgorithmus</strong></p>
+<ol type="1">
+<li><strong>Futtersuche</strong>: Ameisen starten mit einem <em>zufälligen Spaziergang</em> (random walk)</li>
+<li><strong>Pheromonerkennung</strong>: Treffen Ameisen auf eine Pheromonspur, folgen sie dieser</li>
+<li><strong>Futter gefunden</strong>: Eine Ameise kehrt zum Nest zurück und markiert den Pfad mit Pheromonen</li>
+<li><strong>Rückkehr zum Nest</strong>: Andere Ameisen nehmen die verstärkte Spur wahr und folgen ihr, was den Pfad weiter verstärkt</li>
+<li><strong>Verdunsten von Pheromonen</strong>: Pfade, die nicht mehr genutzt werden, verschwinden allmählich</li>
+</ol>
+<p>Dieser Prozess aus <strong>Pheromonverstärkung</strong> und <strong>Verdunstung</strong> führt zur Entstehung eines Pfadmusters, das die kürzeste Verbindung darstellt. Dies ist ein Beispiel für <strong>Emergenz</strong>, bei dem einfache Regeln einzelner Agenten zur Lösung einer komplexen Aufgabe führen</p>
+</section>
+<section id="algortihmusbeschreibung-pseudocode" class="level3 unlisted">
+<h3 class="unlisted anchored" data-anchor-id="algortihmusbeschreibung-pseudocode">Algortihmusbeschreibung: Pseudocode</h3>
+<p><img src="../figs/05_02_ant_02.png" class="img-fluid"></p>
+</section>
+<section id="mathematische-darstellung" class="level3 unlisted">
+<h3 class="unlisted anchored" data-anchor-id="mathematische-darstellung">Mathematische Darstellung</h3>
+<p><strong>Wahrscheinlichkeit der Kantenauswahl</strong></p>
+<ul>
+<li>Ein Agent <span class="math inline">\(k\)</span> befindet sich in Stadt <span class="math inline">\(r\)</span> und wählt die nächste Stadt <span class="math inline">\(s\)</span> aus der Liste der noch zu besuchenden Städte <span class="math inline">\(J_k(r)\)</span></li>
+<li>Die Wahrscheinlichkeit <span class="math inline">\(p_k(r,s)\)</span> für diesen Übergang wird wie folgt berechnet: <span class="math display">\[p_k(r,s) = \begin{cases} \frac{t(r,s)^a \cdot h(r,s)^b}{\sum_{u \in J_k(r)} t(r,u)^a \cdot h(r,u)^b} &amp; \text{wenn } s \in J_k(r) \\ 0 &amp; \text{sonst} \end{cases}\]</span></li>
+<li><strong><span class="math inline">\(t(r,s)\)</span></strong>: Pheromonkonzentration auf der Kante zwischen <span class="math inline">\(r\)</span> und <span class="math inline">\(s\)</span></li>
+<li><strong><span class="math inline">\(h(r,s)\)</span></strong>: Wert, der die Distanz zwischen den Städten darstellt (normalerweise der Kehrwert)</li>
+</ul>
+<p><strong>Zustandsübergangsregel</strong></p>
+<ul>
+<li>Die Regel bestimmt, welche Stadt <span class="math inline">\(x\)</span> als nächstes besucht wird: <span class="math display">\[x = \begin{cases} \arg\max_{u \in J_k(r)} \{ p_k(r,u) \} &amp; \text{wenn } q \le q_0 \\ s &amp; \text{sonst} \end{cases}\]</span></li>
+<li><strong><span class="math inline">\(s\)</span></strong>: eine zufällige Auswahl, die anhand der Wahrscheinlichkeiten <span class="math inline">\(p_k(r,s)\)</span> getroffen wird</li>
+<li><strong><span class="math inline">\(q\)</span></strong>: eine gleichverteilte Zufallsvariable im Intervall <span class="math inline">\([0,1]\)</span></li>
+<li><strong><span class="math inline">\(q_0\)</span></strong>: ein Parameter (<span class="math inline">\(0 \le q_0 \le 1\)</span>), der die Balance zwischen <em>Ausnutzung</em> (höchste Wahrscheinlichkeit wählen) und <em>Erkundung</em> (zufällige Wahl) steuert</li>
+</ul>
+<p><strong>Lokales Pheromon-Update</strong></p>
+<ul>
+<li>Nachdem alle <span class="math inline">\(K\)</span> Agenten ihre Tour beendet haben, werden die Pheromonwerte auf den Kanten aktualisiert (<em>lokales Update</em>)</li>
+<li><strong>Verdunstung</strong>: <span class="math display">\[t_{neu}(r,s) = (1-a) \cdot t(r,s) + \Delta t_k(r,s)\]</span></li>
+<li><strong><span class="math inline">\(a\)</span></strong>: Verflüchtigungsparameter (<span class="math inline">\(0 \le a \le 1\)</span>), der auf die bisherige Pheromon- konzentration <span class="math inline">\(t(r,s)\)</span> wirkt</li>
+<li><strong>Pheromon-Ablagerung</strong>: Die Änderung der Pheromonkonzentration <span class="math inline">\(\Delta t_k(r,s)\)</span> ergibt sich aus der Nutzung der entsprechenden Kante durch die Agenten wobei gilt <span class="math display">\[\Delta t_k(r,s) = \begin{cases} \sum_{k=1}^{K} (L_k)^{-1} &amp; \text{wenn Agent } k \text{ die Kante } (r,s) \text{ benutzt} \\ 0 &amp; \text{sonst} \end{cases}\]</span></li>
+<li><strong><span class="math inline">\(L_k\)</span></strong>: Die Gesamtlänge der Tour von Agent <span class="math inline">\(k\)</span></li>
+<li><em>Kürzere Touren</em> führen zu einer <em>stärkeren</em> Pheromonablagerung</li>
+</ul>
+<p><strong>Globales Pheromon-Update</strong></p>
+<ul>
+<li>Nach dem lokalen Update erfolgt ein globales Update, das die bisher beste Lösung der aktuellen Iteration berücksichtigt <span class="math display">\[t_{neu-global}(r,s) = (1-a) \cdot t_{neu}(r,s) + L_{best-local}^{-1}\]</span></li>
+<li>Kanten, die auf der besten Route der letzten Iteration (<span class="math inline">\(L_{best-local}\)</span>) liegen, erhalten einen zusätzlichen Pheromon-Bonus, um sie für Agenten attraktiv zu halten</li>
+<li>Das Endergebnis des Verfahrens ist die iterationsübergreifende beste Lösung <span class="math inline">\(L_{best-global}\)</span></li>
+</ul>
+<p><u><strong>Zusammenfassend können wir die mathematische Formulierung in unseren Pseudocode einsetzen und erhalten folgenden Ablauf:</strong></u></p>
+<p><img src="../figs/05_02_ant_03.png" class="img-fluid"></p>
+</section>
+<section id="numerisches-beispiel-und-implementierung" class="level3 unlisted">
+<h3 class="unlisted anchored" data-anchor-id="numerisches-beispiel-und-implementierung">Numerisches Beispiel und Implementierung</h3>
+<p>Hier nicht näher betrachtet, siehe dazu Unterkapitel 2.2.2 und Unterkapitel 2.3.</p>
 
 
+</section>
 </section>
 
 <a onclick="window.scrollTo(0, 0); return false;" role="button" id="quarto-back-to-top"><i class="bi bi-arrow-up"></i> Back to top</a></main> <!-- /main -->
