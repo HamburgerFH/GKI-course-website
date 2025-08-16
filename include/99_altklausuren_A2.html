@@ -84,6 +84,35 @@ ul.task-list li input[type="checkbox"] {
   };
 </script>
 
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
 
 <link rel="stylesheet" href="../styles.css">
 </head>
@@ -440,6 +469,7 @@ ul.task-list li input[type="checkbox"] {
 <figcaption>Lösung zur Klausur vom 09.03.2024</figcaption>
 </figure>
 </div>
+<p><span class="crd"><u><strong>ACHTUNG FEHLER IN DER MUSTERLÖSUNG:</strong></u></span> -&gt; siehe ähnliche Rechnung bei der Übungsklausur -&gt; <u><strong>IN DER DRITTLETZTEN ZEILE</strong></u> müsste es <span class="crd"><strong>nicht 1-0.33=0.67</strong></span> heißen, <strong>sondern</strong> <span class="ctl"><span class="math inline">\(1-\frac{5}{9}=0.44\)</span></span> sein !!!</p>
 </section>
 <section id="aufgabe-2-25-punkte-2" class="level3 unlisted">
 <h3 class="unlisted anchored" data-anchor-id="aufgabe-2-25-punkte-2"><span class="crd">22.06.2024</span> – Aufgabe 2 <span class="ctl">(25 Punkte)</span></h3>
