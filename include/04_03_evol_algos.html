@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>evol_algos_01 – Grundlagen der Künstlichen Intelligenz (GKI)</title>
+<title>evol_algos – Grundlagen der Künstlichen Intelligenz (GKI)</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -65,7 +65,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="../site_libs/quarto-search/fuse.min.js"></script>
 <script src="../site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="../">
-<link href="../include/04_03_evol_algos_02.html" rel="next">
 <script src="../site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
 <script src="../site_libs/quarto-html/popper.min.js"></script>
@@ -160,7 +159,7 @@ window.Quarto = {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../include/04_03_evol_algos_01.html">Evolutionäre Algorithmen</a></li><li class="breadcrumb-item"><a href="../include/04_03_evol_algos_01.html">Grundlagen &amp; Einführung</a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../include/04_03_evol_algos.html">Evolutionäre Algorithmen</a></li><li class="breadcrumb-item"><a href="../include/04_03_evol_algos.html">Einführung &amp; Implementierung</a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
@@ -376,14 +375,8 @@ window.Quarto = {
       <ul id="quarto-sidebar-section-7" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../include/04_03_evol_algos_01.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text">Grundlagen &amp; Einführung</span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../include/04_03_evol_algos_02.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Initialisierung</span></a>
+  <a href="../include/04_03_evol_algos.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text">Einführung &amp; Implementierung</span></a>
   </div>
 </li>
       </ul>
@@ -448,11 +441,14 @@ window.Quarto = {
    
   <ul>
   <li><a href="#evolutionäre-algorithmen---grundlagen" id="toc-evolutionäre-algorithmen---grundlagen" class="nav-link active" data-scroll-target="#evolutionäre-algorithmen---grundlagen">Evolutionäre Algorithmen - Grundlagen</a></li>
+  <li><a href="#algorithmusspezifikation" id="toc-algorithmusspezifikation" class="nav-link" data-scroll-target="#algorithmusspezifikation">Algorithmusspezifikation</a></li>
+  <li><a href="#erstellung-initialpopulation" id="toc-erstellung-initialpopulation" class="nav-link" data-scroll-target="#erstellung-initialpopulation">Erstellung Initialpopulation</a></li>
+  <li><a href="#rekombination" id="toc-rekombination" class="nav-link" data-scroll-target="#rekombination">Rekombination</a></li>
   </ul>
 </nav>
     </div>
 <!-- main -->
-<main class="content" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../include/04_03_evol_algos_01.html">Evolutionäre Algorithmen</a></li><li class="breadcrumb-item"><a href="../include/04_03_evol_algos_01.html">Grundlagen &amp; Einführung</a></li></ol></nav></header>
+<main class="content" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../include/04_03_evol_algos.html">Evolutionäre Algorithmen</a></li><li class="breadcrumb-item"><a href="../include/04_03_evol_algos.html">Einführung &amp; Implementierung</a></li></ol></nav></header>
 
 
 
@@ -649,9 +645,493 @@ window.Quarto = {
 <span id="cb1-57"><a href="#cb1-57" aria-hidden="true" tabindex="-1"></a>    plt.ylabel(<span class="st">"Fitness (Accuracy)"</span>)</span>
 <span id="cb1-58"><a href="#cb1-58" aria-hidden="true" tabindex="-1"></a>    plt.grid(<span class="va">True</span>)</span>
 <span id="cb1-59"><a href="#cb1-59" aria-hidden="true" tabindex="-1"></a>    plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-
-
 </section>
+</section>
+</section>
+<section id="algorithmusspezifikation" class="level2">
+<h2 class="anchored" data-anchor-id="algorithmusspezifikation">Algorithmusspezifikation</h2>
+<ol type="1">
+<li>Algorithmus spezifizieren:
+<ul>
+<li>problemspezifische und problemunspezifische Parameter des Algorithmus festlegen</li>
+<li>Erstellung der Individuen für die Anfangspopulation</li>
+</ul></li>
+<li>Codebaustein: es wird lediglich main aufgerufen</li>
+</ol>
+<div class="sourceCode" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="va">__name__</span> <span class="op">==</span> <span class="st">'__main__'</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>  main()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<section id="theoretisch-insgesamt-folgende-schritt" class="level3 unlisted">
+<h3 class="unlisted anchored" data-anchor-id="theoretisch-insgesamt-folgende-schritt">Theoretisch insgesamt folgende Schritt</h3>
+<ol type="1">
+<li>Problemanalyse</li>
+<li>Auswahl des Evolutionsverfahrens</li>
+<li>Spezifikation eines Individuums</li>
+<li>Definition der Fitness eines Individuums</li>
+<li>Initialisierungsstrategie und Terminierungskriterium</li>
+<li>Festlegung des Selektionsverfahrens</li>
+<li>Festlegung des Modifikationsverfahrens</li>
+<li>Festlegung des Ersetzungsverfahrens</li>
+</ol>
+<section id="problemanalyse" class="level4">
+<h4 class="anchored" data-anchor-id="problemanalyse">Problemanalyse:</h4>
+<p>Bezugsrahmen des Algorithmus <span class="math inline">\(\Leftrightarrow\)</span> Hyperparameteroptimierung des Entscheidungsbaumverfahrens optimieren:</p>
+<ul>
+<li>Splittingkriterium</li>
+<li>Maximale Tiefe des Baums</li>
+<li>Minimale Anzahl von Datenpunkten, um einen Split durchzuführen</li>
+</ul>
+</section>
+<section id="auswahl-des-evolutionsverfahrens" class="level4">
+<h4 class="anchored" data-anchor-id="auswahl-des-evolutionsverfahrens">Auswahl des Evolutionsverfahrens:</h4>
+<p>Evolutionsverfahren:</p>
+<ul>
+<li>genetische Algorithmen</li>
+<li>evolutionäre Strategien</li>
+<li>genetische Programmierung</li>
+<li>evolutionäre Programmierung</li>
+</ul>
+<p>Hier lediglich: genetische Algorithmen vs.&nbsp;evolutionäre Strategien, da Fokus auf Hyperparameteroptimierungen</p>
+<p>Der wesentliche Unterschied liegt in der Art der Hyperparameter:</p>
+<ul>
+<li><p><strong>Genetische Algorithmen</strong> erfordern <strong>diskrete</strong> Parameter (ganzzahlig oder nominal).</p></li>
+<li><p><strong>Evolutionsstrategien</strong> können auch <strong>kontinuierliche</strong> Parameter verarbeiten.</p></li>
+</ul>
+<p>Für den beschriebenen Anwendungsfall (Optimierung eines Entscheidungsbaums) ist der <strong>genetische Algorithmus</strong> die passende Wahl, da alle Hyperparameter diskret sind:</p>
+<ul>
+<li><p><strong>Splittingkriterium</strong>: Nominal (Gini, Entropie, etc.)</p></li>
+<li><p><strong>Maximale Tiefe</strong>: Ganzzahlig</p></li>
+<li><p><strong>Minimale Anzahl für Split</strong>: Ganzzahlig</p></li>
+</ul>
+</section>
+<section id="spezifikation-eines-individuums" class="level4">
+<h4 class="anchored" data-anchor-id="spezifikation-eines-individuums">Spezifikation eines Individuums:</h4>
+<p>Die drei Gene des Genotyps sind bereits bekannt als die zu optimierenden Hyperparameter:</p>
+<p><img src="../figs/04_03_evol_algos_03.png" class="img-fluid"></p>
+<p>Der zugehörige Phänotyp ist der Entscheidungsbaum, der mit den Parameterausprägungen des Genotyps gebaut wurde:</p>
+<p><img src="../figs/04_03_evol_algos_04.png" class="img-fluid"></p>
+<p>Dieser Phänotyp soll im weiteren Verlauf auf seine Fitness bewertet werden</p>
+</section>
+<section id="definition-der-fitness-eines-individuums" class="level4">
+<h4 class="anchored" data-anchor-id="definition-der-fitness-eines-individuums">Definition der Fitness eines Individuums:</h4>
+<p>Fitness: wie gut löst Individuum das Problem</p>
+<p>Hier also Kennzahlen, die vom Optimierungsziel abhängen:</p>
+<ul>
+<li><strong>Klassifikationsprobleme</strong>: Accuracy, Precision, Recall</li>
+<li><strong>Regressionsprobleme</strong>: Abweichungsmaße</li>
+</ul>
+<p>Konkret: <strong>Accuracy</strong> – der Anteil an richtig klassifizierten Datenpunkten – des Phänotyps als Fitnessmaß</p>
+</section>
+<section id="initialisierungsstrategie-und-terminierungskriterium" class="level4">
+<h4 class="anchored" data-anchor-id="initialisierungsstrategie-und-terminierungskriterium">Initialisierungsstrategie und Terminierungskriterium:</h4>
+<p>Initialstrategie: Auswahl der Populationsgröße</p>
+<ul>
+<li>Definiert Anzahl Individuen in Initialpopulation &amp; Folgenden</li>
+<li>GA klassisch: große Populationen</li>
+<li>ES: kleinere Populationen</li>
+</ul>
+<p>Terminierung des EA: Kriterien</p>
+<ul>
+<li><strong>Anzahl an Generationen</strong>: hier als frei einstellbares Kriterium</li>
+<li><strong>Güte der Lösungskandidaten</strong>: Fitness des besten Lösungskandidaten in der Population oder Durchschnitts-Fitness</li>
+<li><strong>Konvergenz der Population</strong>: Beenden bei lokalem Optimum: Individuen sehr ähnlich basierend auf einem Maß der Unterschiedlichkeit</li>
+</ul>
+<p>Warnung: Bei Güte &amp; Konvergenz kann falsches Ambitionsniveau zu Endlosschleifen führen.</p>
+</section>
+<section id="festlegung-des-selektionsverfahrens" class="level4">
+<h4 class="anchored" data-anchor-id="festlegung-des-selektionsverfahrens">Festlegung des Selektionsverfahrens:</h4>
+<p>Selektionsverfahren: Auswahl der Individuen (fitness-basiert), die für die Rekombination in Frage kommen und Eigenschaften an nächste Generation weitergeben dürfen. Im Folgenden drei Beispiele:</p>
+<ul>
+<li><strong>Roulette-Wheel-Methode</strong>: Auswahlwahrscheinlichkeit proportional zur Fitness
+<ul>
+<li>Mechanismus: Individuen erhalten proportional zu ihrer Fitness einen Bereich auf einem Rouletterad. Zwei “Würfe” wählen zwei Elternteile.</li>
+<li>Bereichsgröße für jedes der <span class="math inline">\(k=1,\ldots,I=8\)</span> Individuen entspricht dem Anteil an der Gesamtfitness: <span class="math display">\[\frac{\text{Fitness}(k)}{\sum_{i=1}^{I} \text{Fitness}(i)}\]</span></li>
+<li>Voraussetzung: Keine negativen Fitnesswerte</li>
+</ul></li>
+</ul>
+<p><img src="../figs/04_03_evol_algos_05.png" class="img-fluid"></p>
+<ul>
+<li><strong>Turnierverfahren</strong>: Das fitteste Individuum einer zufälligen Untermenge gewinnt
+<ul>
+<li>Mechanismus: Zufällige, gleichverteilte Auswahl einer Teilmenge; das beste Individuum wird Elternteil. Ein neues Turnier findet für den zweiten Elternteil statt.</li>
+<li>Effekt: Erhält Diversität, da nicht immer das global beste Individuum gewinnt.</li>
+<li><strong>Selektionsdruck</strong>: Abhängig von der Größe der Untermenge (kleine Teilmenge -&gt; geringer Druck; große Teilmenge -&gt; hoher Druck).</li>
+</ul></li>
+<li><strong>Rangbasiertes Verfahren</strong>: Auswahlwahrscheinlichkeit basiert auf dem Fitness-Rang
+<ul>
+<li>Mechanismus: Erstellung einer Rangliste nach Fitness (Rang 1 = fitteste). Der Rang bestimmt die Auswahlwahrscheinlichkeit.</li>
+<li>Effekt: Große Fitness-Abstände werden reduziert, kleine vergrößert.</li>
+<li>Vorteil: Verhindert die Dominanz von Ausreißern mit sehr hoher Fitness.</li>
+</ul></li>
+</ul>
+<p><img src="../figs/04_03_evol_algos_06.png" class="img-fluid"></p>
+<p>Im Folgenden: <strong>Roulette-Wheel-Methode</strong></p>
+</section>
+<section id="festlegung-des-modifikationsverfahrens" class="level4">
+<h4 class="anchored" data-anchor-id="festlegung-des-modifikationsverfahrens">Festlegung des Modifikationsverfahrens:</h4>
+<p>Modifikationsverfahren bei EA: zwei Gruppen</p>
+<ul>
+<li><strong>Rekombination</strong></li>
+<li><strong>Mutation</strong></li>
+</ul>
+<p>Bei genetischen Algorithmen erfolgt Rekombination i.d.R. per <strong>Crossover</strong>.</p>
+<p><strong>Crossover</strong>: <em>Kreuzung von Genbestandteilen</em> der Eltern, um ein oder zwei Nachkommen zu erzeugen.</p>
+<ul>
+<li><strong>n-Punkt-Crossover</strong>: n definiert die <em>Anzahl an zufälligen Schnitten</em> in den Elterngenomen, die die zu kreuzenden Teile ergeben.</li>
+</ul>
+<p>Hier, zwei bereits selektierte Eltern:</p>
+<p><img src="../figs/04_03_evol_algos_07_A.png" class="img-fluid"></p>
+<ul>
+<li><strong>Beispiel 1-Punkt-Crossover</strong>:
+<ul>
+<li>Jedes Elternteil wird an einer <em>zufällig bestimmten Stelle</em> einmal durchschnitten.</li>
+<li>Im folgenden Beispiel wird eine 3 gewürfelt, der Schnitt erfolgt also an Position 3.</li>
+</ul></li>
+</ul>
+<p><img src="../figs/04_03_evol_algos_07_B.png" class="img-fluid"></p>
+<p><strong>Mutation</strong>: Zweites Modifikationsverfahren neben der <strong>Rekombination</strong>.</p>
+<ul>
+<li><p><strong>Zweck</strong>: <em>Zufällige Veränderung</em> von Genen einzelner Individuen, um aus <em>lokalen Optima auszubrechen</em> und den Lösungsraum umfassend abzusuchen.</p></li>
+<li><p><strong>Auswahl</strong>: Individuum und Gen werden i.d.R. zufällig gewählt.</p></li>
+<li><p><strong>Mutationswahrscheinlichkeit</strong>:</p>
+<ul>
+<li>Zu Beginn festgelegter Parameter (0-100%), der die <em>Anzahl der zu mutierenden Individuen</em> steuert.</li>
+<li>Sollte in GAs <em>relativ klein</em> sein, da eine zu hohe Rate die <strong>Konvergenz</strong> verhindert.</li>
+</ul></li>
+</ul>
+<p>Ist ein Individuum zur Mutation ausgewählt, wird ein zufälliges Gen des Individuums verändert. Alternativ können auch mehrere Gene pro Individuum verändert werden:</p>
+<p><img src="../figs/04_03_evol_algos_08.png" class="img-fluid"></p>
+<p><strong>Problem: Unzulässige Nachkommen</strong> Mutation kann Individuen außerhalb des Lösungsraums erzeugen. Dafür gibt es drei Lösungsstrategien:</p>
+<ul>
+<li><strong>Vermeidungsstrategie</strong>: Verhindert die Generierung unzulässiger Individuen von vornherein.
+<ul>
+<li><em>Nachteil</em>: Kann sehr komplex und langsam sein.</li>
+</ul></li>
+<li><strong>Reparaturstrategie</strong>: Unzulässige Individuen werden nach der Mutation so “repariert”, dass sie wieder im Lösungsraum liegen.
+<ul>
+<li><em>Nachteil</em>: Kann ebenfalls sehr komplex und langsam sein.</li>
+</ul></li>
+<li><strong>Bestrafungsstrategie</strong>: Unzulässige Individuen werden zugelassen, aber mit einer <em>sehr schlechten Fitness</em> versehen, sodass sie aussterben.
+<ul>
+<li><em>Risiko</em>: Unzulässige Eigenschaften können durch Rekombination weitervererbt werden.</li>
+</ul></li>
+</ul>
+</section>
+<section id="festlegung-des-ersetzungsverfahrens" class="level4">
+<h4 class="anchored" data-anchor-id="festlegung-des-ersetzungsverfahrens">Festlegung des Ersetzungsverfahrens:</h4>
+<p><strong>Ersetzungsstrategie</strong>: Zweites Selektionsverfahren, das bestimmt, welche Individuen in die nächste Generation <em>übernommen werden</em> (<em>Überleben</em>).</p>
+<ul>
+<li><p><strong>Zweck</strong>: Steuerung von <strong>Diversifikation</strong> und <strong>Intensivierung</strong>, um die durchschnittliche Qualität der Population zu erhöhen.</p></li>
+<li><p><strong>Ausgangslage</strong>: Übergroße Population aus <code>m</code> bisherigen Individuen und <code>k</code> Nachkommen.</p></li>
+</ul>
+<p>Es wird zwischen zwei Strategien unterschieden:</p>
+<p><strong>1. Plus-Strategie <code>(m + k)</code></strong></p>
+<ul>
+<li><p><strong>Mechanismus</strong>: Die besten <code>m</code> Individuen aus der <em>Gesamtmenge</em> von Eltern und Kindern (<code>m + k</code>) überleben.</p></li>
+<li><p><strong>Folge</strong>: Die Qualität der Population ist <strong>monoton steigend</strong> (kann sich nicht verschlechtern).</p></li>
+<li><p><strong>Gefahr</strong>: Zu schnelle <strong>Konvergenz</strong> und rascher Verlust der <strong>Diversität</strong>.</p></li>
+<li><p><strong>Varianten</strong>:</p>
+<ul>
+<li><strong>Maximalalter</strong>: Individuen sterben nach einer bestimmten Anzahl von Generationen.</li>
+<li><strong>Kindergarten</strong>: Nachkommen sind für einige Generationen vor der Selektion geschützt.</li>
+</ul></li>
+</ul>
+<p><strong>2. Komma-Strategie <code>(m, k)</code></strong></p>
+<ul>
+<li><p><strong>Mechanismus</strong>: Eltern überleben nicht. Die nächste Generation wird <em>nur aus den Kindern</em> gebildet.</p></li>
+<li><p><strong>Bedingung</strong>: Es müssen mindestens so viele Kinder wie Eltern erzeugt werden (<code>k &gt;= m</code>), um die Populationsgröße zu erhalten. Sind es mehr, werden die besten <code>m</code> aus <code>k</code> Kindern ausgewählt.</p></li>
+<li><p><strong>Folge</strong>: Eine Verschlechterung der Qualität zwischen Generationen ist möglich.</p></li>
+<li><p><strong>Vorteil</strong>: Ermöglicht <em>Erforschung unbekannter Lösungsräume</em> durch temporäre Akzeptanz schlechterer Fitness. Die <strong>Konvergenzgeschwindigkeit</strong> sinkt und die <strong>Diversität</strong> bleibt länger erhalten.</p></li>
+</ul>
+</section>
+</section>
+</section>
+<section id="erstellung-initialpopulation" class="level2">
+<h2 class="anchored" data-anchor-id="erstellung-initialpopulation">Erstellung Initialpopulation</h2>
+<p>Die Initialisierung dient der Vorbereitung des EA. Zunächst folgende fünf Schritte:</p>
+<ol type="1">
+<li>Einrichtung der Programmierumgebung</li>
+<li>Laden des Datensatzes</li>
+<li>Algorithmusspezifizierung operationalisieren</li>
+<li>Einführung von notwendiger Datenstrukturen</li>
+<li>Erstellung der Initialpopulation</li>
+</ol>
+<p>Wir brauchen nun folgende Codeblöcke:</p>
+<ul>
+<li><p>Einrichtung der Programmierumgebung:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.datasets <span class="im">import</span> load_digits</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> random</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn <span class="im">import</span> tree</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.model_selection <span class="im">import</span> cross_val_score</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.model_selection <span class="im">import</span> train_test_split</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> statistics <span class="im">import</span> mean</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Dann kommt der bereits vorgestelle Teil:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> main():</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>(popsize, x, y, x_test, y_test, generationen,best, score, score_n, Nachkommen) <span class="op">=</span> Initialisierung()</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>population <span class="op">=</span> anfangspopulation(popsize)</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>...</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
+<li><p>Nun kommt die Definition der Funtion <code>Initialisierung()</code> wo auch der Datensatz geladen wird:</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> Initialisierung():</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>digits <span class="op">=</span> load_digits()</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>X, X_test, y, y_test <span class="op">=</span> train_test_split(digits.data, digits.target, test_size <span class="op">=</span> <span class="fl">0.2</span>)</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>popsize <span class="op">=</span> <span class="dv">10</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>generationen <span class="op">=</span> <span class="dv">10</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>best <span class="op">=</span> [<span class="va">None</span>] <span class="op">*</span> generationen</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>score <span class="op">=</span> [<span class="dv">0</span>] <span class="op">*</span> popsize</span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>scoreN <span class="op">=</span> [<span class="dv">0</span>] <span class="op">*</span> popsize</span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>Nachkommen <span class="op">=</span> [<span class="va">None</span>] <span class="op">*</span> popsize</span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a><span class="cf">return</span> popsize, X, y, X_test, y_test, generationen, best, score, scoreN, Nachkommen</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
+<li><p><strong>Erstellung der Individuen</strong> Fokus liegt auf der Erstellung des <strong>Genotyps</strong>. Der <strong>Phänotyp</strong> wird erst im Rahmen der Fitnessbewertung erstellt.</p>
+<p>Die <strong>Genotypen</strong> der Initialpopulation werden <em>zufällig generiert</em>: * Für jeden Hyperparameter (Gen) wird das Allel “gewürfelt”. * Der <em>Rahmen der Zufälligkeit</em> ist dabei vorher abgesteckt, um die Erzeugung <strong>unzulässiger Individuen</strong> zu vermeiden.</p>
+<p>Der code dazu ist:</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> Anfangspopulation(popsize):</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>    population <span class="op">=</span> []</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>    c <span class="op">=</span> [<span class="st">'gini'</span>,<span class="st">'entropy'</span>,<span class="st">'log_loss'</span>]</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">0</span>,popsize):</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>        crit <span class="op">=</span> random.choice(c)</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>        <span class="bu">max</span> <span class="op">=</span> <span class="bu">int</span>(<span class="bu">round</span>(random.random()<span class="op">*</span><span class="dv">9</span><span class="op">+</span><span class="dv">1</span>))</span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>        <span class="bu">min</span> <span class="op">=</span> <span class="bu">int</span>(<span class="bu">round</span>(random.random()<span class="op">*</span><span class="dv">9</span><span class="op">+</span><span class="dv">2</span>))</span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>        individuum <span class="op">=</span> [crit,<span class="bu">max</span>,<span class="bu">min</span>]</span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>        population.append(individuum)</span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> population</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
+</ul>
+</section>
+<section id="rekombination" class="level2">
+<h2 class="anchored" data-anchor-id="rekombination">Rekombination</h2>
+<p><strong>Rekombination</strong></p>
+<ul>
+<li><strong>Ziel</strong>:
+<ul>
+<li><em>Diversifizierung</em> der Population durch Erzeugung neuer <strong>Genotypen</strong> mittels Kreuzung.</li>
+<li><em>Intensivierung</em> der Suche in vielversprechenden Lösungsräumen, da meist fitte Individuen gekreuzt werden.</li>
+</ul></li>
+<li><strong>Voraussetzung</strong>: Vor der Rekombination müssen <strong>Fitnessbewertung</strong> und <strong>Elternselektion</strong> stattfinden.</li>
+</ul>
+<section id="fitnessbewertung" class="level3 unlisted">
+<h3 class="unlisted anchored" data-anchor-id="fitnessbewertung">Fitnessbewertung</h3>
+<p>Siehe <code>main()</code> Funktion:</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>population <span class="op">=</span> Anfangspopulation(popsize)</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>score <span class="op">=</span> fitness(population, popsize, X, y, score)</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>start <span class="op">=</span> mean(fitness(population, popsize, X_test, y_test, score))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Wobei die Bewertung durch die folgende Funktion vorgenommen wird:</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> fitness(population, popsize, X, y, score):</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">0</span>,popsize):</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>        clf <span class="op">=</span> tree.DecisionTreeClassifier(criterion<span class="op">=</span>population[i][<span class="dv">0</span>], max_depth<span class="op">=</span>population[i][<span class="dv">1</span>], min_samples_split<span class="op">=</span>population[i][<span class="dv">2</span>])</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>        score[i] <span class="op">=</span> mean(cross_val_score(clf,X,y,cv<span class="op">=</span><span class="dv">3</span>))</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> score</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Die Fitness eines Individuums setzt sich zusammen aus:</p>
+<ul>
+<li><p><strong>Zielfunktion</strong>: Beschreibt, wie gut das Individuum (mit seinen Hyperparametern) eine <em>Vorhersage treffen kann</em>.</p></li>
+<li><p>Potentielle <strong>Strafkosten</strong> für <em>unzulässige Individuen</em>.</p></li>
+</ul>
+<p><strong>Prozess der Bewertung</strong>:</p>
+<ol type="1">
+<li>Aus dem <strong>Genotyp</strong> wird der <strong>Phänotyp</strong> erzeugt.</li>
+<li>Mittels <strong>Cross-Validation</strong> wird der Entscheidungsbaum trainiert und bewertet.</li>
+<li>Die Fitnessbewertung findet für jedes Individuum in der Population statt (siehe <code>for</code>-loop bis <code>popsize</code>)</li>
+</ol>
+<p><strong>Cross-Validation-Verfahren</strong> (Kreuzvalidierungsverfahren)</p>
+<ul>
+<li><strong>Zweck</strong>:
+<ul>
+<li>ermöglicht <em>mehrere Auswertungen</em> des Entscheidungsbaums auf dem gleichen Datensatz durch Nutzung unterschiedlicher Teilmengen</li>
+<li>durch die Kreuzvalidierung wird Overfitting vermieden werden</li>
+<li>Overfitting:
+<ul>
+<li>gekennzeichnet dadurch, dass das maschinelle Lernverfahren auf den Daten, welche zum Training und Testen verwendet wurde, gut abschneidet</li>
+<li>jedoch bei unbekannten Daten schlecht abschneidet – Grund: Algorithmus hat die bekannten Daten verinnerlicht, kann aber nicht generalisieren</li>
+</ul></li>
+</ul></li>
+<li><strong>Prozess</strong>:
+<ul>
+<li>Der Datensatz wird in <code>n</code> gleich große Teile aufgeteilt.</li>
+<li>Die Evaluierung des Entscheidungsbaums erfolgt <code>n</code>-mal.</li>
+<li>Pro Evaluierung wird einer der <code>n</code> Teile als <strong>Testmenge</strong> und die restlichen Teile werden als <strong>Trainingsdaten</strong> genutzt.</li>
+</ul></li>
+</ul>
+<p>Bei jedem Durchgang wird ein anderer Teil als Testmenge genutzt, sodass bei einem <span class="math inline">\(n=3\)</span> (als Beispiel) folgendes Bild entsteht:</p>
+<p><img src="../figs/04_03_evol_algos_09.png" class="img-fluid"></p>
+<p>Aus den drei Ergebnissen der Kreuzvalidierung wird der Mittelwert gebildet, was bei uns die Fitness des Individuums ist.</p>
+<p>Die Fitnessbewertung wird einmal initial durchgeführt, wobei hier <code>X_test</code> und <code>y_test</code> als Datengrundlage genutzt werden: Ausgangspunkt der Optimierung mit ermitteltem mittleren Fitnesswert über die gesamte Population in der Variablen <code>start</code>.</p>
+<p><strong>Überprüfung der Optimierung</strong></p>
+<ul>
+<li>Am Ende wird die <strong>Fitness</strong> erneut mit den <em>Testdaten</em> gemessen.</li>
+<li><strong>Ziel 1</strong>: Überprüfen, ob der Algorithmus die Hyperparameter optimiert hat.</li>
+<li><strong>Ziel 2</strong>: Überprüfen auf <strong>Overfitting</strong>, da die Testdaten nicht Teil der Optimierung waren.</li>
+<li><strong>Erfolgskriterium</strong>: Fitness auf dem Testdatensatz muss nach dem Algorithmus <em>gestiegen sein</em>.</li>
+</ul>
+</section>
+<section id="elterselektion" class="level3 unlisted">
+<h3 class="unlisted anchored" data-anchor-id="elterselektion">Elterselektion</h3>
+<p>Nun gehen wir auf folgenden code Teil ein:</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> gen <span class="kw">in</span> <span class="bu">range</span>(generationen):</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>        roul <span class="op">=</span> roulette(score)</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> j <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">0</span>, popsize, <span class="dv">2</span>):</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>            Elter_1, Elter_2 <span class="op">=</span> selektion(popsize, population, roul)</span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>            Nachkommen[j], Nachkommen[j <span class="op">+</span> <span class="dv">1</span>] <span class="op">=</span> rekombination(Elter_1, Elter_2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Nach der Bestimmung der Fitness sollen nun die Eltern für die Rekombination ausgewählt werden.</p>
+<p>Wir brauchen demnach ein “Rouletterad”, welches die bekannte Formel anwendet, die den Anteil eines Individuums an der Gesamtfitness ermittelt, welcher zwischen 0 und 1 liegt.</p>
+<p><span class="math display">\[\frac{\text{Fitness}(k)}{\sum_{i=1}^{I} \text{Fitness}(i)}\]</span></p>
+<p>Implementierung z.B. so:</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> roulette(score):</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>  score <span class="op">=</span> score <span class="op">/</span> <span class="bu">sum</span>(score)</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>  roul <span class="op">=</span> np.cumsum(score)</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> roul</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Das Ergebnis könnte z.B. so aussehen</p>
+<p><img src="../figs/04_03_evol_algos_10.png" class="img-fluid"></p>
+<p>und in eine Liste eingeordentÖ</p>
+<p><img src="../figs/04_03_evol_algos_11.png" class="img-fluid"></p>
+<p><strong>Roulette-Wheel-Verfahren: Mechanismus</strong></p>
+<ul>
+<li><p><strong>Erstellung des Rouletterads</strong>:</p>
+<ul>
+<li>Die Einträge des Rads bestehen aus der <em>kumulierten Summe</em> der Fitnessanteile der Individuen.</li>
+<li>Der erste Eintrag ist der Anteil von Individuum 1; der zweite ist die Summe der Anteile von Individuum 1 und 2, usw. Der letzte Eintrag ist immer 1.</li>
+</ul></li>
+<li><p><strong>Auswahlprozess</strong>:</p>
+<ul>
+<li>Eine <em>Zufallszahl</em> zwischen 0 und 1 wird erzeugt (die “Kugel”).</li>
+<li>Das Individuum wird ausgewählt, dessen Eintrag der <em>nächstgrößere</em> zur Zufallszahl ist.</li>
+<li><strong>Beispiel</strong>: Eine Zufallszahl von <code>0,52</code> wählt das fünfte Individuum aus.</li>
+</ul></li>
+<li><p><strong>Visualisierung</strong>: Die Breite des Bereichs für ein Individuum stellt dessen Fitnessanteil dar. Ein schmaler Bereich bedeutet eine geringe Fitness und damit eine <em>unwahrscheinliche Auswahl</em>.</p></li>
+<li><p><strong>Voraussetzungen</strong>:</p>
+<ul>
+<li>Keine <strong>negativen Fitnesswerte</strong>.</li>
+<li>Das Verfahren ist auf eine <strong>Maximierung</strong> der Fitness ausgelegt.</li>
+<li>Bei Minimierungszielen oder negativen Werten muss das Verfahren <em>angepasst werden</em>.</li>
+</ul></li>
+</ul>
+<p><img src="../figs/04_03_evol_algos_12.png" class="img-fluid"></p>
+<p><strong>Elter-Selektion</strong></p>
+<p>Erfolgt über zwei Funktionen, die obiges Roulettesystem implementieren:</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> elterselektion(roul,popsize):</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>    zufallszahl <span class="op">=</span> random.random()</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>    Elter <span class="op">=</span> <span class="dv">0</span></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">0</span>,popsize):</span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>      <span class="cf">if</span> (zufallszahl <span class="op">&gt;=</span> roul[i]):</span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>        Elter <span class="op">=</span> i <span class="op">+</span> <span class="dv">1</span></span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> Elter</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> selektion(popsize,population,roul):</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>    Elter1 <span class="op">=</span> population[elterselektion(roul,popsize)]</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>    Elter2 <span class="op">=</span> population[elterselektion(roul,popsize)]</span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> Elter1, Elter2</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="rekombinationsverfahren" class="level3 unlisted">
+<h3 class="unlisted anchored" data-anchor-id="rekombinationsverfahren">Rekombinationsverfahren</h3>
+<p>In jedem Schleifendurchgang werden zwei Eltern ausgewählt werden und auch zwei Nachkommen erstellt:</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> j <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">0</span>, popsize, <span class="dv">2</span>):</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>    Elter1, Elter2 <span class="op">=</span> selektion(popsize,population, roul)</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>    Nachkommen[j], Nachkommen[j <span class="op">+</span> <span class="dv">1</span>] <span class="op">=</span> rekombination(Elter1, Elter2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Dabei wird die Rekombination implementiert durch:</p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> rekombination(Elter1, Elter2):</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>    crossover <span class="op">=</span> <span class="bu">int</span>(<span class="bu">round</span>(random.random()<span class="op">+</span><span class="dv">1</span>)) <span class="co"># der zufällige Crossover-Punkt, 1 oder 2</span></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>    Kind1 <span class="op">=</span> Elter1[<span class="dv">0</span>:crossover] <span class="op">+</span> Elter2[crossover:] <span class="co"># Nachkommenerzeugung</span></span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>    Kind2 <span class="op">=</span> Elter2[<span class="dv">0</span>:crossover] <span class="op">+</span> Elter1[crossover:] <span class="co"># Nachkommenerzeugung</span></span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> Kind1, Kind2 <span class="co"># Ausgabe</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="mutation" class="level3 unlisted">
+<h3 class="unlisted anchored" data-anchor-id="mutation">Mutation</h3>
+<ul>
+<li><p><strong>Problem</strong>: <strong>Selektion</strong> und <strong>Rekombination</strong> führen zur <strong>Konvergenz</strong> des Genpools</p>
+<ul>
+<li><p>gute Individuen setzen sich durch und die Population gleicht sich immer mehr an</p></li>
+<li><p>potenziell bessere Lösungsräume werden nicht mehr betrachtet</p></li>
+</ul></li>
+<li><p><strong>Zweck der Mutation</strong>: Soll den <em>Genpool erweitern</em> und neue Entwicklungsimpulse in die Population bringen.</p></li>
+<li><p><strong>Aufbau der Mutation</strong>:</p>
+<ol type="1">
+<li><p><strong>Individuenselektion</strong> (Auswahl des Individuums)</p></li>
+<li><p><strong>Mutationsverfahren</strong> (Art der Mutation)</p></li>
+</ol></li>
+</ul>
+<p><strong>1. Individuenselektion</strong></p>
+<ul>
+<li><p><strong>Mechanismus</strong>: Erfolgt i.d.R. über eine <em>Zufallsauswahl</em>.</p></li>
+<li><p><strong>Parameter</strong>: Die <strong>Mutationswahrscheinlichkeit</strong> bestimmt die Chance eines jeden Individuums, zur Mutation ausgewählt zu werden.</p></li>
+<li><p><strong>Wichtig</strong>: Sie legt nur fest, <em>ob</em> ein Individuum mutiert, nicht <em>wie stark</em>.</p></li>
+</ul>
+<p><strong>2. Mutationsverfahren</strong></p>
+<ul>
+<li><p><strong>Ablauf</strong>: Nach der Auswahl des Individuums wird zufällig bestimmt, <em>welches Gen</em> mutiert werden soll.</p></li>
+<li><p><strong>Implementierung hier</strong>: Es wird nur <em>ein Gen pro Individuum</em> mutiert.</p></li>
+<li><p><strong>Grund</strong>: Die Mutation mehrerer Gene führt tendenziell zu einer schlechteren Fitness und zum schnellen Aussterben, was den Effekt der Genpoolerweiterung verringert.</p></li>
+</ul>
+<p>Im Hauptcode:</p>
+<div class="sourceCode" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>Nachkommen[j], Nachkommen[j <span class="op">+</span> <span class="dv">1</span>] <span class="op">=</span> rekombination(Elter1, Elter2)</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>Nachkommen <span class="op">=</span> mutation(Nachkommen,popsize)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Dabei</p>
+<div class="sourceCode" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> mutation(population,popsize):</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>    Mutationswahrscheinlichkeit <span class="op">=</span> <span class="fl">0.2</span></span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">0</span>,popsize):</span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> random.random() <span class="op">&lt;</span> Mutationswahrscheinlichkeit:</span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>            Allel <span class="op">=</span> <span class="bu">int</span>(<span class="bu">round</span>(random.random()<span class="op">*</span><span class="dv">2</span>))</span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>            <span class="cf">if</span> Allel <span class="op">==</span> <span class="dv">0</span>:</span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a>                c <span class="op">=</span> [<span class="st">'gini'</span>,<span class="st">'entropy'</span>,<span class="st">'log_loss'</span>]</span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a>                crit <span class="op">=</span> <span class="bu">int</span>(<span class="bu">round</span>(random.random()<span class="op">*</span><span class="dv">2</span>))</span>
+<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a>                population[i][Allel] <span class="op">=</span> c[crit]</span>
+<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a>            <span class="cf">elif</span> Allel <span class="op">==</span> <span class="dv">1</span>:</span>
+<span id="cb16-11"><a href="#cb16-11" aria-hidden="true" tabindex="-1"></a>                population[i][Allel] <span class="op">=</span> <span class="bu">int</span>(<span class="bu">round</span>(random.random()<span class="op">*</span><span class="dv">9</span><span class="op">+</span><span class="dv">1</span>))</span>
+<span id="cb16-12"><a href="#cb16-12" aria-hidden="true" tabindex="-1"></a>            <span class="cf">elif</span> Allel <span class="op">==</span> <span class="dv">2</span>: population[i][Allel] <span class="op">=</span> <span class="bu">int</span>(<span class="bu">round</span>(random.random()<span class="op">*</span><span class="dv">9</span><span class="op">+</span><span class="dv">2</span>))</span>
+<span id="cb16-13"><a href="#cb16-13" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> population</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="selektion" class="level3 unlisted">
+<h3 class="unlisted anchored" data-anchor-id="selektion">Selektion</h3>
+<ul>
+<li><p><strong>Zweck</strong>: Auswahl der Individuen für die nächste Generation mittels <strong>Ersetzungsstrategien</strong>.</p></li>
+<li><p><strong>Grundlage</strong>: Die hier betrachteten Strategien basieren auf der <strong>Fitnessbewertung</strong>, da Ansätze ohne Fitness einer <em>zufälligen Suche</em> ähneln und schlechtere Ergebnisse liefern.</p></li>
+<li><p><strong>Prozess</strong>:</p>
+<ol type="1">
+<li><p>Fitnessbewertung der <em>übergroßen Population</em> (bestehende Individuen + Nachkommen)</p></li>
+<li><p>Anwendung der Ersetzungsstrategie auf Basis der Fitnesswerte</p></li>
+</ol></li>
+</ul>
+<p>Im Hauptcode:</p>
+<div class="sourceCode" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>Nachkommen <span class="op">=</span> mutation(Nachkommen, popsize)</span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>score_n <span class="op">=</span> fitness(Nachkommen, popsize, x, y, score_n)</span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>population <span class="op">+=</span> Nachkommen</span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>score <span class="op">+=</span> score_n</span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>population <span class="op">=</span> [population[j] <span class="cf">for</span> j <span class="kw">in</span> <span class="bu">sorted</span>(<span class="bu">range</span>(<span class="bu">len</span>(score)), key<span class="op">=</span><span class="kw">lambda</span> i: score[i])[<span class="op">-</span>popsize:]]</span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>score <span class="op">=</span> [score[j] <span class="cf">for</span> j <span class="kw">in</span> <span class="bu">sorted</span>(<span class="bu">range</span>(<span class="bu">len</span>(score)), key<span class="op">=</span><span class="kw">lambda</span> i: score[i])[<span class="op">-</span>popsize:]]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="evaluierung" class="level3 unlisted">
+<h3 class="unlisted anchored" data-anchor-id="evaluierung">Evaluierung</h3>
+<p>Im Hauptcode:</p>
+<div class="sourceCode" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>score <span class="op">=</span> [score[j] <span class="cf">for</span> j <span class="kw">in</span> <span class="bu">sorted</span>(<span class="bu">range</span>(<span class="bu">len</span>(score)), key<span class="op">=</span><span class="kw">lambda</span> i: score[i])[<span class="op">-</span>popsize:]]</span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>best[gen] <span class="op">=</span> <span class="bu">max</span>(score)</span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>ende <span class="op">=</span> fitness(population, popsize, x_test, y_test, score)</span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(ende[popsize<span class="op">-</span><span class="dv">1</span>]<span class="op">-</span>start)</span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>plt.plot(best)</span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<ul>
+<li><strong>Verlaufskontrolle</strong>: Die höchste Fitness der Population auf den <strong>Trainingsdaten</strong> wird über die Generationen in einem Graphen dargestellt. Dabei 10 Verläufe der Fitness, wenn 100 Individuen 100 Generationen lang entwickelt werden. Alle weiteren Parameter entsprechen den festgelegten Parametern aus dem obigen Code.</li>
+</ul>
+<p><img src="../figs/04_03_evol_algos_13.png" class="img-fluid"></p>
+<p>Die Graphen bestätigen, dass der Fitnesswert des besten Individuums im Generationsverlauf nicht sinken kann. Der Wert ist monoton steigend. Bei jedem Graph ist auf der X-Achse die Generation und auf der Y-Achse der Fitnesswert abgetragen. Während die X-Achse für alle Läufe identisch ist, variiert die Skalierung der Y- Achse je nach Evolutionsverlauf und startet mindestens bei 0,805 und endet bei maximal <code>0,8325</code>. Da die Fitness der Accuracy entspricht, bedeutet dass das beste Individuum (ausgewählt anhand des Trainingsdatensatzes) in 80,5 % bis 83,25 % der Fälle die richtige Klassifikation des Buchstabens schafft.</p>
+<ul>
+<li><p><strong>Erwartung (Plus-Strategie)</strong>: Da eine <strong>Plus-Strategie</strong> genutzt wird, muss der Graph <strong>monoton steigend</strong> sein.</p></li>
+<li><p><strong>Problem</strong>: Die Fitness / Accuracy auf den Trainingsdaten ist <em>nicht die tatsächliche Leistung</em>. Gründe:</p>
+<ol type="1">
+<li><p>Die Bäume sind nur auf den <strong>Trainingsdatensatz</strong> optimiert.</p></li>
+<li><p>Es wurde immer nur der <em>beste Baum</em> der Generation betrachtet.</p></li>
+</ol></li>
+<li><p><strong>Qualitätskontrolle</strong>:</p>
+<ul>
+<li><p>Zur validen Bewertung wird der <strong>Testdatensatz</strong> genutzt.</p></li>
+<li><p>Es wird der Entscheidungsbaum getestet, der auf den Trainingsdaten am besten war, unter der Annahme, dass die Performance nicht durch <strong>Overfitting</strong> beeinflusst ist.</p></li>
+</ul></li>
+</ul>
+<p><img src="../figs/04_03_evol_algos_14.png" class="img-fluid"></p>
+<ul>
+<li><p><strong>Ergebnis</strong>:</p>
+<ul>
+<li><p>Obwohl die Fitnesswerte auf den Testdaten geringer sind, ist <em>stets eine Verbesserung</em> durch die Optimierung ersichtlich.</p></li>
+<li><p>Im Mittel verbessert sich die Accuracy um <strong>9 Prozentpunkte</strong>.</p></li>
+</ul></li>
+</ul>
+
+
 </section>
 </section>
 
@@ -1055,15 +1535,6 @@ window.Quarto = {
     }
   });
   </script>
-<nav class="page-navigation">
-  <div class="nav-page nav-page-previous">
-  </div>
-  <div class="nav-page nav-page-next">
-      <a href="../include/04_03_evol_algos_02.html" class="pagination-link" aria-label="Initialisierung">
-        <span class="nav-page-text">Initialisierung</span> <i class="bi bi-arrow-right-short"></i>
-      </a>
-  </div>
-</nav>
 </div> <!-- /content -->
 <footer class="footer">
   <div class="nav-footer">
