@@ -1,3 +1,5 @@
+name: Quarto Publish
+
 on:
   push:
     branches: [main]
@@ -9,10 +11,10 @@ on:
       - "styles/**"
       - "figs/**"
       - "assets/**"
+      - "include/**"
+      - "requirements.txt"
       - ".github/workflows/publish.yml"
   workflow_dispatch:
-
-name: Quarto Publish
 
 concurrency:
   group: quarto-publish-${{ github.ref }}
@@ -31,39 +33,56 @@ jobs:
         with:
           fetch-depth: 1
 
-      # 2) Python for notebook execution
+      # 2) Python with pip cache
       - name: Set up Python
         id: setup-python
         uses: actions/setup-python@v5
         with:
           python-version: "3.10"
+          cache: "pip"
+          cache-dependency-path: "requirements.txt"
 
-      # 3) Install deps used by your notebooks (from requirements.txt)
+      # 3) Install deps (will be fast on cache hits)
       - name: Install Python dependencies
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
-      # 4) Create a kernelspec named "gki-venv" so ipynb with that
-      #    kernelspec run fine on CI
-      - name: Register gki-venv kernelspec on runner
-        run: |
-          python -m ipykernel install --user --name gki-venv --display-name "gki-venv"
-          jupyter kernelspec list
+      # 4) Cache jupyter-cache and freeze cache (optional but useful)
+      - name: Cache jupyter-cache
+        uses: actions/cache@v4
+        with:
+          path: .jupyter_cache
+          key: jcache-${{ runner.os }}-py${{ steps.setup-python.outputs.python-version }}-${{ hashFiles('requirements.txt') }}-${{ hashFiles('_quarto.yml', 'include/**/*.ipynb', 'include/**/*.qmd', '*.qmd') }}
+          restore-keys: |
+            jcache-${{ runner.os }}-py${{ steps.setup-python.outputs.python-version }}-${{ hashFiles('requirements.txt') }}-
+
+      - name: Cache _freeze
+        uses: actions/cache@v4
+        with:
+          path: _freeze
+          key: freeze-${{ runner.os }}-py${{ steps.setup-python.outputs.python-version }}-${{ hashFiles('requirements.txt') }}-${{ hashFiles('_quarto.yml', 'include/**/*.ipynb', 'include/**/*.qmd', '*.qmd') }}
+          restore-keys: |
+            freeze-${{ runner.os }}-py${{ steps.setup-python.outputs.python-version }}-${{ hashFiles('requirements.txt') }}-
 
       # 5) Quarto CLI
       - name: Set up Quarto
         uses: quarto-dev/quarto-actions/setup@v2
         with:
-          # match your local 1.7.x; adjust if you prefer "latest"
-          version: "1.7.31"
+          version: "1.7.31"   # match local version for reproducibility
 
-      # 6) Render & publish to gh-pages
-      - name: Render and Publish
+      # 6) Render site (force default kernel so CI doesn't need 'gki-venv')
+      - name: Render site
+        env:
+          QUARTO_PYTHON: ${{ env.pythonLocation }}/bin/python
+        run: |
+          quarto render --execute-kernel=python3
+
+      # 7) Publish already-rendered site (no re-render)
+      - name: Publish to GitHub Pages
         uses: quarto-dev/quarto-actions/publish@v2
         with:
           target: gh-pages
+          render: false
         env:
-          # Let Quarto use this Python for Jupyter engine
-          QUARTO_PYTHON: ${{ env.pythonLocation }}/bin/python
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
