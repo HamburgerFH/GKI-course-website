@@ -3,11 +3,11 @@
 
 
 - Struktur zur Klassifikation oder Regression basierend auf Tests auf 
-  Attributwerten $X_j$ $\Rightarrow$ typische Anwendungen:
+  Merkmale $X_j$ bzw. deren Werte $\Rightarrow$ typische Anwendungen:
   - medizinische Diagnose
   - Kreditwürdigkeitsprüfung
   - Zielgruppenklassifikation im Marketing
-- Ziel: herleitung einer regel, die Objekte korrekt einer Klasse $K_m$
+- Ziel: Herleitung einer Regel, die Objekte korrekt einer Klasse $K_m$
   zuordnet
 - jeder Pfad: Folge von Tests $T_1, T_2, \dots$ auf Attribute; daraus 
   entstehen Zweige, die zu einem Blatt führen
@@ -18,15 +18,15 @@
   $f : \mathcal{X} \rightarrow \mathcal{Y}$
   \begin{align*}
   f:~ \mathbb{R}^p &\rightarrow \{1, \dots, K\}\\
-  \bs{X} &\mapsto K_m
+  \bs{x} &\mapsto K_m
   \end{align*}
 - Durch sukzessive Anwendung der Tests $T_1, T_2,\ldots$ erhalten wir
   eine Aufteilung des Merkmalsraums $\mathcal{X}$ in disjunkte Regionen
-  $R_1, \dots, R_M$ und somit am Ende $f(\bs{X}) = K_m$ für potentielle
+  $R_1, \dots, R_M$ und somit am Ende $f(\bs{x}) = K_m$ für potentielle
   komplett neue Objekte 
 - jedes Objekt wird eindeutig einem Blatt mit Klassenlabel zugeordnet
 - **Wurzelknoten**: Startpunkt der Klassifikationsregel
-- **interner Knoten**: Test auf Attributwert, z. B. $X_2 < 0.53$?
+- **interner Knoten**: Test auf Attributwert, z. B. $x_2 < 0{,}29$?
 - **Zweig**: Ausprägung des Testergebnisses (z. B. „ja“ oder „nein“)
 - **Blattknoten**: Ergebnis der Klassifikation
 
@@ -38,10 +38,14 @@
 
 ![](/figs/02_A_trees_example_01.png)
 
-- rote Punkte: Klasse ``sick'' vs. grüne Punkte: Klasse ``healthy'' 
+- rote Punkte: Klasse `sick` vs. grüne Punkte: Klasse `healthy` 
 - horizontale und vertikale Linien: durch Entscheidungsbaum induzierte
   Schwellenwerte
-- Beispielpfad: $X_2 < 0.53$ und $X_1 < 0{,11}$ führt zur Klasse „sick“
+- Hinweis zur Notation in der Abbildung: dort bezeichnen $x_1$ und $x_2$
+  die beiden dargestellten Merkmale _**für einen beliebigen Datenpunkt i**_. In unserer allgemeinen Notation wäre
+  ein Test für ein einzelnes neues Objekt $\bs{x}$ (Index $i$ weggelassen) entsprechend
+  $x_2 < 0{,}53$.
+- Beispielpfad: $x_2 < 0{,}53$ und $x_1 < 0{,}11$ führt zur Klasse „sick“
 - jeder Pfad im Baum definiert eine Region im Merkmalsraum
 - Ziel: vollständige Trennung der Klassen durch einfache Tests auf
   Attributwerte
@@ -54,15 +58,15 @@
 
 - Ziel: finde Klassifikationsregel $f: \mathcal{X} \to \mathcal{Y}$, die neue 
   Objekte korrekt einer Klasse zuordnet
-- gegeben: Trainingsmenge $M = \{(x_i, y_i)\}_{i=1}^N$ mit Attributen 
-  $X_1, \dots, X_d$
+- gegeben: Trainingsmenge $M = \{(\bs{x}_i, y_i)\}_{i=1}^N$ mit $p$
+  Merkmalen
 - gesucht: Entscheidungsbaum, der $M$ korrekt trennt und auf ungesehene 
   Daten generalisiert
 
 
 
 - Voraussetzung: Attribute müssen Klassen unterscheidbar machen
-- falls $x_i = x_j$, aber $y_i \neq y_j$: keine trennbare Klassifikation
+- falls $\bs{x}_i = \bs{x}_j$, aber $y_i \neq y_j$: keine trennbare Klassifikation
   möglich
 - Ziel ist nicht nur perfekte Trennung von $M$, sondern robuste
   Generalisierung
@@ -80,10 +84,11 @@
 
 
 
-- sei $M = \{(x_i, y_i)\}_{i=1}^N$ eine Trainingsmenge mit $K$ Klassen
-- sei $A$ ein Attribut mit $v$ Ausprägungen $A_1, \dots, A_v$
+- sei $M = \{(\bs{x}_i, y_i)\}_{i=1}^N$ eine Trainingsmenge mit $K$ Klassen
+- sei $A$ ein Attribut/Merkmal mit $v$ möglichen Ausprägungen
+  $a_1, \dots, a_v$
 - aufteilung von $M$ in Teilmengen $M_1, \dots, M_v$ gemäß Attribut $A$
-- $M_j = \{ (x_i, y_i) \in M : x_i \text{ hat Attributwert } A_j \}$
+- $M_j = \{ (\bs{x}_i, y_i) \in M : A(\bs{x}_i) = a_j \}$
 
 
 
@@ -141,7 +146,7 @@
   H(M) = -\sum_{k=1}^{K} p_k \log_2 p_k
   $$
 - $H(M)$ misst die Unreinheit (Unsicherheit) der Klassenverteilung in $M$
-- **_wie zuvor:_** $A$ ist Attribut mit $v$ Ausprägungen:
+- **_wie zuvor:_** $A$ ist Attribut/Merkmal mit $v$ Ausprägungen:
   $a_1, \dots, a_v$ und $M$ wird durch $A$ in Teilmengen $M_1, \dots, M_v$
   aufgeteilt; dann ist die gewichtete Entropie nach Aufteilung durch $A$:
   $$
