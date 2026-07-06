@@ -32,8 +32,8 @@
 - auch möglich: **geordnete Kategorien** (z. B. klein, mittel, groß) – 
   hier nicht behandelt
 - **Regression:** $Y$ ist quantitativ, z. B. Preis, Temperatur, Gewicht
-- **Klassifikation:** $G$ ist qualitativ, z. B. Klasse ``Ja/Nein'', ``rot/blau''
-- ``überwacht'' bedeutet: Trainingsdaten enthalten Zielgrößen zur
+- **Klassifikation:** $G$ ist qualitativ, z. B. Klassen `Ja/Nein`, `rot/blau`
+- **überwacht** bedeutet: Trainingsdaten enthalten Zielgrößen zur
   Kontrolle des Lernprozesses
 - beide Aufgaben lassen sich als **Funktionsapproximation** formulieren
 - Trainingsdaten bestehen aus Paaren $(x_i, y_i)$ oder $(x_i, g_i)$
@@ -70,13 +70,23 @@
 
 ### Eingabedaten (Input) {.unlisted}
 
-- $\bs{X} \in \mathbb{R}^{N \times p}$: Matrix aller Inputvektoren und eine
-  Input/Eingabe: $\bs{x}_i \in \mathbb{R}^p$, $i = 1, \dots, N$ Beobachtungen
-- dazugehöriger Zeilenvektor: $\bs{x}_i^T$ (transponierter Spaltenvektor) 
-  der $i$-ten Beobachtung
+- $N$: Anzahl der Beobachtungen / Datenpunkte
+- $p$: Anzahl der Merkmale
+- $\bs{x}_i \in \mathbb{R}^p$: Merkmalsvektor der $i$-ten Beobachtung
+  (als Spaltenvektor), $i = 1, \dots, N$
+- $\bs{X} \in \mathbb{R}^{N \times p}$: Datenmatrix mit den Beobachtungen
+  als Zeilen, also mit $\bs{x}_i^T$ in der $i$-ten Zeile
 
 $$
 \bs{X} =
+\begin{bmatrix}
+  \bs{x}_1^T \\\\
+  \vdots \\\\
+  \bs{x}_i^T \\\\
+  \vdots \\\\
+  \bs{x}_N^T
+\end{bmatrix}
+=
 \begin{bmatrix}
   x_{11} & x_{12} & \dots & x_{1p} \\\\
   \vdots & \vdots &       & \vdots \\\\
@@ -87,10 +97,9 @@ $$
 \quad \Rightarrow \quad \bs{x}_i^T = \text{i-te Zeile}
 $$
 
-- für den Iris Datensatz wäre $p=4$, $N=150$ und die Reihenfolge
-- $\bs{x}_i^T$ enthält alle vier Merkmale der $i$-ten Blüte:
-  `sepal_length` `sepal_width` `petal_length`
-  `petal_width`
+- für den Iris-Datensatz gilt $p=4$, $N=150$
+- $\bs{x}_i^T$ enthält alle vier Merkmale der $i$-ten Blüte in dieser
+  Reihenfolge: `sepal_length` `sepal_width` `petal_length` `petal_width`
 - Beispiel: $x_{i2}$ = sepal-Breite der $i$-ten Blüte, und
   $x_{N3}$ = petal-Länge der $N$-ten Blüte 
 
