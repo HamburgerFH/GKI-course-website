@@ -516,8 +516,8 @@ window.Quarto = {
 <li>Ziel: aus Eingabevariablen <span class="math inline">\(X\)</span> eine <strong>Vorhersage</strong> <span class="math inline">\(Y\)</span> oder <span class="math inline">\(G\)</span> ableiten</li>
 <li>auch möglich: <strong>geordnete Kategorien</strong> (z. B. klein, mittel, groß) – hier nicht behandelt</li>
 <li><strong>Regression:</strong> <span class="math inline">\(Y\)</span> ist quantitativ, z. B. Preis, Temperatur, Gewicht</li>
-<li><strong>Klassifikation:</strong> <span class="math inline">\(G\)</span> ist qualitativ, z. B. Klasse <code>Ja/Nein'',</code>rot/blau’’</li>
-<li>``überwacht’’ bedeutet: Trainingsdaten enthalten Zielgrößen zur Kontrolle des Lernprozesses</li>
+<li><strong>Klassifikation:</strong> <span class="math inline">\(G\)</span> ist qualitativ, z. B. Klassen <code>Ja/Nein</code>, <code>rot/blau</code></li>
+<li><strong>überwacht</strong> bedeutet: Trainingsdaten enthalten Zielgrößen zur Kontrolle des Lernprozesses</li>
 <li>beide Aufgaben lassen sich als <strong>Funktionsapproximation</strong> formulieren</li>
 <li>Trainingsdaten bestehen aus Paaren <span class="math inline">\((x_i, y_i)\)</span> oder <span class="math inline">\((x_i, g_i)\)</span></li>
 </ul>
@@ -557,11 +557,23 @@ Figure&nbsp;1: Abbildung
 <section id="eingabedaten-input" class="level3 unlisted">
 <h3 class="unlisted anchored" data-anchor-id="eingabedaten-input">Eingabedaten (Input)</h3>
 <ul>
-<li><span class="math inline">\(\bs{X} \in \mathbb{R}^{N \times p}\)</span>: Matrix aller Inputvektoren und eine Input/Eingabe: <span class="math inline">\(\bs{x}_i \in \mathbb{R}^p\)</span>, <span class="math inline">\(i = 1, \dots, N\)</span> Beobachtungen</li>
-<li>dazugehöriger Zeilenvektor: <span class="math inline">\(\bs{x}_i^T\)</span> (transponierter Spaltenvektor) der <span class="math inline">\(i\)</span>-ten Beobachtung</li>
+<li><span class="math inline">\(N\)</span>: Anzahl der Beobachtungen / Datenpunkte</li>
+<li><span class="math inline">\(p\)</span>: Anzahl der Merkmale</li>
+<li><span class="math inline">\(\bs{x}_i \in \mathbb{R}^p\)</span>: Merkmalsvektor der <span class="math inline">\(i\)</span>-ten Beobachtung (als Spaltenvektor), <span class="math inline">\(i = 1, \dots, N\)</span></li>
+<li><span class="math inline">\(\bs{X} \in \mathbb{R}^{N \times p}\)</span>: Datenmatrix mit den Beobachtungen als Zeilen, also mit <span class="math inline">\(\bs{x}_i^T\)</span> in der <span class="math inline">\(i\)</span>-ten Zeile</li>
+<li><span class="math inline">\(X_j\)</span>: <span class="math inline">\(j\)</span>-tes Merkmal bzw. <span class="math inline">\(j\)</span>-te Spalte der Datenmatrix; <span class="math inline">\(x_{ij}\)</span> ist der konkrete Wert dieses Merkmals für Beobachtung <span class="math inline">\(i\)</span></li>
+<li>Hinweis: in der Entscheidungsbaum-Literatur wird ein ausgewähltes Merkmal häufig als Attribut <span class="math inline">\(A\)</span> bezeichnet. Dann meint <span class="math inline">\(A\)</span> keine neue Datenstruktur, sondern ein ausgewähltes Merkmal aus den Spalten von <span class="math inline">\(\bs{X}\)</span>; <span class="math inline">\(a_1, \dots, a_v\)</span> bezeichnen mögliche Ausprägungen dieses Attributs.</li>
 </ul>
 <p><span class="math display">\[
 \bs{X} =
+\begin{bmatrix}
+  \bs{x}_1^T \\\\
+  \vdots \\\\
+  \bs{x}_i^T \\\\
+  \vdots \\\\
+  \bs{x}_N^T
+\end{bmatrix}
+=
 \begin{bmatrix}
   x_{11} &amp; x_{12} &amp; \dots &amp; x_{1p} \\\\
   \vdots &amp; \vdots &amp;       &amp; \vdots \\\\
@@ -572,8 +584,8 @@ Figure&nbsp;1: Abbildung
 \quad \Rightarrow \quad \bs{x}_i^T = \text{i-te Zeile}
 \]</span></p>
 <ul>
-<li>für den Iris Datensatz wäre <span class="math inline">\(p=4\)</span>, <span class="math inline">\(N=150\)</span> und die Reihenfolge</li>
-<li><span class="math inline">\(\bs{x}_i^T\)</span> enthält alle vier Merkmale der <span class="math inline">\(i\)</span>-ten Blüte: <code>sepal_length</code> <code>sepal_width</code> <code>petal_length</code> <code>petal_width</code></li>
+<li>für den Iris-Datensatz gilt <span class="math inline">\(p=4\)</span>, <span class="math inline">\(N=150\)</span></li>
+<li><span class="math inline">\(\bs{x}_i^T\)</span> enthält alle vier Merkmale der <span class="math inline">\(i\)</span>-ten Blüte in dieser Reihenfolge: <code>sepal_length</code> <code>sepal_width</code> <code>petal_length</code> <code>petal_width</code></li>
 <li>Beispiel: <span class="math inline">\(x_{i2}\)</span> = sepal-Breite der <span class="math inline">\(i\)</span>-ten Blüte, und <span class="math inline">\(x_{N3}\)</span> = petal-Länge der <span class="math inline">\(N\)</span>-ten Blüte</li>
 </ul>
 </section>

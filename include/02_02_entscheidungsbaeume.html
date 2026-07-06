@@ -509,22 +509,22 @@ window.Quarto = {
 <section id="entscheidungsbäume-grundidee" class="level2">
 <h2 class="anchored" data-anchor-id="entscheidungsbäume-grundidee">Entscheidungsbäume: Grundidee</h2>
 <ul>
-<li><p>Struktur zur Klassifikation oder Regression basierend auf Tests auf Attributwerten <span class="math inline">\(X_j\)</span> <span class="math inline">\(\Rightarrow\)</span> typische Anwendungen:</p>
+<li><p>Struktur zur Klassifikation oder Regression basierend auf Tests auf Merkmale <span class="math inline">\(X_j\)</span> bzw. deren Werte <span class="math inline">\(\Rightarrow\)</span> typische Anwendungen:</p>
 <ul>
 <li>medizinische Diagnose</li>
 <li>Kreditwürdigkeitsprüfung</li>
 <li>Zielgruppenklassifikation im Marketing</li>
 </ul></li>
-<li><p>Ziel: herleitung einer regel, die Objekte korrekt einer Klasse <span class="math inline">\(K_m\)</span> zuordnet</p></li>
+<li><p>Ziel: Herleitung einer Regel, die Objekte korrekt einer Klasse <span class="math inline">\(K_m\)</span> zuordnet</p></li>
 <li><p>jeder Pfad: Folge von Tests <span class="math inline">\(T_1, T_2, \dots\)</span> auf Attribute; daraus entstehen Zweige, die zu einem Blatt führen</p></li>
 <li><p>formale Sicht: Entscheidungsbaum als Funktion zum Beispiel: <span class="math inline">\(f : \mathcal{X} \rightarrow \mathcal{Y}\)</span> <span class="math display">\[\begin{align*}
 f:~ \mathbb{R}^p &amp;\rightarrow \{1, \dots, K\}\\
-\bs{X} &amp;\mapsto K_m
+\bs{x} &amp;\mapsto K_m
 \end{align*}\]</span></p></li>
-<li><p>Durch sukzessive Anwendung der Tests <span class="math inline">\(T_1, T_2,\ldots\)</span> erhalten wir eine Aufteilung des Merkmalsraums <span class="math inline">\(\mathcal{X}\)</span> in disjunkte Regionen <span class="math inline">\(R_1, \dots, R_M\)</span> und somit am Ende <span class="math inline">\(f(\bs{X}) = K_m\)</span> für potentielle komplett neue Objekte</p></li>
+<li><p>Durch sukzessive Anwendung der Tests <span class="math inline">\(T_1, T_2,\ldots\)</span> erhalten wir eine Aufteilung des Merkmalsraums <span class="math inline">\(\mathcal{X}\)</span> in disjunkte Regionen <span class="math inline">\(R_1, \dots, R_M\)</span> und somit am Ende <span class="math inline">\(f(\bs{x}) = K_m\)</span> für potentielle komplett neue Objekte</p></li>
 <li><p>jedes Objekt wird eindeutig einem Blatt mit Klassenlabel zugeordnet</p></li>
 <li><p><strong>Wurzelknoten</strong>: Startpunkt der Klassifikationsregel</p></li>
-<li><p><strong>interner Knoten</strong>: Test auf Attributwert, z. B. <span class="math inline">\(X_2 &lt; 0.53\)</span>?</p></li>
+<li><p><strong>interner Knoten</strong>: Test auf Attributwert, z. B. <span class="math inline">\(x_2 &lt; 0{,}29\)</span>?</p></li>
 <li><p><strong>Zweig</strong>: Ausprägung des Testergebnisses (z. B. „ja“ oder „nein“)</p></li>
 <li><p><strong>Blattknoten</strong>: Ergebnis der Klassifikation</p></li>
 </ul>
@@ -533,9 +533,10 @@ f:~ \mathbb{R}^p &amp;\rightarrow \{1, \dots, K\}\\
 <h2 class="anchored" data-anchor-id="beispiel-entscheidungsbaum">Beispiel: Entscheidungsbaum</h2>
 <p><img src="../figs/02_A_trees_example_01.png" class="img-fluid"></p>
 <ul>
-<li>rote Punkte: Klasse <code>sick'' vs. grüne Punkte: Klasse</code>healthy’’</li>
+<li>rote Punkte: Klasse <code>sick</code> vs.&nbsp;grüne Punkte: Klasse <code>healthy</code></li>
 <li>horizontale und vertikale Linien: durch Entscheidungsbaum induzierte Schwellenwerte</li>
-<li>Beispielpfad: <span class="math inline">\(X_2 &lt; 0.53\)</span> und <span class="math inline">\(X_1 &lt; 0{,11}\)</span> führt zur Klasse „sick“</li>
+<li>Hinweis zur Notation in der Abbildung: dort bezeichnen <span class="math inline">\(x_1\)</span> und <span class="math inline">\(x_2\)</span> die beiden dargestellten Merkmale <em><strong>für einen beliebigen Datenpunkt i</strong></em>. In unserer allgemeinen Notation wäre ein Test für ein einzelnes neues Objekt <span class="math inline">\(\bs{x}\)</span> (Index <span class="math inline">\(i\)</span> weggelassen) entsprechend <span class="math inline">\(x_2 &lt; 0{,}53\)</span>.</li>
+<li>Beispielpfad: <span class="math inline">\(x_2 &lt; 0{,}53\)</span> und <span class="math inline">\(x_1 &lt; 0{,}11\)</span> führt zur Klasse „sick“</li>
 <li>jeder Pfad im Baum definiert eine Region im Merkmalsraum</li>
 <li>Ziel: vollständige Trennung der Klassen durch einfache Tests auf Attributwerte</li>
 </ul>
@@ -544,10 +545,10 @@ f:~ \mathbb{R}^p &amp;\rightarrow \{1, \dots, K\}\\
 <h2 class="anchored" data-anchor-id="induktionsaufgabe-und-generalisierbarkeit">Induktionsaufgabe und Generalisierbarkeit</h2>
 <ul>
 <li><p>Ziel: finde Klassifikationsregel <span class="math inline">\(f: \mathcal{X} \to \mathcal{Y}\)</span>, die neue Objekte korrekt einer Klasse zuordnet</p></li>
-<li><p>gegeben: Trainingsmenge <span class="math inline">\(M = \{(x_i, y_i)\}_{i=1}^N\)</span> mit Attributen <span class="math inline">\(X_1, \dots, X_d\)</span></p></li>
+<li><p>gegeben: Trainingsmenge <span class="math inline">\(M = \{(\bs{x}_i, y_i)\}_{i=1}^N\)</span> mit <span class="math inline">\(p\)</span> Merkmalen</p></li>
 <li><p>gesucht: Entscheidungsbaum, der <span class="math inline">\(M\)</span> korrekt trennt und auf ungesehene Daten generalisiert</p></li>
 <li><p>Voraussetzung: Attribute müssen Klassen unterscheidbar machen</p></li>
-<li><p>falls <span class="math inline">\(x_i = x_j\)</span>, aber <span class="math inline">\(y_i \neq y_j\)</span>: keine trennbare Klassifikation möglich</p></li>
+<li><p>falls <span class="math inline">\(\bs{x}_i = \bs{x}_j\)</span>, aber <span class="math inline">\(y_i \neq y_j\)</span>: keine trennbare Klassifikation möglich</p></li>
 <li><p>Ziel ist nicht nur perfekte Trennung von <span class="math inline">\(M\)</span>, sondern robuste Generalisierung</p></li>
 <li><p>bei mehreren möglichen Bäumen wählt man den einfacheren</p></li>
 <li><p>Einfachheit gilt als Proxy für Generalisierungsfähigkeit</p></li>
@@ -557,10 +558,10 @@ f:~ \mathbb{R}^p &amp;\rightarrow \{1, \dots, K\}\\
 <section id="aufspaltung-eines-knotens" class="level2">
 <h2 class="anchored" data-anchor-id="aufspaltung-eines-knotens">Aufspaltung eines Knotens</h2>
 <ul>
-<li><p>sei <span class="math inline">\(M = \{(x_i, y_i)\}_{i=1}^N\)</span> eine Trainingsmenge mit <span class="math inline">\(K\)</span> Klassen</p></li>
-<li><p>sei <span class="math inline">\(A\)</span> ein Attribut mit <span class="math inline">\(v\)</span> Ausprägungen <span class="math inline">\(A_1, \dots, A_v\)</span></p></li>
+<li><p>sei <span class="math inline">\(M = \{(\bs{x}_i, y_i)\}_{i=1}^N\)</span> eine Trainingsmenge mit <span class="math inline">\(K\)</span> Klassen</p></li>
+<li><p>sei <span class="math inline">\(A\)</span> ein Attribut/Merkmal mit <span class="math inline">\(v\)</span> möglichen Ausprägungen <span class="math inline">\(a_1, \dots, a_v\)</span></p></li>
 <li><p>aufteilung von <span class="math inline">\(M\)</span> in Teilmengen <span class="math inline">\(M_1, \dots, M_v\)</span> gemäß Attribut <span class="math inline">\(A\)</span></p></li>
-<li><p><span class="math inline">\(M_j = \{ (x_i, y_i) \in M : x_i \text{ hat Attributwert } A_j \}\)</span></p></li>
+<li><p><span class="math inline">\(M_j = \{ (\bs{x}_i, y_i) \in M : A(\bs{x}_i) = a_j \}\)</span></p></li>
 <li><p>für jeden Split-Knoten wird ein Attribut <span class="math inline">\(A\)</span> gewählt, das <span class="math inline">\(M\)</span> möglichst gut trennt also einen möglichst guten split erzeugt</p></li>
 <li><p>die Qualität eines Splits wird über <strong>Entropie</strong> und <strong>Informationsgewinn</strong> gemessen</p></li>
 <li><p>Ziel: maximale Homogenität der Klassen in den Teilmengen <span class="math inline">\(M_j\)</span></p></li>
@@ -592,7 +593,7 @@ f:~ \mathbb{R}^p &amp;\rightarrow \{1, \dots, K\}\\
 H(M) = -\sum_{k=1}^{K} p_k \log_2 p_k
 \]</span></li>
 <li><span class="math inline">\(H(M)\)</span> misst die Unreinheit (Unsicherheit) der Klassenverteilung in <span class="math inline">\(M\)</span></li>
-<li><strong><em>wie zuvor:</em></strong> <span class="math inline">\(A\)</span> ist Attribut mit <span class="math inline">\(v\)</span> Ausprägungen: <span class="math inline">\(a_1, \dots, a_v\)</span> und <span class="math inline">\(M\)</span> wird durch <span class="math inline">\(A\)</span> in Teilmengen <span class="math inline">\(M_1, \dots, M_v\)</span> aufgeteilt; dann ist die gewichtete Entropie nach Aufteilung durch <span class="math inline">\(A\)</span>: <span class="math display">\[
+<li><strong><em>wie zuvor:</em></strong> <span class="math inline">\(A\)</span> ist Attribut/Merkmal mit <span class="math inline">\(v\)</span> Ausprägungen: <span class="math inline">\(a_1, \dots, a_v\)</span> und <span class="math inline">\(M\)</span> wird durch <span class="math inline">\(A\)</span> in Teilmengen <span class="math inline">\(M_1, \dots, M_v\)</span> aufgeteilt; dann ist die gewichtete Entropie nach Aufteilung durch <span class="math inline">\(A\)</span>: <span class="math display">\[
 H_A(M) = \sum_{j=1}^v \frac{|M_j|}{|M|} \cdot H(M_j)\quad\text{mit}\quad
 \frac{|M_j|}{|M|}=\frac{\sum_{k=1}^K m_{k}^{(j)}}{\sum_{k=1}^K m_k}\;,
 \]</span></li>
