@@ -11,6 +11,8 @@ on:
       - "assets/**"
       - "include/**"
       - "requirements.txt"
+      - ".staticrypt.json"
+      - "scripts/**"
       - ".github/workflows/publish.yml"
   workflow_dispatch:
 
@@ -77,11 +79,44 @@ jobs:
         with:
           version: "1.7.31"
 
-      # 7) Render & publish
-      - name: Render and Publish
+      # 7) Render
+      - name: Render Quarto website
+        uses: quarto-dev/quarto-actions/render@v2
+        env:
+          QUARTO_PYTHON: ${{ env.pythonLocation }}/bin/python
+
+      # 8) Encrypt
+      - name: Encrypt HTML pages
+        env:
+          STATICRYPT_PASSWORD: ${{ secrets.SITE_PASSWORD }}
+        run: |
+          if [ -z "$STATICRYPT_PASSWORD" ]; then
+            echo "SITE_PASSWORD repository secret is required"
+            exit 1
+          fi
+
+          npx --yes staticrypt@3.5.4 _site/* \
+            --recursive \
+            --directory _site \
+            --config .staticrypt.json \
+            --remember 5 \
+            --template-color-primary "#03497b" \
+            --template-color-secondary "#177bb9" \
+            --template-title "GKI-Kurswebsite" \
+            --template-instructions "Bitte Kurs-Passwort eingeben." \
+            --template-placeholder "Passwort" \
+            --template-button "Website öffnen" \
+            --template-remember "Passwort 5 Tage merken" \
+            --template-error "Falsches Passwort"
+
+          node scripts/apply-staticrypt-entry-gate.mjs \
+            _site /GKI-course-website/
+
+      # 9) Publish
+      - name: Publish website
         uses: quarto-dev/quarto-actions/publish@v2
         with:
           target: gh-pages
+          render: false
         env:
-          QUARTO_PYTHON: ${{ env.pythonLocation }}/bin/python
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
