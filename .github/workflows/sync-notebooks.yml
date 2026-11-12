@@ -1,0 +1,57 @@
+# Mirrors the course notebooks into HamburgerFH/GKI-notebooks, the small
+# repo students open in Codespaces. This repo stays the source of truth.
+name: Sync notebooks repo
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "include/*.ipynb"
+      - "data/processed/**"
+      - "requirements.txt"
+      - ".github/workflows/sync-notebooks.yml"
+  workflow_dispatch:
+
+concurrency:
+  group: sync-notebooks
+  cancel-in-progress: false
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out website repo
+        uses: actions/checkout@v4
+        with:
+          path: website
+
+      - name: Check out notebooks repo
+        uses: actions/checkout@v4
+        with:
+          repository: HamburgerFH/GKI-notebooks
+          ssh-key: ${{ secrets.NOTEBOOKS_DEPLOY_KEY }}
+          path: notebooks
+
+      # only these paths are owned by the website repo; README and
+      # devcontainer live in the notebooks repo and are left alone
+      - name: Copy notebooks, data and requirements
+        run: |
+          rm -f notebooks/notebooks/*.ipynb
+          cp website/include/*.ipynb notebooks/notebooks/
+          rm -rf notebooks/data/processed
+          mkdir -p notebooks/data
+          cp -r website/data/processed notebooks/data/
+          cp website/requirements.txt notebooks/requirements.txt
+
+      - name: Commit and push
+        working-directory: notebooks
+        run: |
+          git add -A notebooks data/processed requirements.txt
+          if git diff --cached --quiet; then
+            echo "Notebooks repo already up to date"
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898283+github-actions[bot]@users.noreply.github.com"
+          git commit -m "chore: sync from GKI-course-website@${GITHUB_SHA::7}"
+          git push
