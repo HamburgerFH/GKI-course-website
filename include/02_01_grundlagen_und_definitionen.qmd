@@ -1,88 +1,72 @@
 ## Grundlagen der Künstlichen Intelligenz
 
-
-
 ### Einführung {.unlisted}
 
-- Künstliche Intelligenz umfasst eine Vielzahl von Algorithmen zur automatisierten
-  Datenverarbeitung
+- Künstliche Intelligenz umfasst eine Vielzahl von Algorithmen zur
+  automatisierten Datenverarbeitung
 - Entscheidungsbäume gehören zum Bereich des **maschinellen Lernens**
-- Fokus dieser Vorlesung: Methoden des **überwachten Lernens**
-- maschinelles Lernen ist ein Teilbereich der KI, bei dem Systeme aus
-  Daten lernen statt explizit programmiert zu werden
+- Fokus dieser Vorlesung: Methoden des **überwachten maschinellen Lernens**
+- maschinelles Lernen ist ein Teilbereich der KI, bei dem Systeme aus Daten
+  lernen statt explizit programmiert zu werden
+- Modelle wie Entscheidungsbäume folgen einer klaren, regelbasierten Struktur
+  und sind gut interpretierbar
 
-
-  
-### Zentrale Algorithmen {.unlisted}
+### Zentralisierte Algorithmen {.unlisted}
 
 - ein **zentral gesteuerter Algorithmus** verwaltet Daten, Parameter und Logik
   an einem einzigen Ort
 - Vorteil: einfache Struktur, leicht zu implementieren
-- Nachteil: zentraler Ausfallpunkt, eingeschränkte Skalierbarkeit
-- Nachteil: zentraler Ausfallpunkt, schlecht skalierbar bei verteilten Aufgaben
+- Nachteil: zentraler Ausfallpunkt (single point of failure) und schlecht
+  skalierbar, v. a. bei verteilten Aufgaben
 - Beispiel: ineffizient zur Steuerung ganzer Fahrzeugflotten
-- zentrale Modelle wie Entscheidungsbäume folgen einer klaren, 
-  regelbasierten Struktur und sind gut interpretierbar
 
-
-  
 ### Überwachtes Lernen: Grundidee {.unlisted}
 
 - Ziel: aus Eingabevariablen $X$ eine **Vorhersage** $Y$ oder $G$ ableiten
-- auch möglich: **geordnete Kategorien** (z. B. klein, mittel, groß) – 
-  hier nicht behandelt
+- auch möglich: **geordnete Kategorien** (z. B. klein, mittel, groß) – hier
+  nicht behandelt
 - **Regression:** $Y$ ist quantitativ, z. B. Preis, Temperatur, Gewicht
 - **Klassifikation:** $G$ ist qualitativ, z. B. Klassen `Ja/Nein`, `rot/blau`
-- **überwacht** bedeutet: Trainingsdaten enthalten Zielgrößen zur
-  Kontrolle des Lernprozesses
+- **überwacht** bedeutet: Trainingsdaten enthalten Zielgrößen zur Kontrolle des
+  Lernprozesses
 - beide Aufgaben lassen sich als **Funktionsapproximation** formulieren
 - Trainingsdaten bestehen aus Paaren $(x_i, y_i)$ oder $(x_i, g_i)$
 
-
-
 ## Beispiel: Klassifikation mit Iris-Daten
-
-
 
 ![Abbildung](/figs/02_intro_iris.png){#fig-02_intro_iris}
 
-- Eingabe: Länge und Breite von Kelch- und Blütenblättern 
+- Eingabe: Länge und Breite von Kelch- und Blütenblättern
 - **Sepal** = Kelchblatt vs. **Petal** = Blütenblatt (siehe Bild)
 - Ziel: Vorhersage der Iris-Spezies (setosa, versicolor, virginica)
 - typische Klassifikationsaufgabe mit $G \in \{1, 2, 3\}$
 
-
-  
 ### Hintergrund zum Datensatz {.unlisted}
 
 - stammt aus einer Studie von **Ronald Fisher** (1936)
-- enthält 150 Beobachtungen, je 50 pro Iris-Art: `setosa`, 
-  `versicolor`, `virginica`
-- für jede Pflanze sind 4 Merkmale gegeben: Kelchblatt-Länge/Breite und Blütenblatt-Länge/Breite
+- enthält 150 Beobachtungen, je 50 pro Iris-Art: `setosa`, `versicolor`,
+  `virginica`
+- für jede Pflanze sind 4 Merkmale gegeben: Kelchblatt-Länge/Breite und
+  Blütenblatt-Länge/Breite
 - seit Jahrzehnten Standard-Datensatz zum Testen von Klassifikationsverfahren
 - gut geeignet für visuelle Trennung \& erste Modellbeispiele
 
-
-
 ## Notation
-
-
 
 ### Eingabedaten (Input) {.unlisted}
 
 - $N$: Anzahl der Beobachtungen / Datenpunkte
 - $p$: Anzahl der Merkmale
-- $\bs{x}_i \in \mathbb{R}^p$: Merkmalsvektor der $i$-ten Beobachtung
-  (als Spaltenvektor), $i = 1, \dots, N$
-- $\bs{X} \in \mathbb{R}^{N \times p}$: Datenmatrix mit den Beobachtungen
-  als Zeilen, also mit $\bs{x}_i^T$ in der $i$-ten Zeile
-- $X_j$: $j$-tes Merkmal bzw. $j$-te Spalte der Datenmatrix; $x_{ij}$ ist
-  der konkrete Wert dieses Merkmals für Beobachtung $i$
+- $\bs{x}_i \in \mathbb{R}^p$: Merkmalsvektor der $i$-ten Beobachtung (als
+  Spaltenvektor), $i = 1, \dots, N$
+- $\bs{X} \in \mathbb{R}^{N \times p}$: Datenmatrix mit den Beobachtungen als
+  Zeilen, also mit $\bs{x}_i^T$ in der $i$-ten Zeile
+- $X_j$: $j$-tes Merkmal bzw. $j$-te Spalte der Datenmatrix; $x_{ij}$ ist der
+  konkrete Wert dieses Merkmals für Beobachtung $i$
 - Hinweis: in der Entscheidungsbaum-Literatur wird ein ausgewähltes Merkmal
-  häufig als Attribut $A$ bezeichnet. Dann meint $A$ keine neue
-  Datenstruktur, sondern ein ausgewähltes Merkmal aus den Spalten von
-  $\bs{X}$; $a_1, \dots, a_v$ bezeichnen mögliche Ausprägungen dieses
-  Attributs.
+  häufig als Attribut $A$ bezeichnet. Dann meint $A$ keine neue Datenstruktur,
+  sondern ein ausgewähltes Merkmal aus den Spalten von $\bs{X}$;
+  $a_1, \dots, a_v$ bezeichnen mögliche Ausprägungen dieses Attributs.
 
 $$
 \bs{X} =
@@ -107,18 +91,18 @@ $$
 - für den Iris-Datensatz gilt $p=4$, $N=150$
 - $\bs{x}_i^T$ enthält alle vier Merkmale der $i$-ten Blüte in dieser
   Reihenfolge: `sepal_length` `sepal_width` `petal_length` `petal_width`
-- Beispiel: $x_{i2}$ = sepal-Breite der $i$-ten Blüte, und
-  $x_{N3}$ = petal-Länge der $N$-ten Blüte 
+- Beispiel: $x_{i2}$ = sepal-Breite der $i$-ten Blüte, und $x_{N3}$ =
+  petal-Länge der $N$-ten Blüte
 
-
-  
 ### Zielgrößen (Output) {.unlisted}
 
 - $Y_i \in \mathbb{R}$: quantitatives Ziel (Regression)
-- $G_i \in \Omega$: qualitatives Ziel (Klassifikation), z. B. $\Omega = \{\text{setosa}, \dots\}$
+- $G_i \in \Omega$: qualitatives Ziel (Klassifikation), z. B.
+  $\Omega = \{\text{setosa}, \dots\}$
 - $\hat{Y}_i$, $\hat{G}_i$: geschätzte Ausgaben
 - Ziel: $\hat{Y}_i \approx Y_i$, $\hat{G}_i \approx G_i$
-- Binäre Klassifikation für binäres $G$: $\hat{Y}_i \in [0, 1]$ und Schwellenwert-Regel z. B. für Wert 0.5:
+- Binäre Klassifikation für binäres $G$: $\hat{Y}_i \in [0, 1]$ und
+  Schwellenwert-Regel z. B. für Wert 0.5:
 
 $$
 \hat{G}_i =
