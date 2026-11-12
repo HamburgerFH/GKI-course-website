@@ -76,49 +76,116 @@ Molecular BioSystems 5(12)](/figs/02_A_trees_example_01.png){#fig-02_tree_exampl
 
 ## Entropie und Informationsgewinn {#entropie}
 
-### Definition
+### Definitionen
 
-- sei $M$ eine Menge von Objekten, die auf $K$ Klassen verteilt sind
-- $p_k$ sei der Anteil der Objekte (rel. Häufigkeit) in Klasse $k$,
-  $k = 1, \dots, K$ und $m_1,\ldots,m_K$ die entsprechende Anzahl der Objekte
-- die **Entropie** von $M$ ist definiert als:
-  $$
-  H(M) = -\sum_{k=1}^{K} p_k \log_2 p_k
-  $$
-- $H(M)$ misst die Unreinheit (Unsicherheit) der Klassenverteilung in $M$
-- **_wie zuvor:_** $A$ ist Attribut/Merkmal mit $v$ Ausprägungen:
-  $a_1, \dots, a_v$ und $M$ wird durch $A$ in Teilmengen $M_1, \dots, M_v$
-  aufgeteilt; dann ist die gewichtete Entropie nach Aufteilung durch $A$:
-  $$
-  H_A(M) = \sum_{j=1}^v \frac{|M_j|}{|M|} \cdot H(M_j)\quad\text{mit}\quad
-  \frac{|M_j|}{|M|}=\frac{\sum_{k=1}^K m_{k}^{(j)}}{\sum_{k=1}^K m_k}\;,
-  $$
-- wobei $m_{k}^{(j)}$ die Anzahl der Objekte aus Klasse $k$ innerhalb $M_j$
-  bezeichnet
-- der **Informationsgewinn** durch Attribut $A$ ist definiert als:
-  $$
-  \text{gain}(A) = H(M) - H_A(M)
-  $$
-- $A^* = \arg\max_{A \in \mathcal{A}} \, \text{gain}(A)$: bestes Attribut für
-  Aufspaltung maximiert gain über Menge aller verfügbaren Attribute
-  $\mathcal{A}$
+- sei $M$ eine beliebige Menge von Objekten, die auf $K$ Klassen verteilt sind
+  - an der Wurzel des Entscheidungsbaums: $M$ alle Objekte/Datenpunkte und
+    $|M|=N$
+  - nach einem Split: $M$ Teilmenge des Knotens, z.B. eine der Teilmengen $M_j$
+    aus der Aufteilung gemäß Attribut $A$
+- für jede Klasse $k = 1, \dots, K$, sei
+  - $m_k$ die Anzahl der Objekte in Klasse $k$
+  - $p_k$ der Anteil der Objekte, d.h. rel. Häufigkeit $p_k:=\frac{m_k}{|M|}$
+- $A$ ist Attribut/Merkmal mit $v$ Ausprägungen: $a_1, \dots, a_v$
 
-### Entropie als Maß für Unreinheit
+::: {.callout-note icon=false}
 
-- Entropie misst die Unreinheit (Unsicherheit) einer Klassenzuordnung in $M$
-- je gemischter die Klassenverteilung, desto höher die Entropie
-- eine reine Menge (alle Objekte gleiche Klasse) hat Entropie $= 0$
-- maximal bei Gleichverteilung: $p_k = \frac{1}{K}$ für alle $k = 1, \dots, K$
+#### Definition Entropie
 
-- Entropie entspricht dem erwarteten Informationsgehalt einer zufälligen
-  Klassenzuordnung
-- Interpretation: wie „überraschend“ ist das Ergebnis einer Klassifikation?
-- bei deterministischer Klasse (z.B. 100 % sick): keine Überraschung
+Die **Entropie** $H(\cdot)$ von $M$ ist definiert als:
+
+$$
+H(M) = -\sum_{k:\, p_k > 0} p_k \log_2 p_k\;,
+$$
+
+wobei nur nur über Klassen summiert wird, die in $M$ vorkommen ($p_k > 0$), da
+$\log_2 0$ nicht definiert ist. $H(M)$ misst die Unreinheit (Unsicherheit) der
+Klassenverteilung/Klassenzuordnung in $M$:
+
+- für eine reine Menge, alle Objekte gleiche Klasse, d.h.
+  $\exists!\, k: p_k = 1$ und $p_j = 0 \ \forall j \neq k$: Entropie $= 0$
+- je gemischter, d.h. je ausgeglichener die Anteile $p_k$, desto höher die
+  Entropie (jede nicht reine Menge hat $H(M) > 0$); z.B. bei $K = 2$ steigt
+  $H(M)$ mit $p_1$ von $0$ bis $0.5$ und fällt danach wieder
+- maximal bei Gleichverteilung $p_k = \frac{1}{K}$ für alle $k = 1, \dots, K$:
+
+  $$
+  H(M) = -\sum_{k=1}^{K} \frac{1}{K} \log_2 \frac{1}{K}
+  = -K \cdot \frac{1}{K} \cdot (-\log_2 K) = \log_2 K
+  $$
+
+  z.B. $H(M) = 1$ bei $K = 2$
+  - dass dies das Maximum ist, folgt aus der Jensen-Ungleichung ($\log_2$ ist
+    konkav), mit $K'$ = Anzahl der vorkommenden Klassen:
+    $$
+    H(M) = \sum_{k:\, p_k > 0} p_k \log_2 \frac{1}{p_k}
+    \leq \log_2 \Big( \sum_{k:\, p_k > 0} p_k \cdot \frac{1}{p_k} \Big)
+    = \log_2 K' \leq \log_2 K
+    $$
+  - Gleichheit genau dann, wenn alle $p_k$ gleich sind und alle $K$ Klassen
+    vorkommen, d.h. bei Gleichverteilung
+
+:::
+
+::: {.callout-note icon=false}
+
+#### Gewichtete Entropie
+
+Sei $M$ eine Menge von Objekten, die durch $A$ in Teilmengen $M_1, \dots, M_v$
+aufgeteilt wird. Dann ist die gewichtete Entropie nach Aufteilung durch $A$
+gegeben durch:
+
+$$
+H_A(M) = \sum_{j=1}^v \frac{|M_j|}{|M|} \cdot H(M_j)\quad\text{mit}\quad
+\frac{|M_j|}{|M|}=\frac{\sum_{k=1}^K m_{k}^{(j)}}{\sum_{k=1}^K m_k}\;,
+$$
+
+Dabei bezeichnet $m_{k}^{(j)}$ die Anzahl der Objekte aus Klasse $k$ innerhalb.
+$M_j$.
+
+:::
+
+::: {.callout-note icon=false}
+
+#### Informationsgewinn
+
+Der **Informationsgewinn** durch Attribut $A$ ist definiert als:
+
+$$
+\text{gain}(A) = H(M) - H_A(M)
+$$
+
+:::
+
+### Entropie: Intuition und mögliche Interpretationen
+
+Sei $Z$ eine Zufallsvariable mit Realisation $z$. Der **Informationsgehalt**
+eines Ereignisses $z$ mit $p(z)$ ist gegeben durch:
+
+$$
+I_g(z) = -\log_2 p(z)
+$$
+
+Demnach entspricht die **Entropie** dem erwarteten Informationsgehalt einer
+zufälligen Klassenzuordnung, bzw. dem Erwartungswert des Informationsgehalts
+über alle Klassen:
+
+$$
+H(M) = p_1 \cdot I_g(p_1) + p_2 \cdot I_g(p_2)
+= -p_1 \log_2 p_1 - p_2 \log_2 p_2
+$$
+
+Entropie als Maß für die **Unbestimmtheit/Unreinheit** der Klassenzugehörigkeit:
+
+- wie ''überraschend'' ist das Ergebnis einer Klassifikation ?
+- bei deterministischer Klasse (z.B. 100 % `sick``): keine Überraschung
   $\rightarrow$ keine Information nötig
 - bei Gleichverteilung (50/50): maximaler Überraschungseffekt $\rightarrow$ mehr
   Information nötig
-
-- Entropie liefert Grundlage für den **Informationsgewinn** eines Attributsplits
+- Intuition: über ein wahrscheinliches Ereignis zu lernen ist weniger informativ
+  als über ein unwahrscheinliches Ereignis zu lernen
+- Entropie liefert Grundlage für den **Informationsgewinn** hinsichtlich eines
+  Attributsplits
 - je stärker ein Attribut die Entropie reduziert, desto besser ist es zur
   Trennung geeignet
 
@@ -126,31 +193,24 @@ Molecular BioSystems 5(12)](/figs/02_A_trees_example_01.png){#fig-02_tree_exampl
 
 - gegeben seien $K=2$ Klassen: ''sick'' und ''healthy'' mit $p_1$ als Anteil der
   Objekte in Klasse ''sick'', $p_2 = 1 - p_1$ für eine Menge von Objekten M
-- **Informationsgehalt** eines Ereignisses $z$ mit $p(z)$ ist:
-  $$
-  I_g(z) = -\log_2 p(z)
-  $$
-- Intuition: über ein wahrscheinliches Ereignis zu lernen ist weniger informativ
-  als über ein unwahrscheinliches Ereignis zu lernen
-
-- **Entropie** ist Erwartungswert des Informationsgehalts über alle Klassen und
-  misst die **Unbestimmtheit/Unreinheit** der Klassenzugehörigkeit:
-
-  $$
-  H(M) = p_1 \cdot I_g(p_1) + p_2 \cdot I_g(p_2)
-  = -p_1 \log_2 p_1 - p_2 \log_2 p_2
-  $$
-
 - **Extremfall 1:** $p_1 = 1$, $p_2 = 0$ $\rightarrow$ $H(M) = 0$ (vollständige
   Sicherheit)
 - **Extremfall 2:** $p_1 = p_2 = 0.5$ $\rightarrow$ $H(M) = 1$ (maximale
   Unsicherheit)
 
 - **Informationsgewinn** durch ein Attribut $A$:
+
   $$
   \text{gain}(A) = H(M) - H_A(M)
   $$
+
 - hoher Informationsgewinn von $A$ erzeugt möglichst ''reinere'' Teilmengen
+
+## Iterative Dichotomiser 3 (ID3)
+
+- $A^* = \arg\max_{A \in \mathcal{A}} \, \text{gain}(A)$: bestes Attribut für
+  Aufspaltung maximiert gain über Menge aller verfügbaren Attribute
+  $\mathcal{A}$
 - Ziel: maximale Reduktion der Unreinheit durch Auswahl des besten $A^*$
 
 ### Beispiel II: Fußball mit Entscheidungsbäumen -- Einführung
