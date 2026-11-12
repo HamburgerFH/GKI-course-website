@@ -5,35 +5,37 @@
   - medizinische Diagnose
   - Kreditwürdigkeitsprüfung
   - Zielgruppenklassifikation im Marketing
-- Ziel: Herleitung einer Regel, die Objekte korrekt einer Klasse $K_m$ zuordnet
-- jeder Pfad: Folge von Tests $T_1, T_2, \dots$ auf Attribute; daraus entstehen
-  Zweige, die zu einem Blatt führen
-
-- formale Sicht: Entscheidungsbaum als Funktion zum Beispiel:
-  $f : \mathcal{X} \rightarrow \mathcal{G}$ \begin{align*} f:~ \mathbb{R}^p
-  &\rightarrow \{1, \dots, K\}\\ \bs{x} &\mapsto K_m \end{align*}
+- Ziel: Herleitung einer Regel, die Objekte korrekt einer Klasse $k$ zuordnet
+- formale Sicht: Entscheidungsbaum als Abbildung vom Merkmalsraum $\mathcal{X}$
+  (alle möglichen Objekte) in die Menge der Klassen $\mathcal{G}$:
+  $$
+  f: \mathcal{X} = \mathbb{R}^p \rightarrow \mathcal{G} = \{1, \dots, K\},
+  \quad \bs{x} \mapsto f(\bs{x}) = k
+  $$
+- Pfad auf dem Entscheidungsbaum: Folge von Tests $T_1, T_2, \dots$ auf
+  Attribute; daraus entstehen Zweige, die zu einem Blatt führen
 - Durch sukzessive Anwendung der Tests $T_1, T_2,\ldots$ erhalten wir eine
   Aufteilung des Merkmalsraums $\mathcal{X}$ in disjunkte Regionen
-  $R_1, \dots, R_M$ und somit am Ende $f(\bs{x}) = K_m$ für potentielle komplett
-  neue Objekte
+  $R_1, R_2, \dots$ (eine Region pro Blatt); ein neues Objekt $\bs{x}$ fällt in
+  genau eine Region und erhält deren Klasse: $f(\bs{x}) = k$
+
+![Entscheidungsbaum (links) zu einer Datenmenge eines binären
+Klassifikationsproblems mit Merkmalen $X_1$ und $X_2$ (rechts); Quelle:
+Geurts et al. (2009), [Supervised learning with decision tree-based methods in
+computational and systems biology](https://doi.org/10.1039/b907946g),
+Molecular BioSystems 5(12)](/figs/02_A_trees_example_01.png){#fig-02_tree_example}
+
 - jedes Objekt wird eindeutig einem Blatt mit Klassenlabel zugeordnet
 - **Wurzelknoten**: Startpunkt der Klassifikationsregel
-- **interner Knoten**: Test auf Attributwert, z. B. $x_2 < 0{,}29$?
+- **interner Knoten**: Test auf Attributwert, z. B. $x_2 < 0.29$?
 - **Zweig**: Ausprägung des Testergebnisses (z. B. „ja“ oder „nein“)
 - **Blattknoten**: Ergebnis der Klassifikation
-
-## Beispiel: Entscheidungsbaum
-
-![](/figs/02_A_trees_example_01.png)
-
 - rote Punkte: Klasse `sick` vs. grüne Punkte: Klasse `healthy`
 - horizontale und vertikale Linien: durch Entscheidungsbaum induzierte
   Schwellenwerte
-- Hinweis zur Notation in der Abbildung: dort bezeichnen $x_1$ und $x_2$ die
-  beiden dargestellten Merkmale _**für einen beliebigen Datenpunkt i**_. In
-  unserer allgemeinen Notation wäre ein Test für ein einzelnes neues Objekt
-  $\bs{x}$ (Index $i$ weggelassen) entsprechend $x_2 < 0{,}53$.
-- Beispielpfad: $x_2 < 0{,}53$ und $x_1 < 0{,}11$ führt zur Klasse „sick“
+- Notation: $X_1$, $X_2$ in der Abbildung sind die $p=2$ Merkmale (Variablen);
+  ein Test für ein konkretes Objekt $\bs{x}$ lautet z. B. $x_2 < 0.53$
+- Beispielpfad: $x_2 \geq 0.53$ und $x_1 < 0.11$ führt zur Klasse „sick“
 - jeder Pfad im Baum definiert eine Region im Merkmalsraum
 - Ziel: vollständige Trennung der Klassen durch einfache Tests auf Attributwerte
 
