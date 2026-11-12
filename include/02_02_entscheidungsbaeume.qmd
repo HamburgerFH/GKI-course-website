@@ -47,8 +47,9 @@
   $x_2 < 0{,}53$.
 - Beispielpfad: $x_2 < 0{,}53$ und $x_1 < 0{,}11$ führt zur Klasse „sick“
 - jeder Pfad im Baum definiert eine Region im Merkmalsraum
-- Ziel: vollständige Trennung der Klassen durch einfache Tests auf
-  Attributwerte
+- Ziel: möglichst reine Regionen durch einfache Tests auf Attributwerte;
+  eine vollständige Trennung der Trainingsdaten führt aber oft zu
+  Overfitting (s. Generalisierbarkeit und Pruning)
 
 
 
@@ -87,15 +88,16 @@
 - sei $M = \{(\bs{x}_i, y_i)\}_{i=1}^N$ eine Trainingsmenge mit $K$ Klassen
 - sei $A$ ein Attribut/Merkmal mit $v$ möglichen Ausprägungen
   $a_1, \dots, a_v$
-- aufteilung von $M$ in Teilmengen $M_1, \dots, M_v$ gemäß Attribut $A$
+- Aufteilung von $M$ in Teilmengen $M_1, \dots, M_v$ gemäß Attribut $A$
 - $M_j = \{ (\bs{x}_i, y_i) \in M : A(\bs{x}_i) = a_j \}$
 
 
 
 - für jeden Split-Knoten wird ein Attribut $A$ gewählt, das $M$ möglichst
   gut trennt also einen möglichst guten split erzeugt
-- die Qualität eines Splits wird über **Entropie** und **Informationsgewinn** 
-  gemessen
+- die Qualität eines Splits wird über ein Unreinheitsmaß bewertet: bei
+  ID3/C4.5 über **Entropie** und **Informationsgewinn**, bei CART über den
+  **Gini-Index**, bei Regressionsbäumen über die **Varianz**
 - Ziel: maximale Homogenität der Klassen in den Teilmengen $M_j$
 
 
@@ -113,7 +115,8 @@
 - Entropie misst die Unreinheit (Unsicherheit) einer Klassenzuordnung in $M$
 - je gemischter die Klassenverteilung, desto höher die Entropie
 - eine reine Menge (alle Objekte gleiche Klasse) hat Entropie $= 0$
-- maximal bei Gleichverteilung: $p_k = \frac{1}{K}$ für alle $k = 1, \dots, K$
+- maximal bei Gleichverteilung: $p_k = \frac{1}{K}$ für alle $k = 1, \dots, K$,
+  dann gilt $H = \log_2 K$
 
 
 
@@ -145,6 +148,7 @@
   $$
   H(M) = -\sum_{k=1}^{K} p_k \log_2 p_k
   $$
+  mit der Konvention $0 \cdot \log_2 0 = 0$ (leere Klassen tragen nichts bei)
 - $H(M)$ misst die Unreinheit (Unsicherheit) der Klassenverteilung in $M$
 - **_wie zuvor:_** $A$ ist Attribut/Merkmal mit $v$ Ausprägungen:
   $a_1, \dots, a_v$ und $M$ wird durch $A$ in Teilmengen $M_1, \dots, M_v$
@@ -172,9 +176,9 @@
 - gegeben seien $K=2$ Klassen: ''sick'' und ''healthy'' mit $p_1$ als 
   Anteil der Objekte in Klasse ''sick'', $p_2 = 1 - p_1$ für eine Menge von 
   Objekten M
-- **Informationsgehalt** eines Ereignisses $z$ mit $p(z)$ ist:
+- **Informationsgehalt** eines Ereignisses mit Wahrscheinlichkeit $p$ ist:
   $$
-  I_g(z) = -\log_2 p(z)
+  I_g(p) = -\log_2 p
   $$
 - Intuition: über ein wahrscheinliches Ereignis zu lernen ist weniger
   informativ als über ein unwahrscheinliches Ereignis zu lernen
@@ -232,7 +236,7 @@
 *Titel: Trainingsdaten für die Klassifikation: Wetterbedingungen und
 Spielergebnis*
 
-- Daten: Wetterbedingungen an 14 Tagen, d.h. $M=14$ zu klassifizierende
+- Daten: Wetterbedingungen an 14 Tagen, d.h. $|M|=14$ zu klassifizierende
   Objekte, mit Attributen:
   - Outlook: sun, overcast, rain
   - Temperature: hot, sweet, cool
@@ -248,7 +252,8 @@ Spielergebnis*
 
 
 
-- Ziel: finde Attribut mit maximalem Informationsgewinn als Wurzelknoten
+- Verfahren **ID3** (Quinlan): finde Attribut mit maximalem
+  Informationsgewinn als Wurzelknoten
   - [1.] wir berechnen $H(M)$ 
   - [2.] anschließend $H_{A_j}(M)$ für alle vier Attribute $A_j$,
     $j=1,\ldots,4$
@@ -257,7 +262,7 @@ Spielergebnis*
   - [4.] splitte den Baum auf Basis der Attributwerte in Unterbäume
   - [5.] setze Schritte 2. - 4. fort, bis alle Elemente klassifiziert sind
     oder kein Informationsgewinn mehr möglich (Uneindeutigkeit des
-    Klassifkationsproblems)
+    Klassifikationsproblems)
 
 **Klassenverteilung:** 9 $\times$ [Yes]{.cgr}, 5 $\times$ [No]{.crd}:
 \begin{align}
@@ -290,8 +295,9 @@ gain(Temperature)=0.029, gain(Humidity)=0.152, gain(Wind)=0.048
 ![](/figs/02_A_trees_example_02.png)
 
 - nach dem ersten Attributsplit entstehen wieder Teilbäume (s. **Abb. 2.2**)
-- für jeden dieser Teilbäume: erneut suchen des besten Attributs unter
-  **_allen_** Attributen (einschließlich des ersten *Outlook*)
+- für jeden dieser Teilbäume: erneut Suche nach dem besten Attribut unter
+  den verbleibenden Attributen; *Outlook* ist innerhalb eines Teilbaums
+  konstant (gain $= 0$) und muss bei ID3 nicht erneut geprüft werden
 - Fortsetzung bis alle Objekte eindeutig klassifiziert sind oder kein 
   Informationsgewinn mehr möglich ist, z.B. wenn weitere Klassifizierung
   nicht mehr möglich ist: danach zufällige Festsetzung oder Mehrheitsklasse
@@ -319,15 +325,16 @@ gain(Temperature)=0.029, gain(Humidity)=0.152, gain(Wind)=0.048
   \text{SplitEntropy}(A) = -\sum_{j=1}^v \frac{|M_j|}{|M|} 
   \log_2 \frac{|M_j|}{|M|}
   $$
-- je mehr mögliche Ausprägungen ein Attribut hat, desto höher die
-  Split-Entropie
+- tendenziell gilt: je mehr Ausprägungen und je gleichmäßiger die
+  Aufteilung, desto höher die Split-Entropie (maximal $\log_2 v$)
 
 
 
 - Informationsgewinn allein belohnt  ''überpräzise'' Splits, z.B. durch
   ein Attribut mit fast eindeutigem Wert
-- gainRatio normalisiert diesen Effekt und bevorzugt trennscharfe und
-  gleichzeitig generalisierende Attribute
+- gainRatio relativiert diesen Effekt; da eine sehr kleine Split-Entropie
+  den Quotienten aufbläht, betrachtet C4.5 gainRatio nur für Attribute mit
+  mindestens durchschnittlichem Informationsgewinn
 
 
 
@@ -340,20 +347,21 @@ gain(Temperature)=0.029, gain(Humidity)=0.152, gain(Wind)=0.048
 - jeder Knoten $L_q$ verarbeitet eine Teilmenge $M_q \subseteq M$ der Daten
 - wenn alle Elemente in $M_q$ die gleiche Klasse haben $\rightarrow$ $L_q$
   wird Blatt
-- falls für eine Untermenge $M_q$ kein Informationsgewinn mehr möglich ist:
+- falls für eine Untermenge $M_q$ keine Verbesserung (Gini-Gewinn) mehr
+  möglich ist:
   - dann zufällige Festsetzung der Kategoriezugehörigkeit
   - oder Festsetzung der Kategoriezugehörigkeit mit Wert der
     Mehrheitskategorie
-  - oder als Mittelwert über Kategorien (bei metrischen Werten z.B. 
-    Regressionsbäumen)
-- sonst: wähle Attribut $A_i$ unter allen Attributen, für $i=1,\ldots,v$,
+  - oder als Mittelwert der Zielwerte in $M_q$ (bei metrischer
+    Zielvariable, d. h. Regressionsbäumen)
+- sonst: wähle Attribut $A_i$ unter allen Attributen, für $i=1,\ldots,p$,
   mit Menge von Attributwerten $\mathcal{A}_i$, sodass eine optimale
   Aufspaltung von $M_q$ entsteht
   - $\hookrightarrow$ **_Optimalitätsmaß:_** nicht Entropie sondern *Gini-Index* !
 - es werden **binäre Partitionen**, d.h. Partitionen mit den Eigenschaften 
   $\mathcal{A}_i^L \cup \mathcal{A}_i^R = \mathcal{A}_i$, und 
   $\mathcal{A}_i^L \cap \mathcal{A}_i^R = \emptyset$ betrachtet; diese
-  definieren dann auch eine Zerlegung von $M_q$ zwei ebenfalls disjunkte
+  definieren dann auch eine Zerlegung von $M_q$ in zwei ebenfalls disjunkte
   Teilmengen:
   \begin{align}
   L_q^i(\mathcal{A}_i^L)&=\lbrace x^{(m)}\in M_q:a_i^{m}\in \mathcal{A}_i^L\rbrace\\
@@ -362,7 +370,7 @@ gain(Temperature)=0.029, gain(Humidity)=0.152, gain(Wind)=0.048
 - wobei $a_i^{m}$ die konkrete Ausprägung eines Attributs $A_i$ für ein
   zu klassifizierendes Input(-objekt) $x^{(m)}$ bezeichnet und die 
   Wahrscheinlichkeiten bzw. Anteile: 
-  $p_{iL}^q(\mathcal{A}_i^L) = \frac{L_q^i(\mathcal{A}_i^L)}{M_q}$ und
+  $p_{iL}^q(\mathcal{A}_i^L) = \frac{|L_q^i(\mathcal{A}_i^L)|}{|M_q|}$ und
   $p_{iR}^q(\mathcal{A}_i^R) = 1 - p_{iL}^q(\mathcal{A}_i^L)$
 
 
@@ -376,7 +384,8 @@ gain(Temperature)=0.029, gain(Humidity)=0.152, gain(Wind)=0.048
   Gini(M_q) = 1 - \sum_{k=1}^K (p_k^q)^2
   $$
 - minimale Unreinheit bei homogener Klassenzuordnung: $Gini(M_q) = 0$
-- maximale Unreinheit bei Gleichverteilung: $p_k^q = \frac{1}{K}$
+- maximale Unreinheit bei Gleichverteilung: $p_k^q = \frac{1}{K}$, dann
+  gilt $Gini(M_q) = 1 - \frac{1}{K}$
 - Aufteilung von $M_q$ in zwei Mengen über Zerlegung
   $\mathcal{A}_i^L, \mathcal{A}_i^R$ und Berechnung eines gewichteten 
   Gini-Index nach Aufteilung:
@@ -390,6 +399,9 @@ gain(Temperature)=0.029, gain(Humidity)=0.152, gain(Wind)=0.048
   Gini(R_q^i(\mathcal{A}_i^R)) &= 1 - \sum_{k=1}^K
   (p_{kR}^q(\mathcal{A}_i^R))^2
   \end{align}
+
+  wobei $p_{kL}^q$ bzw. $p_{kR}^q$ die Anteile von Klasse $k$ in
+  $L_q^i(\mathcal{A}_i^L)$ bzw. $R_q^i(\mathcal{A}_i^R)$ bezeichnen
 
 
 
@@ -406,12 +418,13 @@ gain(Temperature)=0.029, gain(Humidity)=0.152, gain(Wind)=0.048
   \mathcal{A}_i^{L,*} = \arg\max_{\mathcal{A}_i^L \subset \mathcal{A}_i} \,
   GiniGain(M_q, \mathcal{A}_i^L)
   $$
-- falls Gini-Gewinn = 0 $\rightarrow$ keine sinnvolle Aufspaltung möglich
-  und Knoten $L_q$ erzeugt dann **binäre Kinderknoten**, basierend auf der
+- falls der maximale Gini-Gewinn $= 0$ $\rightarrow$ keine sinnvolle
+  Aufspaltung möglich, $L_q$ wird Blatt
+- sonst erzeugt Knoten $L_q$ **binäre Kinderknoten**, basierend auf der
   gefundenen optimalen Partition induziert durch $\mathcal{A}_i^{L,*}$
-- die binären Kinderknoten erhalten dann jeweils ihre zugehörigen 
-  Teilmengen $M_L = L_q(\mathcal{A}_i^{L,*})$, $M_R = R_q(\mathcal{A}_i^{L,*})$
-  und die Aufspaltung beginnt von neuem
+- die binären Kinderknoten erhalten dann jeweils ihre zugehörigen
+  Teilmengen $M_L = L_q^i(\mathcal{A}_i^{L,*})$,
+  $M_R = R_q^i(\mathcal{A}_i^{R,*})$ und die Aufspaltung beginnt von neuem
 
 
 
@@ -421,14 +434,15 @@ gain(Temperature)=0.029, gain(Humidity)=0.152, gain(Wind)=0.048
 
 - CART verwendet ausschließlich **binäre Aufteilungen**
 - anwendbar auf **numerische** und **kategoriale** Attribute
-  - bei numerischen Werten basiert Aufteilung auf einem threshold Wert
-    der Form: $x^{(m)} \leq t \quad \text{vs.} \quad x^{(m)} > t$
+  - bei einem numerischen Merkmal $X_j$ basiert die Aufteilung auf einem
+    Schwellenwert $t$: $x_{ij} \leq t \quad \text{vs.} \quad x_{ij} > t$
   - kategoriale Merkmale werden in zwei Gruppen aufgeteilt z. B.
     $\{\text{sun, rain}\}$ vs. $\{\text{overcast}\}$
-    - dabei werden alle möglichen Kombinationen geprüft:
+    - dabei werden alle möglichen Zerlegungen geprüft, hier genau drei:
       - $\{\text{sun, rain}\}$ vs. $\{\text{overcast}\}$
-      - $\{\text{sun}\}$ vs. $\{\text{overcast, rain}\}$ 
-      - ...
+      - $\{\text{sun}\}$ vs. $\{\text{overcast, rain}\}$
+      - $\{\text{rain}\}$ vs. $\{\text{sun, overcast}\}$
+    - allgemein gibt es bei $v$ Ausprägungen $2^{v-1} - 1$ Zerlegungen
 - erzeugte Bäume sind oft robuster als bei ID3
 - zur Vermeidung von Overfitting wird **Pruning** eingesetzt:
   - **Pre-Pruning:** Stoppen der Aufspaltung bei geringer Stichprobengröße 
@@ -444,6 +458,8 @@ gain(Temperature)=0.029, gain(Humidity)=0.152, gain(Wind)=0.048
 
 - Ziel: Vorhersage einer **numerischen Zielvariable**, z. B. Anzahl Spieler
 - Struktur des Baums wie bei CART: binäre Splits entlang von Attributen
+  (im folgenden Beispiel zur Veranschaulichung ein Mehrfach-Split nach
+  Outlook)
 - jeder Blattknoten enthält den **arithmetischen Mittelwert** der Zielvariable
 - **kein Klassenlabel**, sondern reelle Vorhersagegröße
 
@@ -495,9 +511,9 @@ Spieleranzahl*
 
 | **Outlook** | **Anzahl** | **Mittelwert** | **Varianz** | **Std.-Abw.** |
 |:-----------:|-----------:|---------------:|------------:|--------------:|
-| Overcast    | 4          | 46.25          | 14.19       | 3.77          |
-| Rain        | 5          | 39.20          | 101.36      | 10.07         |
-| Sun         | 5          | 35.20          | 86.56       | 9.30          |
+| Overcast    | 4          | 46.25          | 12.19       | 3.49          |
+| Rain        | 5          | 39.20          | 118.16      | 10.87         |
+| Sun         | 5          | 35.20          | 60.56       | 7.78          |
 
 *Titel: Spieleranzahl nach Outlook: Mittelwert, Varianz und
 Standardabweichung*
@@ -514,30 +530,35 @@ $$
 
 
 
-- Gesamtvarianz (korrekt): $86.88$ \quad Gesamt-Std.-Abw. (wie im SB): $9.32$
-- gewichtete Varianz nach Outlook:
+- Gesamtvarianz und Gesamt-Standardabweichung vor dem Split:
   \begin{align}
   \bar{y} &= \frac{1}{14} \sum_{i=1}^{14} y_i 
-  = \frac{607}{14} \approx 43.36 \\[1ex]
+  = \frac{557}{14} \approx 39.79 \\[1ex]
   \text{Var}(M) &= \frac{1}{14} \sum_{i=1}^{14} (y_i - \bar{y})^2 
   = \frac{1}{14} \left[
-  (25 - 43.36)^2 + (30 - 43.36)^2 + \dots + (30 - 43.36)^2 \right] \\
-  &= \frac{1}{14} \cdot 1216.26 \approx 86.88 \\[1ex]
+  (25 - 39.79)^2 + (30 - 39.79)^2 + \dots + (30 - 39.79)^2 \right] \\
+  &= \frac{1}{14} \cdot 1216.36 \approx 86.88 \\[1ex]
   \text{SD}(M) &= \sqrt{86.88} \approx 9.32
   \end{align}
-- **_Varianzreduktion:_**
+- gewichtete Varianz nach Outlook und **_Varianzreduktion:_**
   $$
+  \text{Var}_{\text{split}} = \frac{5}{14} \cdot 60.56 + \frac{4}{14} \cdot
+  12.19 + \frac{5}{14} \cdot 118.16 = 21.63 + 3.48 + 42.20 = 67.31
+  \\[1ex]
   \text{gain}_\text{Var} = 86.88 - 67.31 = 19.57
   $$
 - gewichtete SD nach Outlook:
   $$
   \text{SD}(M) = 9.32 \\[1ex]
   \text{SD}_{\text{split}} = 
-  \frac{5}{14} \cdot 9.30 + \frac{4}{14} \cdot 3.77 + 
-  \frac{5}{14} \cdot 10.07 
-  = 3.32 + 1.08 + 3.26 = 7.66 \\[1ex]
+  \frac{5}{14} \cdot 7.78 + \frac{4}{14} \cdot 3.49 + 
+  \frac{5}{14} \cdot 10.87 
+  = 2.78 + 1.00 + 3.88 = 7.66 \\[1ex]
   $$
 - **_''gain'' auf Basis SD:_** $\text{gain}_\text{SD} = 9.32 - 7.66 = 1.66$
+- Vergleich mit den anderen Attributen: $\text{gain}_\text{Var}$(Temperature)
+  $= 7.31$, $\text{gain}_\text{Var}$(Humidity) $= 4.90$,
+  $\text{gain}_\text{Var}$(Wind) $= 3.37$ $\Rightarrow$ Outlook wird Wurzel
 - **Splitkriterium**: Wähle Attribut mit maximaler Varianzreduktion, 
   oder basierend auf Standardabweichung
 - **Blattwert**: arithmetisches Mittel der Zielwerte in jedem Blatt
@@ -551,10 +572,12 @@ $$
 ### Ensemble von Entscheidungsbäumen {.unlisted}
 
 - Random Forest kombiniert viele Entscheidungsbäume zu einem Modell
-- Idee: **Bootstrapping** + **zufällige Attributauswahl** pro Split
-- jeder Baum wird auf einer Zufallsstichprobe der Daten trainiert
+- Idee: **Bagging** + **zufällige Attributauswahl** pro Split
+- jeder Baum wird auf einer Bootstrap-Stichprobe (Ziehen mit Zurücklegen)
+  der Daten trainiert
 - bei jedem Split wird eine **Zufallsauswahl** von Attributen betrachtet
-- Vorhersage bei **Regression** vs. Klassifikation:
+- Vorhersage bei **Regression** vs. (binärer) Klassifikation; allgemein
+  bei Klassifikation: Mehrheitsvotum der Bäume
   $$
   \hat{y}_i = \frac{1}{T} \sum_{t=1}^T \hat{y}_{it}\;, \quad
   \hat{p}_i = \frac{1}{T} \sum_{t=1}^T I(\hat{y}_{it} = 1)
@@ -571,7 +594,7 @@ $$
 ### Random Forest: Eigenschaften {.unlisted}
 
 - reduziert die Varianz einzelner Bäume durch Aggregation
-- robust gegenüber Rauschen und Overfitting
+- deutlich weniger anfällig für Rauschen und Overfitting als Einzelbäume
 - keine Pruning-Strategien notwendig
 - keine starke Parametrierung erforderlich (nur Anzahl Bäume $T$ und 
   Attributanzahl $m$ pro Split)
@@ -599,18 +622,21 @@ $$
 - Problem: overfitting bei zu komplexen Bäumen
 
 
-Zentrale Hyperparameter sind hier sog. **Splittingkriterien**
+Zentrale Hyperparameter des Entscheidungsbaums (scikit-learn):
 
-- **criterion**: gini, entropy, log_loss
-- **max_depth**: maximale Tiefe des Baums zur Iomplexitätskontrolle
+- **criterion** (Splitkriterium): gini, entropy, log_loss; für
+  Entscheidungsbäume sind entropy und log_loss identisch (Shannon-Entropie)
+- **max_depth**: maximale Tiefe des Baums zur Komplexitätskontrolle
 - **min_samples_split**: minimale Anzahl Datenpunkte für einen split
 
 ### Datengrundlage für die Beispiele {.unlisted}
 
 - Datensatz: handgeschriebene Ziffern 0–9 (''Pen-Based Recognition of
   Handwritten Digits'')
-- 16 attribute als 4 $\times$ 4-Pixel-Darstellung, werte 0–100
-- Umfang: 10992 Beobachtungen, davon 7494 Trainings- und 3498 Test-Datenpunkte
+- 16 Attribute: $x$- und $y$-Koordinaten von 8 abgetasteten Punkten der
+  Stiftbewegung, Werte 0–100
+- Umfang: 10992 Beobachtungen, vorgegebene Aufteilung in 7494 Trainings-
+  und 3498 Test-Datenpunkte
 - keine Fehlwerte (missing values)
 
 
@@ -622,19 +648,25 @@ Zentrale Hyperparameter sind hier sog. **Splittingkriterien**
   Wachstum der Kombinationszahl
 - Beispiel: 5 Hyperparameter $\times$ 4 Werte $\ra$ $4^5 = 1\,024$ Kombinationen
 - **parallele Ausführung** möglich, da Einzeltests unabhängig sind
-- daten splitten: training und test
+- Daten aufteilen: Trainingsdaten für Modell und Hyperparameterwahl
+  (Validierung bzw. Kreuzvalidierung), Testdaten nur für die
+  abschließende Bewertung
 - suchraum
   - criterion $\in \{$gini, entropy, log_loss$\}$
   - max_depth $\in \{1,\dots,10\}$
   - min_samples_split $\in \{2,\dots,10\}$
 - Schleifen über alle Kombinationen, Modell trainieren, **accuracy** auf
-  Testdaten berechnen, beste Kombination merken
+  Validierungsdaten (bzw. per Kreuzvalidierung) berechnen, beste
+  Kombination merken
+- erst danach einmalig accuracy auf den Testdaten; wer die
+  Hyperparameter direkt auf den Testdaten auswählt, überschätzt die Güte
+  (Data Leakage)
 - optional Reproduzierbarkeit: `random_state = 123`
 
 ### Grid Search: Beobachtung und Einsatzgrenzen {.unlisted}
 
 - Laufzeit steigt stark mit Suchraumgröße
 - gut geeignet bei wenigen diskreten Hyperparametern
-- Ergebnisse variieren leicht durch zufallseffekte in Datensplitting und
-  Baumerzeugung
+- Ergebnisse variieren leicht durch Zufallseffekte, z. B. bei der
+  Validierungsaufteilung und der Baumerzeugung
 - beispielhafte Güte in der Anwendung: accuracy um ca. 88 % auf Testdaten
