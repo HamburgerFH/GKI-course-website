@@ -47,61 +47,36 @@ Molecular BioSystems 5(12)](/figs/02_A_trees_example_01.png){#fig-02_tree_exampl
 - horizontale und vertikale Linien: durch Entscheidungsbaum induzierte
   Schwellenwerte
 
-## Induktionsaufgabe und Generalisierbarkeit
+## Aufbau eines Entscheidungsbaums: Aufgabe und Vorgehen
 
-- Ziel: finde Klassifikationsregel $f: \mathcal{X} \to \mathcal{G}$, die neue
-  Objekte korrekt einer Klasse zuordnet
-- gegeben: Trainingsmenge $M = \{(\bs{x}_i, g_i)\}_{i=1}^N$ mit $p$ Merkmalen
-- gesucht: Entscheidungsbaum, der $M$ korrekt trennt und auf ungesehene Daten
-  generalisiert
-
-- Voraussetzung: Attribute müssen Klassen unterscheidbar machen
-- falls $\bs{x}_i = \bs{x}_j$, aber $g_i \neq g_j$: keine trennbare
-  Klassifikation möglich
-- Ziel ist nicht nur perfekte Trennung von $M$, sondern robuste Generalisierung
-
-- bei mehreren möglichen Bäumen wählt man den einfacheren
-- Einfachheit gilt als Proxy für Generalisierungsfähigkeit
-- Prinzip: **Occam’s Razor** – wähle die einfachste Hypothese, die zu den Daten
-  passt
-
-## Aufspaltung eines Knotens
-
-- sei $M = \{(\bs{x}_i, g_i)\}_{i=1}^N$ eine Trainingsmenge mit $K$ Klassen
+- sei $M = \{(\bs{x}_i, g_i)\}_{i=1}^N$ eine Trainingsmenge mit $K$ Klassen und
+  $p$ Merkmalen
 - sei $A$ ein Attribut/Merkmal mit $v$ möglichen Ausprägungen $a_1, \dots, a_v$
-- aufteilung von $M$ in Teilmengen $M_1, \dots, M_v$ gemäß Attribut $A$
-- $M_j = \{ (\bs{x}_i, g_i) \in M : A(\bs{x}_i) = a_j \}$
 
-- für jeden Split-Knoten wird ein Attribut $A$ gewählt, das $M$ möglichst gut
-  trennt also einen möglichst guten split erzeugt
-- die Qualität eines Splits wird über **Entropie** und **Informationsgewinn**
-  gemessen
-- Ziel: maximale Homogenität der Klassen in den Teilmengen $M_j$
+- **gesucht**: Entscheidungsbaum, der $M$ möglichst gut trennt und vor allem auf
+  ungesehene Daten generalisiert (perfekte Trennung von $M$ ist nicht das Ziel)
+- **Vorgehen**: Aufteilung von $M$ in Teilmengen $M_1, \dots, M_v$ gemäß $A$:
+  - $M_j = \{ (\bs{x}_i, g_i) \in M : A(\bs{x}_i) = a_j \}$
+  - für jeden Split-Knoten wird ein Attribut $A$ gewählt, das $M$ möglichst gut
+    trennt, also einen möglichst guten Split erzeugt
+- **Ziel**: maximale Homogenität der Klassen in den Teilmengen $M_j$, wobei
+  - Qualität eines Splits gemessen über ein Unreinheitsmaß, z.B. über
+    [**Entropie** und **Informationsgewinn**](#entropie) (s.u.)
+  - wenn ein Attribut eine Partition erzeugt, in der jedes $M_j$ nur eine Klasse
+    enthält, ist der Informationsgewinn maximal
+  - falls jedes $M_j$ dieselbe Klassenverteilung wie $M$ hat, ist der
+    Informationsgewinn 0 und der Split nutzlos
 
-- **Beispiel:** wenn ein Attribut eine Partition erzeugt, in der jedes $M_j$ nur
-  eine Klasse enthält, ist der Informationsgewinn maximal
-- falls alle Klassen gleich verteilt bleiben, ist der Split nutzlos
+- **Voraussetzung**: Attribute müssen Klassen unterscheidbar machen, d.h. falls
+  $\bs{x}_i = \bs{x}_j$, aber $g_i \neq g_j$: keine trennbare Klassifikation
+  möglich
+- **Occam’s Razor Prinzip** -> wähle die einfachste Hypothese, die zu den Daten
+  passt: bei mehreren möglichen Bäumen wählt man den einfacheren: Einfachheit
+  gilt als Proxy für Generalisierungsfähigkeit
 
-## Entropie als Maß für Unreinheit
+## Entropie und Informationsgewinn {#entropie}
 
-- Entropie misst die Unreinheit (Unsicherheit) einer Klassenzuordnung in $M$
-- je gemischter die Klassenverteilung, desto höher die Entropie
-- eine reine Menge (alle Objekte gleiche Klasse) hat Entropie $= 0$
-- maximal bei Gleichverteilung: $p_k = \frac{1}{K}$ für alle $k = 1, \dots, K$
-
-- Entropie entspricht dem erwarteten Informationsgehalt einer zufälligen
-  Klassenzuordnung
-- Interpretation: wie „überraschend“ ist das Ergebnis einer Klassifikation?
-- bei deterministischer Klasse (z.B. 100 % sick): keine Überraschung
-  $\rightarrow$ keine Information nötig
-- bei Gleichverteilung (50/50): maximaler Überraschungseffekt $\rightarrow$ mehr
-  Information nötig
-
-- Entropie liefert Grundlage für den **Informationsgewinn** eines Attributsplits
-- je stärker ein Attribut die Entropie reduziert, desto besser ist es zur
-  Trennung geeignet
-
-## Entropie und Informationsgewinn
+### Definition
 
 - sei $M$ eine Menge von Objekten, die auf $K$ Klassen verteilt sind
 - $p_k$ sei der Anteil der Objekte (rel. Häufigkeit) in Klasse $k$,
@@ -128,7 +103,26 @@ Molecular BioSystems 5(12)](/figs/02_A_trees_example_01.png){#fig-02_tree_exampl
   Aufspaltung maximiert gain über Menge aller verfügbaren Attribute
   $\mathcal{A}$
 
-## Beispiel: Entropie und Informationsgewinn
+### Entropie als Maß für Unreinheit
+
+- Entropie misst die Unreinheit (Unsicherheit) einer Klassenzuordnung in $M$
+- je gemischter die Klassenverteilung, desto höher die Entropie
+- eine reine Menge (alle Objekte gleiche Klasse) hat Entropie $= 0$
+- maximal bei Gleichverteilung: $p_k = \frac{1}{K}$ für alle $k = 1, \dots, K$
+
+- Entropie entspricht dem erwarteten Informationsgehalt einer zufälligen
+  Klassenzuordnung
+- Interpretation: wie „überraschend“ ist das Ergebnis einer Klassifikation?
+- bei deterministischer Klasse (z.B. 100 % sick): keine Überraschung
+  $\rightarrow$ keine Information nötig
+- bei Gleichverteilung (50/50): maximaler Überraschungseffekt $\rightarrow$ mehr
+  Information nötig
+
+- Entropie liefert Grundlage für den **Informationsgewinn** eines Attributsplits
+- je stärker ein Attribut die Entropie reduziert, desto besser ist es zur
+  Trennung geeignet
+
+### Beispiel I: Entropie und Informationsgewinn
 
 - gegeben seien $K=2$ Klassen: ''sick'' und ''healthy'' mit $p_1$ als Anteil der
   Objekte in Klasse ''sick'', $p_2 = 1 - p_1$ für eine Menge von Objekten M
@@ -159,7 +153,7 @@ Molecular BioSystems 5(12)](/figs/02_A_trees_example_01.png){#fig-02_tree_exampl
 - hoher Informationsgewinn von $A$ erzeugt möglichst ''reinere'' Teilmengen
 - Ziel: maximale Reduktion der Unreinheit durch Auswahl des besten $A^*$
 
-## Beispiel: Fußball mit Entscheidungsbäumen
+### Beispiel II: Fußball mit Entscheidungsbäumen - Einführung
 
 | **Day** | **Outlook** | **Temperature** | **Humidity** | **Wind** |  **Play**   |
 | :-----: | :---------: | :-------------: | :----------: | :------: | :---------: |
@@ -191,7 +185,7 @@ Spielergebnis_
   - $\hookrightarrow$ Ausprägungen [Yes]{.cgr} es wurde Fußball gespielt vs.
     [No]{.crd}, es wurde nicht gespielt
 
-## Beispiel: Fußball mit Entscheidungsbäumen
+### Beispiel II: Fußball mit Entscheidungsbäumen - Berechnungen
 
 - Ziel: finde Attribut mit maximalem Informationsgewinn als Wurzelknoten
   - [1.] wir berechnen $H(M)$
@@ -222,7 +216,7 @@ gain(Temperature)=0.029, gain(Humidity)=0.152, gain(Wind)=0.048
 **_Folge:_** Outlook wird als Wurzelknoten gewählt da
 [gain(outlook)=0.247]{.ctl} am höchsten.
 
-## Beispiel: Fußball mit Entscheidungsbäumen
+### Beispiel II: Fußball mit Entscheidungsbäumen - Ergebnisse
 
 ![](/figs/02_A_trees_example_02.png)
 
