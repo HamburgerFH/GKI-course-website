@@ -7,7 +7,7 @@ der Notebooks, `data/processed/` oder `requirements.txt` ändert, kopiert der
 Workflow `sync-notebooks.yml` sie nach
 [HamburgerFH/GKI-notebooks](https://github.com/HamburgerFH/GKI-notebooks).
 Dort starten Studierende die Notebooks per Codespaces:
-<https://codespaces.new/HamburgerFH/GKI-notebooks?quickstart=1>
+<https://codespaces.new/HamburgerFH/GKI-notebooks>
 
 Der Workflow pusht mit einem Deploy-Key (Secret `NOTEBOOKS_DEPLOY_KEY`).
 
