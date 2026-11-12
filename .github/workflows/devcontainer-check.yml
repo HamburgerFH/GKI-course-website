@@ -1,0 +1,36 @@
+# Builds the Codespaces devcontainer and runs every notebook in it, so a
+# broken package or kernel setup shows up here instead of in class
+name: Devcontainer check
+
+on:
+  push:
+    paths:
+      - ".devcontainer/**"
+      - "requirements.txt"
+      - "include/*.ipynb"
+      - "data/**"
+      - ".github/workflows/devcontainer-check.yml"
+  workflow_dispatch:
+
+jobs:
+  notebooks:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build devcontainer and execute notebooks
+        uses: devcontainers/ci@v0.3
+        with:
+          push: never
+          runCmd: |
+            set -e
+            jupyter kernelspec list | grep gki-venv
+            mkdir -p /tmp/nbout
+            for nb in include/*.ipynb; do
+              echo "::group::$nb"
+              jupyter nbconvert --to notebook --execute \
+                --ExecutePreprocessor.kernel_name=gki-venv \
+                --ExecutePreprocessor.timeout=1200 \
+                --output-dir /tmp/nbout "$nb"
+              echo "::endgroup::"
+            done
