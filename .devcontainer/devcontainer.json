@@ -1,0 +1,24 @@
+{
+  // Ready-to-run environment for the course notebooks (GitHub Codespaces)
+  "name": "GKI course notebooks",
+  "image": "mcr.microsoft.com/devcontainers/python:3.12",
+  "hostRequirements": {
+    "cpus": 2,
+    "memory": "8gb"
+  },
+  // the notebooks' metadata asks for a kernel named gki-venv
+  "postCreateCommand": "pip install --no-cache-dir -r requirements.txt && python -m ipykernel install --user --name gki-venv --display-name gki-venv",
+  "customizations": {
+    "codespaces": {
+      "openFiles": [".devcontainer/README.md"]
+    },
+    "vscode": {
+      "extensions": ["ms-python.python", "ms-toolsai.jupyter"],
+      "settings": {
+        "python.defaultInterpreterPath": "/usr/local/bin/python",
+        // notebooks use paths relative to their own folder (../data/...)
+        "jupyter.notebookFileRoot": "${fileDirname}"
+      }
+    }
+  }
+}

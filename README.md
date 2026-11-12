@@ -1,5 +1,14 @@
 # README und TO-DOS
 
+## Notebooks in GitHub Codespaces ausführen
+
+[![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/HamburgerFH/GKI-course-website?quickstart=1)
+
+Mit einem (kostenlosen) GitHub-Konto startet der Button eine fertige
+Python-/Jupyter-Umgebung im Browser. Die Notebooks liegen in `include/`;
+die Anleitung öffnet sich im Codespace automatisch
+(`.devcontainer/README.md`).
+
 ## Passwortschutz
 
 Die veröffentlichte GitHub-Pages-Site verschlüsselt beim CI-Build alle
