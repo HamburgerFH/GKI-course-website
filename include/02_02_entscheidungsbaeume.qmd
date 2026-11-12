@@ -16,8 +16,9 @@
   Attribute; daraus entstehen Zweige, die zu einem Blatt führen
 - Durch sukzessive Anwendung der Tests $T_1, T_2,\ldots$ erhalten wir eine
   Aufteilung des Merkmalsraums $\mathcal{X}$ in disjunkte Regionen
-  $R_1, R_2, \dots$ (eine Region pro Blatt); ein neues Objekt $\bs{x}$ fällt in
-  genau eine Region und erhält deren Klasse: $f(\bs{x}) = k$
+  $R_1, R_2, \dots$ (eine Region pro Blatt); jedes Objekt $\bs{x}$ landet so in
+  genau einem Blatt bzw. genau einer Region und erhält deren Klasse:
+  $f(\bs{x}) = k$
 
 ![Entscheidungsbaum (links) zu einer Datenmenge eines binären
 Klassifikationsproblems mit Merkmalen $X_1$ und $X_2$ (rechts); Quelle:
@@ -25,19 +26,27 @@ Geurts et al. (2009), [Supervised learning with decision tree-based methods in
 computational and systems biology](https://doi.org/10.1039/b907946g),
 Molecular BioSystems 5(12)](/figs/02_A_trees_example_01.png){#fig-02_tree_example}
 
-- jedes Objekt wird eindeutig einem Blatt mit Klassenlabel zugeordnet
-- **Wurzelknoten**: Startpunkt der Klassifikationsregel
-- **interner Knoten**: Test auf Attributwert, z. B. $x_2 < 0.29$?
-- **Zweig**: Ausprägung des Testergebnisses (z. B. „ja“ oder „nein“)
-- **Blattknoten**: Ergebnis der Klassifikation
-- rote Punkte: Klasse `sick` vs. grüne Punkte: Klasse `healthy`
+- **Notation**: $X_1$, $X_2$ bezeichnen die $p=2$ Merkmale (Variablen); ein Test
+  für ein konkretes Objekt $\bs{x}$ lautet z. B. $x_2 < 0.53$
+
+### Linke Seite der Abbildung: Baum {.unlisted}
+
+- **Wurzelknoten**: Startpunkt der Klassifikationsregel, hier
+  $\boxed{X_2 < 0.53}$
+- **interner bzw. Split-Knoten**: Test auf Attributwert, hier z. B.
+  $\boxed{X_2 < 0.29}$
+- **Zweig**: Ausprägung des Testergebnisses, hier z. B. `yes` oder `no`
+- **Blattknoten**: Ergebnis der Klassifikation, hier die Ellipsen `sick` (rot)
+  bzw. `healthy` (grün)
+- Beispielpfad: $x_2 \geq 0.53$ und $x_1 < 0.11$ führt zur Klasse `sick`
+
+### Rechte Seite der Abbildung: Merkmalsraum {.unlisted}
+
+- jeder Pfad im Baum definiert eine Region im Merkmalsraum
+- rote Punkte: Objekte der Klasse `sick` vs. grüne Punkte: Objekte der Klasse
+  `healthy`
 - horizontale und vertikale Linien: durch Entscheidungsbaum induzierte
   Schwellenwerte
-- Notation: $X_1$, $X_2$ in der Abbildung sind die $p=2$ Merkmale (Variablen);
-  ein Test für ein konkretes Objekt $\bs{x}$ lautet z. B. $x_2 < 0.53$
-- Beispielpfad: $x_2 \geq 0.53$ und $x_1 < 0.11$ führt zur Klasse „sick“
-- jeder Pfad im Baum definiert eine Region im Merkmalsraum
-- Ziel: vollständige Trennung der Klassen durch einfache Tests auf Attributwerte
 
 ## Induktionsaufgabe und Generalisierbarkeit
 
