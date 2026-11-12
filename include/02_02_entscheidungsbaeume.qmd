@@ -88,18 +88,45 @@ Molecular BioSystems 5(12)](/figs/02_A_trees_example_01.png){#fig-02_tree_exampl
   - $p_k$ der Anteil der Objekte, d.h. rel. Häufigkeit $p_k:=\frac{m_k}{|M|}$
 - $A$ ist Attribut/Merkmal mit $v$ Ausprägungen: $a_1, \dots, a_v$
 
-::: {.callout-note icon=false}
+::: {#def-informationsgehalt}
 
-#### Definition Entropie
+#### Informationsgehalt
 
-Die **Entropie** $H(\cdot)$ von $M$ ist definiert als:
+Sei $Z$ die Klasse eines zufällig aus $M$ gezogenen Objekts, d.h.
+$P(Z = k) = p_k$. Der **Informationsgehalt** des Ereignisses $Z = k$ ist
 
 $$
-H(M) = -\sum_{k:\, p_k > 0} p_k \log_2 p_k\;,
+I_g(k) = -\log_2 p_k \quad (p_k > 0)\;.
+$$
+
+Intuition: über ein wahrscheinliches Ereignis zu lernen ist weniger informativ
+als über ein unwahrscheinliches Ereignis (seltene Klasse $\rightarrow$ viel
+Information, sichere Klasse mit $p_k = 1$ $\rightarrow$ keine Information).
+
+:::
+
+::: {#def-entropie}
+
+#### Entropie
+
+Die **Entropie** $H(\cdot)$ von $M$ ist der Erwartungswert des
+Informationsgehalts, $H(M) = E[I_g(Z)]$, und damit definiert als:
+
+$$
+H(M) = \sum_{k:\, p_k > 0} p_k \cdot I_g(k)
+= -\sum_{k:\, p_k > 0} p_k \log_2 p_k\;,
 $$
 
 wobei nur nur über Klassen summiert wird, die in $M$ vorkommen ($p_k > 0$), da
-$\log_2 0$ nicht definiert ist. $H(M)$ misst die Unreinheit (Unsicherheit) der
+$\log_2 0$ nicht definiert ist.
+
+:::
+
+::: {#prp-entropie}
+
+#### Eigenschaften der Entropie
+
+$H(M)$ misst die Unreinheit (Unsicherheit) der
 Klassenverteilung/Klassenzuordnung in $M$:
 
 - für eine reine Menge, alle Objekte gleiche Klasse, d.h.
@@ -115,19 +142,32 @@ Klassenverteilung/Klassenzuordnung in $M$:
   $$
 
   z.B. $H(M) = 1$ bei $K = 2$
-  - dass dies das Maximum ist, folgt aus der Jensen-Ungleichung ($\log_2$ ist
-    konkav), mit $K'$ = Anzahl der vorkommenden Klassen:
-    $$
-    H(M) = \sum_{k:\, p_k > 0} p_k \log_2 \frac{1}{p_k}
-    \leq \log_2 \Big( \sum_{k:\, p_k > 0} p_k \cdot \frac{1}{p_k} \Big)
-    = \log_2 K' \leq \log_2 K
-    $$
-  - Gleichheit genau dann, wenn alle $p_k$ gleich sind und alle $K$ Klassen
-    vorkommen, d.h. bei Gleichverteilung
 
 :::
 
-::: {.callout-note icon=false}
+::: {.proof}
+
+Sei $K'$ die Anzahl der in $M$ vorkommenden Klassen. Da $\log_2$ konkav ist,
+liefert die Jensen-Ungleichung:
+
+$$
+\begin{aligned}
+H(M) &= \sum_{k:\, p_k > 0} p_k \log_2 \frac{1}{p_k}
+  && \text{da } -\log_2 p_k = \log_2 \tfrac{1}{p_k} \\
+&\leq \log_2 \Big( \sum_{k:\, p_k > 0} p_k \cdot \frac{1}{p_k} \Big)
+  && \text{Jensen-Ungleichung} \\
+&= \log_2 K' \;\leq\; \log_2 K
+  && \text{da } K' \leq K
+\end{aligned}
+$$
+
+Gleichheit gilt genau dann, wenn alle $p_k$ gleich sind (Gleichheitsfall der
+Jensen-Ungleichung) und alle $K$ Klassen vorkommen ($K' = K$), d.h. bei
+Gleichverteilung $p_k = \frac{1}{K}$.
+
+:::
+
+::: {#def-gewichtete-entropie}
 
 #### Gewichtete Entropie
 
@@ -145,7 +185,7 @@ $M_j$.
 
 :::
 
-::: {.callout-note icon=false}
+::: {#def-informationsgewinn}
 
 #### Informationsgewinn
 
@@ -155,56 +195,20 @@ $$
 \text{gain}(A) = H(M) - H_A(M)
 $$
 
+je stärker ein Attribut die Entropie reduziert, desto besser ist es zur Trennung
+geeignet
+
 :::
 
 ### Entropie: Intuition und mögliche Interpretationen
 
-Sei $Z$ eine Zufallsvariable mit Realisation $z$. Der **Informationsgehalt**
-eines Ereignisses $z$ mit $p(z)$ ist gegeben durch:
-
-$$
-I_g(z) = -\log_2 p(z)
-$$
-
-Demnach entspricht die **Entropie** dem erwarteten Informationsgehalt einer
-zufälligen Klassenzuordnung, bzw. dem Erwartungswert des Informationsgehalts
-über alle Klassen:
-
-$$
-H(M) = p_1 \cdot I_g(p_1) + p_2 \cdot I_g(p_2)
-= -p_1 \log_2 p_1 - p_2 \log_2 p_2
-$$
-
 Entropie als Maß für die **Unbestimmtheit/Unreinheit** der Klassenzugehörigkeit:
+wie überraschend ist die Klasse eines zufällig gezogenen Objekts?
 
-- wie ''überraschend'' ist das Ergebnis einer Klassifikation ?
-- bei deterministischer Klasse (z.B. 100 % `sick``): keine Überraschung
-  $\rightarrow$ keine Information nötig
-- bei Gleichverteilung (50/50): maximaler Überraschungseffekt $\rightarrow$ mehr
-  Information nötig
-- Intuition: über ein wahrscheinliches Ereignis zu lernen ist weniger informativ
-  als über ein unwahrscheinliches Ereignis zu lernen
-- Entropie liefert Grundlage für den **Informationsgewinn** hinsichtlich eines
-  Attributsplits
-- je stärker ein Attribut die Entropie reduziert, desto besser ist es zur
-  Trennung geeignet
-
-### Beispiel I: Entropie und Informationsgewinn
-
-- gegeben seien $K=2$ Klassen: ''sick'' und ''healthy'' mit $p_1$ als Anteil der
-  Objekte in Klasse ''sick'', $p_2 = 1 - p_1$ für eine Menge von Objekten M
-- **Extremfall 1:** $p_1 = 1$, $p_2 = 0$ $\rightarrow$ $H(M) = 0$ (vollständige
-  Sicherheit)
-- **Extremfall 2:** $p_1 = p_2 = 0.5$ $\rightarrow$ $H(M) = 1$ (maximale
-  Unsicherheit)
-
-- **Informationsgewinn** durch ein Attribut $A$:
-
-  $$
-  \text{gain}(A) = H(M) - H_A(M)
-  $$
-
-- hoher Informationsgewinn von $A$ erzeugt möglichst ''reinere'' Teilmengen
+- Beispiel mit $K = 2$ Klassen `sick` und `healthy`, $p_2 = 1 - p_1$:
+  - 100 % `sick` ($p_1 = 1$): keine Überraschung, $H(M) = 0$ Bit
+  - 50/50 ($p_1 = p_2 = 0.5$): maximale Überraschung, $H(M) = 1$ Bit, d.h. im
+    Mittel ist eine Ja/Nein-Frage nötig, um die Klasse zu erfahren
 
 ## Iterative Dichotomiser 3 (ID3)
 
