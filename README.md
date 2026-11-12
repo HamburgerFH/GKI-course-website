@@ -15,6 +15,41 @@ In GKI-notebooks `notebooks/`, `data/processed/` und `requirements.txt` nicht
 direkt bearbeiten: die Synchronisation überschreibt diese Pfade. README und
 `.devcontainer/` gehören dagegen GKI-notebooks und werden dort gepflegt.
 
+## Lokal bearbeiten mit Neovim und Live-Vorschau
+
+Im Projektverzeichnis starten:
+
+```bash
+./scripts/preview-local.sh
+```
+
+Die Vorschau ist unter <http://localhost:4444> erreichbar. Sie ist nur an
+`127.0.0.1` gebunden und benötigt kein Passwort. StatiCrypt wird ausschließlich
+im Publish-Workflow ausgeführt.
+
+In einem zweiten Terminal oder tmux-Pane die gewünschte Quelldatei öffnen:
+
+```bash
+nvim include/02_02_entscheidungsbaeume.qmd
+```
+
+Mit `:w` speichern: Quarto rendert die geänderte Seite und aktualisiert den
+Browser automatisch. Textquellen sind `index.qmd` und `include/*.qmd`;
+Python-Beispiele liegen in `include/*.ipynb`. `_site/` enthält generierte
+Dateien und wird nicht direkt bearbeitet.
+
+Das Skript verwendet die vorhandene `.venv` und registriert den Kernel
+`gki-venv` innerhalb dieser Umgebung. So funktioniert die Vorschau auch nach
+einem Umzug des Projektverzeichnisses. Notebook-Vorschauen verwenden
+vorhandene Ausgaben; das Speichern von Python-Code allein führt ein Notebook
+nicht automatisch neu aus.
+
+Mit `Ctrl+C` den Server stoppen. Falls Port 4444 belegt ist:
+
+```bash
+GKI_PREVIEW_PORT=4445 ./scripts/preview-local.sh
+```
+
 ## Passwortschutz
 
 Die veröffentlichte GitHub-Pages-Site verschlüsselt beim CI-Build alle
@@ -48,7 +83,7 @@ mit serverseitiger Authentifizierung erforderlich.
 Aus der Kommandozeile, vorher
 
 ```bash
-cd Dropbox/stuff/for-others/teaching/HFH/GKI/05-gki-website/
+cd ~/Syncthing/projects/teaching/GKI/05-gki-website/
 ```
 
 Danach eins von beidem:
