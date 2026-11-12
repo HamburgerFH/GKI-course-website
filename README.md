@@ -1,13 +1,15 @@
 # README und TO-DOS
 
-## Notebooks in GitHub Codespaces ausführen
+## Notebooks für Studierende (GKI-notebooks)
 
-[![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/HamburgerFH/GKI-course-website?quickstart=1)
+Die Notebooks in `include/*.ipynb` sind die Quelle. Bei jedem Push nach `main`,
+der Notebooks, `data/processed/` oder `requirements.txt` ändert, kopiert der
+Workflow `sync-notebooks.yml` sie nach
+[HamburgerFH/GKI-notebooks](https://github.com/HamburgerFH/GKI-notebooks).
+Dort starten Studierende die Notebooks per Codespaces:
+<https://codespaces.new/HamburgerFH/GKI-notebooks?quickstart=1>
 
-Mit einem (kostenlosen) GitHub-Konto startet der Button eine fertige
-Python-/Jupyter-Umgebung im Browser. Die Notebooks liegen in `include/`;
-die Anleitung öffnet sich im Codespace automatisch
-(`.devcontainer/README.md`).
+Der Workflow pusht mit einem Deploy-Key (Secret `NOTEBOOKS_DEPLOY_KEY`).
 
 ## Passwortschutz
 
