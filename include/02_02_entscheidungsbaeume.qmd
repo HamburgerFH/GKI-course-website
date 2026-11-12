@@ -153,7 +153,7 @@ Molecular BioSystems 5(12)](/figs/02_A_trees_example_01.png){#fig-02_tree_exampl
 - hoher Informationsgewinn von $A$ erzeugt möglichst ''reinere'' Teilmengen
 - Ziel: maximale Reduktion der Unreinheit durch Auswahl des besten $A^*$
 
-### Beispiel II: Fußball mit Entscheidungsbäumen - Einführung
+### Beispiel II: Fußball mit Entscheidungsbäumen -- Einführung
 
 | **Day** | **Outlook** | **Temperature** | **Humidity** | **Wind** |  **Play**   |
 | :-----: | :---------: | :-------------: | :----------: | :------: | :---------: |
@@ -185,7 +185,7 @@ Spielergebnis_
   - $\hookrightarrow$ Ausprägungen [Yes]{.cgr} es wurde Fußball gespielt vs.
     [No]{.crd}, es wurde nicht gespielt
 
-### Beispiel II: Fußball mit Entscheidungsbäumen - Berechnungen
+### Beispiel II: Fußball mit Entscheidungsbäumen -- Berechnungen
 
 - Ziel: finde Attribut mit maximalem Informationsgewinn als Wurzelknoten
   - [1.] wir berechnen $H(M)$
@@ -216,7 +216,7 @@ gain(Temperature)=0.029, gain(Humidity)=0.152, gain(Wind)=0.048
 **_Folge:_** Outlook wird als Wurzelknoten gewählt da
 [gain(outlook)=0.247]{.ctl} am höchsten.
 
-### Beispiel II: Fußball mit Entscheidungsbäumen - Ergebnisse
+### Beispiel II: Fußball mit Entscheidungsbäumen -- Ergebnisse
 
 ![](/figs/02_A_trees_example_02.png)
 
@@ -227,7 +227,7 @@ gain(Temperature)=0.029, gain(Humidity)=0.152, gain(Wind)=0.048
   Informationsgewinn mehr möglich ist, z.B. wenn weitere Klassifizierung nicht
   mehr möglich ist: danach zufällige Festsetzung oder Mehrheitsklasse
 
-## C4.5: Weiterentwicklung von ID3
+### C4.5: Weiterentwicklung von ID3
 
 - C4.5 verwendet wie ID3 Entropie als Kriterium, verbessert jedoch die Auswahl
   der Attribute
@@ -252,7 +252,9 @@ gain(Temperature)=0.029, gain(Humidity)=0.152, gain(Wind)=0.048
 - gainRatio normalisiert diesen Effekt und bevorzugt trennscharfe und
   gleichzeitig generalisierende Attribute
 
-## CART: Grundidee
+## CART: eine Alternative zur ID3/C4.5 Familie
+
+### Cart -- Grundidee
 
 - CART beginnt mit einem einzelnen Knoten $L_0$ (der Wurzel) und Menge von
   Objekten $M_0$ ($=M$)
@@ -282,7 +284,7 @@ gain(Temperature)=0.029, gain(Humidity)=0.152, gain(Wind)=0.048
   $p_{iL}^q(\mathcal{A}_i^L) = \frac{L_q^i(\mathcal{A}_i^L)}{M_q}$ und
   $p_{iR}^q(\mathcal{A}_i^R) = 1 - p_{iL}^q(\mathcal{A}_i^L)$
 
-## CART: Gini-Index und Knotenaufteilung
+### CART: Gini-Index und Knotenaufteilung
 
 - Gini-Index misst Unreinheit in $M_q$ mit Klassenanteilen $p_k^q$:
   $$
@@ -300,7 +302,7 @@ gain(Temperature)=0.029, gain(Humidity)=0.152, gain(Wind)=0.048
   (p_{kL}^q(\mathcal{A}_i^L))^2\\ Gini(R_q^i(\mathcal{A}*i^R)) &= 1 -
   \sum*{k=1}^K (p_{kR}^q(\mathcal{A}_i^R))^2 \end{align}
 
-## CART: Gini-Gewinn und Optimierung
+### CART: Gini-Gewinn und Optimierung
 
 - Gini-Gewinn durch Partition $\mathcal{A}_i^L \subset \mathcal{A}_i$:
   $$
@@ -318,7 +320,7 @@ gain(Temperature)=0.029, gain(Humidity)=0.152, gain(Wind)=0.048
   $M_L = L_q(\mathcal{A}_i^{L,*})$, $M_R = R_q(\mathcal{A}_i^{L,*})$ und die
   Aufspaltung beginnt von neuem
 
-## CART: Eigenschaften und Pruning
+### CART: Eigenschaften und Pruning
 
 - CART verwendet ausschließlich **binäre Aufteilungen**
 - anwendbar auf **numerische** und **kategoriale** Attribute
@@ -338,6 +340,8 @@ gain(Temperature)=0.029, gain(Humidity)=0.152, gain(Wind)=0.048
 - Post-Pruning liefert in der Regel bessere Resultate
 
 ## Regression mit Entscheidungsbäumen
+
+### Idee von Regressionsbäumen
 
 - Ziel: Vorhersage einer **numerischen Zielvariable**, z.B. Anzahl Spieler
 - Struktur des Baums wie bei CART: binäre Splits entlang von Attributen
@@ -359,7 +363,7 @@ gain(Temperature)=0.029, gain(Humidity)=0.152, gain(Wind)=0.048
   \text{gain}_\text{Var} = \text{Var}(M_q) - \text{Var}_{\text{split}}
   $$
 
-## Beispiel: Fußball-Datensatz (Regression)
+### Beispiel: Fußball-Datensatz (Regression)
 
 | **Day** | **Outlook** | **Temperature** | **Humidity** | **Wind** | **Players** |
 | :-----: | :---------: | :-------------: | :----------: | :------: | ----------: |
@@ -398,7 +402,7 @@ $$
 \text{SD}(M) = \sqrt{\text{Var}(M)}
 $$
 
-## Beispiel: Fußball-Datensatz (Regression)
+### Beispiel: Fußball-Datensatz (Regression)
 
 - Gesamtvarianz (korrekt): $86.88$ \quad Gesamt-Std.-Abw. (wie im SB): $9.32$
 - gewichtete Varianz nach Outlook: \begin{align} \bar{y} &= \frac{1}{14}
