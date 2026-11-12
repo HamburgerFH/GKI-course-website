@@ -5,6 +5,7 @@ const siteDirectory = process.argv[2] ?? "_site";
 const publishedRoot = process.argv[3] ?? "/";
 const bodyEnd = "</body>";
 const gateMarker = "data-gki-entry-gate";
+const encryptedMarker = 'id="staticrypt-password"';
 
 async function findHtmlFiles(directory) {
   const entries = await readdir(directory, { withFileTypes: true });
@@ -61,6 +62,12 @@ const htmlFiles = await findHtmlFiles(siteDirectory);
 
 for (const file of htmlFiles) {
   const html = await readFile(file, "utf8");
+
+  // staticrypt can exit cleanly without encrypting (e.g. on a declined
+  // prompt); never ship a gate on top of plaintext
+  if (!html.includes(encryptedMarker)) {
+    throw new Error(`Not encrypted by staticrypt: ${file}`);
+  }
 
   if (html.includes(gateMarker)) {
     throw new Error(`Entry gate already exists in ${file}`);
