@@ -4,10 +4,10 @@
 
 - Künstliche Intelligenz umfasst eine Vielzahl von Algorithmen zur
   automatisierten Datenverarbeitung
-- Entscheidungsbäume gehören zum Bereich des **maschinellen Lernens**
-- Fokus dieser Vorlesung: Methoden des **überwachten maschinellen Lernens**
 - maschinelles Lernen ist ein Teilbereich der KI, bei dem Systeme aus Daten
   lernen statt explizit programmiert zu werden
+- Entscheidungsbäume gehören zum Bereich des **maschinellen Lernens**
+- Fokus dieser Vorlesung: Methoden des **überwachten maschinellen Lernens**
 - Modelle wie Entscheidungsbäume folgen einer klaren, regelbasierten Struktur
   und sind gut interpretierbar
 
@@ -22,24 +22,35 @@
 
 ### Überwachtes Lernen: Grundidee {.unlisted}
 
-- Ziel: aus Eingabevariablen $X$ eine **Vorhersage** $Y$ oder $G$ ableiten
+- Gegeben: Daten/Beobachtungen indiziert durch $i=1,\ldots,N$
+- Ziel: aus dem Eingabevektor $\bs{X}_i$ eine **Vorhersage** $Y_i$ oder $G_i$
+  ableiten
+  - Länge des Eingabevektors = Anzahl der Merkmale bzw. features $p$
+- Trainingsdaten bestehen aus Paaren $(\bs{x}_i, y_i)$ oder $(\bs{x}_i, g_i)$:
+  - konkrete Werte klein geschrieben
+  - vs. Variablen / allgemeine Größen: Großbuchstaben
+- **Regression:** $Y_i$ ist quantitativ, z. B. Preis, Temperatur, Gewicht
+- **Klassifikation:** $G_i$ ist qualitativ, z. B. Klassen `Ja/Nein`, `rot/blau`
 - auch möglich: **geordnete Kategorien** (z. B. klein, mittel, groß) – hier
   nicht behandelt
-- **Regression:** $Y$ ist quantitativ, z. B. Preis, Temperatur, Gewicht
-- **Klassifikation:** $G$ ist qualitativ, z. B. Klassen `Ja/Nein`, `rot/blau`
 - **überwacht** bedeutet: Trainingsdaten enthalten Zielgrößen zur Kontrolle des
   Lernprozesses
 - beide Aufgaben lassen sich als **Funktionsapproximation** formulieren
-- Trainingsdaten bestehen aus Paaren $(x_i, y_i)$ oder $(x_i, g_i)$
 
 ## Beispiel: Klassifikation mit Iris-Daten
 
-![Abbildung](/figs/02_intro_iris.png){#fig-02_intro_iris}
+![Iris-Datensatz: die drei Arten mit Kelchblatt (Sepal) und Blütenblatt
+(Petal). Fotos: [Radomil](https://commons.wikimedia.org/wiki/File:Kosaciec_szczecinkowaty_Iris_setosa.jpg),
+[D. Langlois](https://commons.wikimedia.org/wiki/File:Iris_versicolor_3.jpg)
+(beide CC BY-SA 3.0), [F. Mayfield](https://commons.wikimedia.org/wiki/File:Iris_virginica.jpg)
+(CC BY-SA 2.0), via Wikimedia Commons](/figs/02_intro_iris.png){#fig-02_intro_iris}
 
 - Eingabe: Länge und Breite von Kelch- und Blütenblättern
 - **Sepal** = Kelchblatt vs. **Petal** = Blütenblatt (siehe Bild)
 - Ziel: Vorhersage der Iris-Spezies (setosa, versicolor, virginica)
-- typische Klassifikationsaufgabe mit $G \in \{1, 2, 3\}$
+- typische Klassifikationsaufgabe mit
+  $G_i \in \mathcal{G} = \{\text{setosa}, \text{versicolor}, \text{virginica}\}$
+  (oft kodiert als 1, 2, 3)
 
 ### Hintergrund zum Datensatz {.unlisted}
 
@@ -56,13 +67,13 @@
 ### Eingabedaten (Input) {.unlisted}
 
 - $N$: Anzahl der Beobachtungen / Datenpunkte
-- $p$: Anzahl der Merkmale
+- $p$: Anzahl der Merkmale / features
 - $\bs{x}_i \in \mathbb{R}^p$: Merkmalsvektor der $i$-ten Beobachtung (als
   Spaltenvektor), $i = 1, \dots, N$
 - $\bs{X} \in \mathbb{R}^{N \times p}$: Datenmatrix mit den Beobachtungen als
   Zeilen, also mit $\bs{x}_i^T$ in der $i$-ten Zeile
-- $X_j$: $j$-tes Merkmal bzw. $j$-te Spalte der Datenmatrix; $x_{ij}$ ist der
-  konkrete Wert dieses Merkmals für Beobachtung $i$
+- $x_{ij}$: Wert des $j$-ten Merkmals für Beobachtung $i$ (Eintrag der
+  Datenmatrix in Zeile $i$, Spalte $j$)
 - Hinweis: in der Entscheidungsbaum-Literatur wird ein ausgewähltes Merkmal
   häufig als Attribut $A$ bezeichnet. Dann meint $A$ keine neue Datenstruktur,
   sondern ein ausgewähltes Merkmal aus den Spalten von $\bs{X}$;
@@ -97,17 +108,18 @@ $$
 ### Zielgrößen (Output) {.unlisted}
 
 - $Y_i \in \mathbb{R}$: quantitatives Ziel (Regression)
-- $G_i \in \Omega$: qualitatives Ziel (Klassifikation), z. B.
-  $\Omega = \{\text{setosa}, \dots\}$
+- $G_i \in \mathcal{G}$: qualitatives Ziel (Klassifikation), z. B.
+  $\mathcal{G} = \{\text{setosa}, \dots\}$
 - $\hat{Y}_i$, $\hat{G}_i$: geschätzte Ausgaben
 - Ziel: $\hat{Y}_i \approx Y_i$, $\hat{G}_i \approx G_i$
-- Binäre Klassifikation für binäres $G$: $\hat{Y}_i \in [0, 1]$ und
-  Schwellenwert-Regel z. B. für Wert 0.5:
+- Binäre Klassifikation: $G$ als 0/1 kodiert, $\hat{Y}_i \in [0, 1]$ als
+  geschätzte Wahrscheinlichkeit für $G_i = 1$; Schwellenwert-Regel z. B. für
+  Wert 0.5:
 
 $$
 \hat{G}_i =
 \begin{cases}
-  1 & \text{falls } \hat{Y}_i \geq 0{,}5 \\\\
-  0 & \text{falls } \hat{Y}_i < 0{,}5
+  1 & \text{falls } \hat{Y}_i \geq 0.5 \\\\
+  0 & \text{falls } \hat{Y}_i < 0.5
 \end{cases}
 $$
