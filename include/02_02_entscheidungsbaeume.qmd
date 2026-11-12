@@ -26,19 +26,18 @@ Geurts et al. (2009), [Supervised learning with decision tree-based methods in
 computational and systems biology](https://doi.org/10.1039/b907946g),
 Molecular BioSystems 5(12)](/figs/02_A_trees_example_01.png){#fig-02_tree_example}
 
-- **Notation**: $X_1$, $X_2$ bezeichnen die $p=2$ Merkmale (Variablen); ein Test
-  für ein konkretes Objekt $\bs{x}$ lautet z. B. $x_2 < 0.53$
-
 ### Linke Seite der Abbildung: Baum {.unlisted}
 
 - **Wurzelknoten**: Startpunkt der Klassifikationsregel, hier
   $\boxed{X_2 < 0.53}$
-- **interner bzw. Split-Knoten**: Test auf Attributwert, hier z. B.
+- **interner bzw. Split-Knoten**: weiterer Test unterhalb der Wurzel, hier z.B.
   $\boxed{X_2 < 0.29}$
-- **Zweig**: Ausprägung des Testergebnisses, hier z. B. `yes` oder `no`
+- **Test**: für $p=2$ Merkmale (Variablen) $X_1$, $X_2$ lautet ein Test z.B.
+  $X_1 < 0.11$
+- **Zweig**: Ausprägung des Testergebnisses, hier z.B. `yes` oder `no`
 - **Blattknoten**: Ergebnis der Klassifikation, hier die Ellipsen `sick` (rot)
   bzw. `healthy` (grün)
-- Beispielpfad: $x_2 \geq 0.53$ und $x_1 < 0.11$ führt zur Klasse `sick`
+- Beispielpfad: $X_2 \geq 0.53$ und $X_1 < 0.11$ führt zur Klasse `sick`
 
 ### Rechte Seite der Abbildung: Merkmalsraum {.unlisted}
 
@@ -93,7 +92,7 @@ Molecular BioSystems 5(12)](/figs/02_A_trees_example_01.png){#fig-02_tree_exampl
 - Entropie entspricht dem erwarteten Informationsgehalt einer zufälligen
   Klassenzuordnung
 - Interpretation: wie „überraschend“ ist das Ergebnis einer Klassifikation?
-- bei deterministischer Klasse (z. B. 100 % sick): keine Überraschung
+- bei deterministischer Klasse (z.B. 100 % sick): keine Überraschung
   $\rightarrow$ keine Information nötig
 - bei Gleichverteilung (50/50): maximaler Überraschungseffekt $\rightarrow$ mehr
   Information nötig
@@ -331,7 +330,7 @@ gain(Temperature)=0.029, gain(Humidity)=0.152, gain(Wind)=0.048
 - anwendbar auf **numerische** und **kategoriale** Attribute
   - bei numerischen Werten basiert Aufteilung auf einem threshold Wert der Form:
     $x^{(m)} \leq t \quad \text{vs.} \quad x^{(m)} > t$
-  - kategoriale Merkmale werden in zwei Gruppen aufgeteilt z. B.
+  - kategoriale Merkmale werden in zwei Gruppen aufgeteilt z.B.
     $\{\text{sun, rain}\}$ vs. $\{\text{overcast}\}$
     - dabei werden alle möglichen Kombinationen geprüft:
       - $\{\text{sun, rain}\}$ vs. $\{\text{overcast}\}$
@@ -346,7 +345,7 @@ gain(Temperature)=0.029, gain(Humidity)=0.152, gain(Wind)=0.048
 
 ## Regression mit Entscheidungsbäumen
 
-- Ziel: Vorhersage einer **numerischen Zielvariable**, z. B. Anzahl Spieler
+- Ziel: Vorhersage einer **numerischen Zielvariable**, z.B. Anzahl Spieler
 - Struktur des Baums wie bei CART: binäre Splits entlang von Attributen
 - jeder Blattknoten enthält den **arithmetischen Mittelwert** der Zielvariable
 - **kein Klassenlabel**, sondern reelle Vorhersagegröße
@@ -463,7 +462,7 @@ $$
 
 ## Hyperparameter-Optimierung: Grundlagen
 
-- **Parameter**: durch den Datensatz bestimmt, vom Algorithmus gelernt (z. B.
+- **Parameter**: durch den Datensatz bestimmt, vom Algorithmus gelernt (z.B.
   Regressionskoeffizienten, Gewichte im neuronalen Netz)
 - **Hyperparameter**: vom Anwender vor dem Training festgelegt, steuern das
   Lernverfahren
