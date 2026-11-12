@@ -11,6 +11,10 @@ Dort starten Studierende die Notebooks per Codespaces:
 
 Der Workflow pusht mit einem Deploy-Key (Secret `NOTEBOOKS_DEPLOY_KEY`).
 
+In GKI-notebooks `notebooks/`, `data/processed/` und `requirements.txt` nicht
+direkt bearbeiten: die Synchronisation überschreibt diese Pfade. README und
+`.devcontainer/` gehören dagegen GKI-notebooks und werden dort gepflegt.
+
 ## Passwortschutz
 
 Die veröffentlichte GitHub-Pages-Site verschlüsselt beim CI-Build alle
