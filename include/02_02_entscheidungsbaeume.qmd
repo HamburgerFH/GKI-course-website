@@ -345,8 +345,7 @@ Temperature, Humidity, Wind)](/figs/02_A_trees_example_02.png){#fig-02_tree_foot
 - nach dem ersten Attributsplit entstehen wieder Teilbäume (s.
   [@fig-02_tree_football])
 - für jeden Teilbaum: erneut bestes Attributs unter **_verbleibenden_**
-  Attributen suchen, d.h. **ohne** `Outlook`
-  ([@alg-id3], Schritt 5)
+  Attributen suchen, d.h. **ohne** `Outlook` ([@alg-id3], Schritt 5)
 - Fortsetzung bis alle Objekte eindeutig klassifiziert sind oder ein anderes
   Abbruchkriterium von [@alg-id3] greift, dann:
   - Mehrheitsklasse
@@ -357,8 +356,8 @@ Temperature, Humidity, Wind)](/figs/02_A_trees_example_02.png){#fig-02_tree_foot
 - C4.5 [@quinlan1993] ist der Nachfolger von ID3 [@quinlan1986]: verwendet wie
   ID3 Entropie als Kriterium, verbessert jedoch die Auswahl der Attribute
 - weitere Neuerungen gegenüber ID3: stetige Merkmale über Schwellenwerte
-  $A \le t$ (binärer Split, Merkmal darf im Teilbaum erneut vorkommen),
-  fehlende Werte, Pruning
+  $A \le t$ (binärer Split, Merkmal darf im Teilbaum erneut vorkommen), fehlende
+  Werte, Pruning
 - **Problem:** Informationsgewinn ($\text{gain}(A)$) bevorzugt Attribute mit
   vielen Ausprägungen
   - $H_A(M)$ ist der gewichtete Mittelwert der Entropien der $M_j$
@@ -371,8 +370,8 @@ Temperature, Humidity, Wind)](/figs/02_A_trees_example_02.png){#fig-02_tree_foot
   - ein Attribut mit mehr Ausprägungen hat also strukturell einen Vorteil, und
     gain bestraft die Feinheit nirgends
   - Größenordnung: ist $A$ unabhängig von der Klasse, gilt trotzdem im Mittel
-    $E[\text{gain}(A)] \approx \frac{(v-1)(K-1)}{2N \ln 2}$ (Näherung für
-    großes $N$), d.h. der Zufallsanteil wächst linear mit $v$
+    $E[\text{gain}(A)] \approx \frac{(v-1)(K-1)}{2N \ln 2}$ (Näherung für großes
+    $N$), d.h. der Zufallsanteil wächst linear mit $v$
   - Fußball-Beispiel ($N = 14$, $K = 2$): bei $v = 3$ (Outlook) etwa 0.10 Bit
     schon rein zufällig, gemessen wurden 0.247
 - Lösung: **gainRatio** als Quotient aus Informationsgewinn ($\text{gain}(A)$)
@@ -401,15 +400,16 @@ Temperature, Humidity, Wind)](/figs/02_A_trees_example_02.png){#fig-02_tree_foot
   kleine Split-Entropien gainRatio stark erhöhen, wählt C4.5 nur unter
   Attributen mit mindestens durchschnittlichem $\text{gain}(A)$
 
-**Beispiel** (Fußball-Daten, Wurzelknoten):
+**Beispiel** (Fußball-Daten, Wurzelknoten); zur Illustration wird zusätzlich der
+Zeilenindex Day wie ein Attribut behandelt:
 
-| Attribut    | $\text{gain}(A)$ | $\text{SplitEntropy}(A)$ | $\text{gainRatio}(A)$ |
-| ----------- | :--------------: | :----------------------: | :-------------------: |
-| Outlook     |      0.247       |          1.577           |       **0.156**       |
-| Temperature |      0.029       |          1.557           |         0.019         |
-| Humidity    |      0.152       |          1.000           |         0.152         |
-| Wind        |      0.048       |          0.985           |         0.049         |
-| Day         |      0.940       |          3.807           |         0.247         |
+| Attribut                                | $\text{gain}(A)$ | $\text{SplitEntropy}(A)$ | $\text{gainRatio}(A)$ |
+| --------------------------------------- | :--------------: | :----------------------: | :-------------------: |
+| Outlook                                 |      0.247       |          1.577           |       **0.156**       |
+| Temperature                             |      0.029       |          1.557           |         0.019         |
+| Humidity                                |      0.152       |          1.000           |         0.152         |
+| Wind                                    |      0.048       |          0.985           |         0.049         |
+| Day (Zeilenindex, nur zur Illustration) |      0.940       |          3.807           |         0.247         |
 
 - ohne Day: Outlook bleibt bestes Attribut, aber knapp vor Humidity
 - Day (jeder Tag eigene Teilmenge, alle $M_j$ rein): maximaler gain, aber
@@ -424,8 +424,8 @@ Temperature, Humidity, Wind)](/figs/02_A_trees_example_02.png){#fig-02_tree_foot
 
 Der Index $j$ zählt ab hier die **Attribute**: $A_j$ ist das $j$-te Merkmal mit
 $A_j(\bs{x}_i) = x_{ij}$, $j = 1, \dots, p$ (wie in
-[Grundlagen](02_01_grundlagen_und_definitionen.qmd)). Die Ausprägungen von
-$A_j$ werden als Menge $\mathcal{V}_j$ geschrieben.
+[Grundlagen](02_01_grundlagen_und_definitionen.qmd)). Die Ausprägungen von $A_j$
+werden als Menge $\mathcal{V}_j$ geschrieben.
 
 **Beispiel** (Fußball-Daten): $p = 4$ Attribute $A_1 = \text{Outlook}$,
 $A_2 = \text{Temperature}$, $A_3 = \text{Humidity}$, $A_4 = \text{Wind}$; für
@@ -442,9 +442,9 @@ $\mathcal{V}_1^R = \{\text{Sun}, \text{Rain}\}$.
 - jeder Knoten $S_q$ verarbeitet eine Teilmenge $M_q \subseteq M$ der Daten
 - wenn alle Elemente in $M_q$ die gleiche Klasse haben $\rightarrow$ $S_q$ wird
   Blatt
-- falls für eine Untermenge $M_q$ kein Split den Gini-Index mehr verringert
-  oder ein Abbruchkriterium greift (z.B. Mindestgröße von $M_q$): $S_q$ wird
-  Blatt mit
+- falls für eine Untermenge $M_q$ kein Split den Gini-Index mehr verringert oder
+  ein Abbruchkriterium greift (z.B. Mindestgröße von $M_q$): $S_q$ wird Blatt
+  mit
   - Mehrheitsklasse in $M_q$ (Klassifikation)
   - bei Gleichstand zufälliger Festsetzung der Klasse
   - Mittelwert der Zielwerte $y_i$ in $M_q$ (Regressionsbäume)
@@ -477,89 +477,122 @@ $\mathcal{V}_1^R = \{\text{Sun}, \text{Rain}\}$.
 
 ### CART: Gini-Index und Knotenaufteilung
 
-- Gini-Index misst Unreinheit in $M_q$ mit Klassenanteilen $p_k^q$:
-  $$
-  Gini(M_q) = 1 - \sum_{k=1}^K (p_k^q)^2
-  $$
-- minimale Unreinheit bei homogener Klassenverteilung: $Gini(M_q) = 0$
-- maximale Unreinheit bei Gleichverteilung: $p_k^q = \frac{1}{K}$
+::: {#def-gini}
+
+#### Gini-Index
+
+Für eine Menge $M$ mit Klassenanteilen $p_k = \frac{m_k}{|M|}$ ist der
+**Gini-Index** definiert als:
+
+$$
+\text{Gini}(M) = 1 - \sum_{k=1}^K p_k^2 = \sum_{k=1}^K p_k (1 - p_k)
+$$
+
+Intuition: Wahrscheinlichkeit, ein zufällig gezogenes Objekt falsch zu
+klassifizieren, wenn man ihm zufällig gemäß der Klassenverteilung in $M$ eine
+Klasse zuordnet.
+
+:::
+
+- Gini-Index misst Unreinheit in $M_q$ mit Klassenanteilen $p_k^q$, d.h.
+  $\text{Gini}(M_q)$ gemäß @def-gini
+- minimale Unreinheit bei reiner Menge (alle Objekte gleiche Klasse):
+  $\text{Gini}(M_q) = 0$
+- maximale Unreinheit bei Gleichverteilung $p_k^q = \frac{1}{K}$:
+  $\text{Gini}(M_q) = 1 - \frac{1}{K}$, z.B. $0.5$ bei $K = 2$
 - Aufteilung von $M_q$ in zwei Mengen über Zerlegung
-  $\mathcal{A}_i^L, \mathcal{A}_i^R$ und Berechnung eines gewichteten Gini-Index
+  $\mathcal{V}_j^L, \mathcal{V}_j^R$ und Berechnung eines gewichteten Gini-Index
   nach Aufteilung:
 
   $$
   \begin{aligned}
-  wGini(M_q, \mathcal{A}_i^L) &= p_{iL}^q \cdot Gini(L_q^i(\mathcal{A}_i^L))
-  + p_{iR}^q \cdot Gini(R_q^i(\mathcal{A}_i^R)) \\
-  Gini(L_q^i(\mathcal{A}_i^L)) &= 1 - \sum_{k=1}^K
-  (p_{kL}^q(\mathcal{A}_i^L))^2 \\
-  Gini(R_q^i(\mathcal{A}_i^R)) &= 1 - \sum_{k=1}^K
-  (p_{kR}^q(\mathcal{A}_i^R))^2
+  \text{wGini}(M_q, \mathcal{V}_j^L)
+  &= p_L^q(\mathcal{V}_j^L) \cdot \text{Gini}(M_q^L(\mathcal{V}_j^L)) \\
+  &+ p_R^q(\mathcal{V}_j^R) \cdot \text{Gini}(M_q^R(\mathcal{V}_j^R))
   \end{aligned}
   $$
 
+- $\text{Gini}(M_q^L)$ und $\text{Gini}(M_q^R)$ gemäß @def-gini mit den
+  Klassenanteilen in $M_q^L$ bzw. $M_q^R$
+
 ### CART: Gini-Gewinn und Optimierung
 
-- Gini-Gewinn durch Partition $\mathcal{A}_i^L \subset \mathcal{A}_i$:
+- Gini-Gewinn durch Partition $\mathcal{V}_j^L$ von Attribut $A_j$ (mit
+  $\emptyset \neq \mathcal{V}_j^L \subsetneq \mathcal{V}_j$):
+
   $$
-  GiniGain(M_q, \mathcal{A}_i^L) = Gini(M_q) - wGini(M_q, \mathcal{A}_i^L)
+  \text{GiniGain}(M_q, \mathcal{V}_j^L) = \text{Gini}(M_q)
+  - \text{wGini}(M_q, \mathcal{V}_j^L)
   $$
-- Ziel: finde Partition mit maximalem Gini-Gewinn
+
+- Ziel: finde Attribut und Partition mit maximalem Gini-Gewinn
+
   $$
-  \mathcal{A}_i^{L,*} = \arg\max_{\mathcal{A}_i^L \subset \mathcal{A}_i} \,
-  GiniGain(M_q, \mathcal{A}_i^L)
+  (j^*, \mathcal{V}_{j^*}^{L,*}) = \arg\max_{j,\; \mathcal{V}_j^L} \,
+  \text{GiniGain}(M_q, \mathcal{V}_j^L)
   $$
-- falls Gini-Gewinn = 0 $\rightarrow$ keine sinnvolle Aufspaltung möglich und
-  Knoten $L_q$ erzeugt dann **binäre Kinderknoten**, basierend auf der
-  gefundenen optimalen Partition induziert durch $\mathcal{A}_i^{L,*}$
+
+- falls maximaler Gini-Gewinn = 0 $\rightarrow$ keine sinnvolle Aufspaltung
+  möglich, $S_q$ wird Blatt
+- sonst erzeugt Knoten $S_q$ **binäre Kinderknoten**, basierend auf der
+  gefundenen optimalen Partition $\mathcal{V}_{j^*}^{L,*}$
 - die binären Kinderknoten erhalten dann jeweils ihre zugehörigen Teilmengen
-  $M_L = L_q(\mathcal{A}_i^{L,*})$, $M_R = R_q(\mathcal{A}_i^{L,*})$ und die
-  Aufspaltung beginnt von neuem
+  $M_q^L = M_q^L(\mathcal{V}_{j^*}^{L,*})$ und
+  $M_q^R = M_q^R(\mathcal{V}_{j^*}^{R,*})$, und die Aufspaltung beginnt von
+  neuem
 
 ### CART: Eigenschaften und Pruning
 
 - CART verwendet ausschließlich **binäre Aufteilungen**
 - anwendbar auf **numerische** und **kategoriale** Attribute
-  - bei numerischen Werten basiert Aufteilung auf einem threshold Wert der Form:
-    $x^{(m)} \leq t \quad \text{vs.} \quad x^{(m)} > t$
-  - kategoriale Merkmale werden in zwei Gruppen aufgeteilt z.B.
-    $\{\text{sun, rain}\}$ vs. $\{\text{overcast}\}$
-    - dabei werden alle möglichen Kombinationen geprüft:
-      - $\{\text{sun, rain}\}$ vs. $\{\text{overcast}\}$
-      - $\{\text{sun}\}$ vs. $\{\text{overcast, rain}\}$
-      - ...
-- erzeugte Bäume sind oft robuster als bei ID3
-- zur Vermeidung von Overfitting wird **Pruning** eingesetzt:
+  - bei numerischen Werten basiert Aufteilung auf einem Schwellenwert $s$ der
+    Form: $A_j(\bs{x}_i) \leq s \quad \text{vs.} \quad A_j(\bs{x}_i) > s$
+  - kategoriale Merkmale werden in zwei Gruppen aufgeteilt; dabei werden alle
+    $2^{v-1} - 1$ möglichen Kombinationen geprüft, z.B. für Outlook ($v = 3$):
+    - $\{\text{Sun}, \text{Rain}\}$ vs. $\{\text{Overcast}\}$
+    - $\{\text{Sun}\}$ vs. $\{\text{Overcast}, \text{Rain}\}$
+    - $\{\text{Rain}\}$ vs. $\{\text{Sun}, \text{Overcast}\}$
+  - anders als bei ID3 kann dasselbe Attribut im Teilbaum erneut verwendet
+    werden (andere Schwelle $s$ bzw. verbleibende Ausprägungen), vgl. den
+    Einführungsbaum in [@fig-02_tree_example]
+- binäre Aufteilungen zerstückeln die Daten weniger stark als die
+  Mehrfach-Splits von ID3
+- zur Vermeidung von Overfitting wird **Pruning** eingesetzt, da jeder weitere
+  Split die Unreinheit auf den Trainingsdaten nur senken kann (vgl. C4.5)
   - **Pre-Pruning:** Stoppen der Aufspaltung bei geringer Stichprobengröße oder
     kleinem Gini-Gewinn
-  - **Post-Pruning:** nachträgliches Zurückschneiden unnötiger Teilbäume
-- Post-Pruning liefert in der Regel bessere Resultate
+  - **Post-Pruning:** nachträgliches Zurückschneiden unnötiger Teilbäume; bei
+    CART als Cost-Complexity-Pruning mit Komplexitätsparameter $\alpha$, der per
+    Kreuzvalidierung gewählt wird [@james2023, Kap. 8.1]
+- Post-Pruning liefert in der Regel bessere Resultate, da Pre-Pruning
+  kurzsichtig ist: ein schwacher Split kann später gute Splits ermöglichen
 
 ## Regression mit Entscheidungsbäumen
 
 ### Idee von Regressionsbäumen
 
 - Ziel: Vorhersage einer **numerischen Zielvariable**, z.B. Anzahl Spieler
-- Struktur des Baums wie bei CART: binäre Splits entlang von Attributen
+- Struktur des Baums wie bei CART: Splits anhand von Attributen
 - jeder Blattknoten enthält den **arithmetischen Mittelwert** der Zielvariable
 - **kein Klassenlabel**, sondern reelle Vorhersagegröße
 
 - Kriterium für Attributwahl: **Varianzreduktion**
 - für Teilmenge $M_q$:
   $$
-  \text{Var}(M_q) = \frac{1}{|M_q|} \sum_{i \in M_q} (y_i - \bar{y}_q)^2
+  \text{Var}(M_q) = \frac{1}{|M_q|} \sum_{(\bs{x}_i, y_i) \in M_q}
+  (y_i - \bar{y}_q)^2
   $$
-- Aufteilung in $M_1$, $M_2$ mit Gewichtung:
+- Aufteilung in $M_q^L$, $M_q^R$ mit Gewichtung:
   $$
-  \text{Var}_{\text{split}} = \frac{|M_1|}{|M_q|} \text{Var}(M_1) +
-  \frac{|M_2|}{|M_q|} \text{Var}(M_2)
+  \text{Var}_{\text{split}} = \frac{|M_q^L|}{|M_q|} \text{Var}(M_q^L) +
+  \frac{|M_q^R|}{|M_q|} \text{Var}(M_q^R)
   $$
 - Ziel: **maximale Reduktion der Varianz**
   $$
   \text{gain}_\text{Var} = \text{Var}(M_q) - \text{Var}_{\text{split}}
   $$
 
-### Beispiel: Fußball-Datensatz (Regression)
+### Beispiel: Fußball-Datensatz (Regression) -- Daten
 
 | **Day** | **Outlook** | **Temperature** | **Humidity** | **Wind** | **Players** |
 | :-----: | :---------: | :-------------: | :----------: | :------: | ----------: |
@@ -582,52 +615,77 @@ _Titel: Trainingsdaten für die Regression: Wetterbedingungen und Spieleranzahl_
 
 - Ziel: Vorhersage der Spieleranzahl (numerisch) $\rightarrow$ Beispielattribut
   ''Outlook'' mit drei Ausprägungen
+- zur Vereinfachung splittet das Beispiel mehrfach (eine Teilmenge je
+  Ausprägung wie bei ID3); $\text{Var}_{\text{split}}$ ist dann die gewichtete
+  Summe über alle drei Teilmengen
 
 | **Outlook** | **Anzahl** | **Mittelwert** | **Varianz** | **Std.-Abw.** |
 | :---------: | ---------: | -------------: | ----------: | ------------: |
-|  Overcast   |          4 |          46.25 |       14.19 |          3.77 |
-|    Rain     |          5 |          39.20 |      101.36 |         10.07 |
-|     Sun     |          5 |          35.20 |       86.56 |          9.30 |
+|  Overcast   |          4 |          46.25 |       12.19 |          3.49 |
+|    Rain     |          5 |          39.20 |      118.16 |         10.87 |
+|     Sun     |          5 |          35.20 |       60.56 |          7.78 |
 
 _Titel: Spieleranzahl nach Outlook: Mittelwert, Varianz und Standardabweichung_
 
 **Formel Varianz und Standardabweichung:**
 
 $$
-\text{Var}(M) = \frac{1}{n} \sum_{i=1}^n (y_i - \bar{y})^2\;,\quad
+\text{Var}(M) = \frac{1}{|M|} \sum_{(\bs{x}_i, y_i) \in M} (y_i - \bar{y})^2\;,
+\quad
 \text{SD}(M) = \sqrt{\text{Var}(M)}
 $$
 
-### Beispiel: Fußball-Datensatz (Regression)
+### Beispiel: Fußball-Datensatz (Regression) -- Berechnungen
 
-- Gesamtvarianz (korrekt): $86.88$ \quad Gesamt-Std.-Abw. (wie im SB): $9.32$
-- gewichtete Varianz nach Outlook:
+- Gesamtvarianz und Standardabweichung:
 
   $$
   \begin{aligned}
-  \bar{y} &= \frac{1}{14} \sum_{i=1}^{14} y_i = \frac{607}{14} \approx 43.36
+  \bar{y} &= \frac{1}{14} \sum_{i=1}^{14} y_i = \frac{557}{14} \approx 39.79
   \\[1ex]
   \text{Var}(M) &= \frac{1}{14} \sum_{i=1}^{14} (y_i - \bar{y})^2
-  = \frac{1}{14} \left[ (25 - 43.36)^2 + (30 - 43.36)^2 + \dots
-  + (30 - 43.36)^2 \right] \\
-  &= \frac{1}{14} \cdot 1216.26 \approx 86.88 \\[1ex]
+  = \frac{1}{14} \left[ (25 - 39.79)^2 + (30 - 39.79)^2 + \dots
+  + (30 - 39.79)^2 \right] \\
+  &= \frac{1}{14} \cdot 1216.36 \approx 86.88 \\[1ex]
   \text{SD}(M) &= \sqrt{86.88} \approx 9.32
   \end{aligned}
   $$
 
+- gewichtete Varianz nach Outlook:
+
+  $$
+  \text{Var}_{\text{split}} = \frac{5}{14} \cdot 60.56
+  + \frac{4}{14} \cdot 12.19 + \frac{5}{14} \cdot 118.16
+  = 21.63 + 3.48 + 42.20 = 67.31
+  $$
+
 - **_Varianzreduktion:_**
+
   $$
   \text{gain}_\text{Var} = 86.88 - 67.31 = 19.57
   $$
+
+- Vergleich mit den anderen Attributen:
+
+  | Attribut    | $\text{Var}_{\text{split}}$ | $\text{gain}_\text{Var}$ |
+  | ----------- | :-------------------------: | :----------------------: |
+  | Outlook     |            67.31            |        **19.57**         |
+  | Temperature |            79.58            |           7.31           |
+  | Humidity    |            81.98            |           4.90           |
+  | Wind        |            83.51            |           3.37           |
+
 - gewichtete SD nach Outlook:
+
   $$
-  \text{SD}(M) = 9.32 \\[1ex]
-  \text{SD}_{\text{split}} =
-  \frac{5}{14} \cdot 9.30 + \frac{4}{14} \cdot 3.77 +
-  \frac{5}{14} \cdot 10.07
-  = 3.32 + 1.08 + 3.26 = 7.66 \\[1ex]
+  \begin{aligned}
+  \text{SD}(M) &= 9.32 \\[1ex]
+  \text{SD}_{\text{split}} &= \frac{5}{14} \cdot 7.78 + \frac{4}{14} \cdot 3.49
+  + \frac{5}{14} \cdot 10.87 = 2.78 + 1.00 + 3.88 = 7.66
+  \end{aligned}
   $$
+
 - **_''gain'' auf Basis SD:_** $\text{gain}_\text{SD} = 9.32 - 7.66 = 1.66$
+  (Variante; CART und ISLP verwenden die Varianz bzw. RSS)
 - **Splitkriterium**: Wähle Attribut mit maximaler Varianzreduktion, oder
   basierend auf Standardabweichung
 - **Blattwert**: arithmetisches Mittel der Zielwerte in jedem Blatt
