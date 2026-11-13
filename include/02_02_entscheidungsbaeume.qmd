@@ -210,12 +210,41 @@ wie überraschend ist die Klasse eines zufällig gezogenen Objekts?
   - 50/50 ($p_1 = p_2 = 0.5$): maximale Überraschung, $H(M) = 1$ Bit, d.h. im
     Mittel ist eine Ja/Nein-Frage nötig, um die Klasse zu erfahren
 
-## Iterative Dichotomiser 3 (ID3)
+## Iterative Dichotomiser 3 (ID3) {#id3}
 
-- $A^* = \arg\max_{A \in \mathcal{A}} \, \text{gain}(A)$: bestes Attribut für
-  Aufspaltung maximiert gain über Menge aller verfügbaren Attribute
-  $\mathcal{A}$
-- Ziel: maximale Reduktion der Unreinheit durch Auswahl des besten $A^*$
+- ID3 (Quinlan, 1986): klassisches Verfahren zum Aufbau von Entscheidungsbäumen
+  für kategoriale Attribute
+- top-down und _greedy_: in jedem Knoten wird das lokal beste Attribut gewählt,
+  getroffene Entscheidungen werden nicht revidiert
+- Auswahlkriterium: Informationsgewinn
+  - $A^* = \arg\max_{A \in \mathcal{A}} \, \text{gain}(A)$: bestes Attribut für
+    Aufspaltung maximiert gain über Menge aller verfügbaren Attribute
+    $\mathcal{A}$
+  - Ziel: maximale Reduktion der Unreinheit durch Auswahl des besten $A^*$
+
+**Algorithmus** für einen Knoten mit Menge $M$ und Attributen $\mathcal{A}$:
+
+1. berechne $H(M)$
+2. berechne $H_A(M)$ und $\text{gain}(A)$ für alle $A \in \mathcal{A}$
+3. wähle $A^*$ als Split-Attribut des Knotens
+4. teile $M$ gemäß der Ausprägungen von $A^*$ in $M_1, \dots, M_v$ (ein
+   Kindknoten je Ausprägung)
+5. wende 1.–4. rekursiv auf jedes $M_j$ an, mit $\mathcal{A} \setminus \{A^*\}$
+   (in $M_j$ hat $A^*$ für alle Objekte den Wert $a_j$, ein erneuter Split
+   brächte gain = 0)
+
+**Abbruch** (Knoten wird Blatt):
+
+- $M_j$ ist rein ($H(M_j) = 0$) -> Blatt mit dieser Klasse
+- keine Attribute mehr übrig -> Mehrheitsklasse in $M_j$
+- $M_j$ ist leer -> Mehrheitsklasse des Elternknotens
+- kein Informationsgewinn mehr möglich ($\text{gain}(A) = 0$ für alle
+  $A \in \mathcal{A}$) -> Mehrheitsklasse in $M_j$ (gängigste Variante)
+
+**Grenzen** (-> Motivation für C4.5, s.u.):
+
+- nur kategoriale Attribute, kein Pruning, daher Neigung zu Overfitting
+- gain bevorzugt Attribute mit vielen Ausprägungen
 
 ### Beispiel II: Fußball mit Entscheidungsbäumen -- Einführung
 
@@ -251,14 +280,9 @@ Spielergebnis_
 
 ### Beispiel II: Fußball mit Entscheidungsbäumen -- Berechnungen
 
-- Ziel: finde Attribut mit maximalem Informationsgewinn als Wurzelknoten
-  - [1.] wir berechnen $H(M)$
-  - [2.] anschließend $H_{A_j}(M)$ für alle vier Attribute $A_j$, $j=1,\ldots,4$
-  - [3.] Attribut mit maximalem $\text{gain}(A_j)$ bildet die Wurzel des Baums
-  - [4.] splitte den Baum auf Basis der Attributwerte in Unterbäume
-  - [5.] setze Schritte 2. - 4. fort, bis alle Elemente klassifiziert sind oder
-    kein Informationsgewinn mehr möglich (Uneindeutigkeit des
-    Klassifkationsproblems)
+- Ziel: finde Attribut mit maximalem Informationsgewinn als Wurzelknoten, d.h.
+  Schritte 1.–3. von [ID3](#id3) für $M$ mit
+  $\mathcal{A} = \{\text{Outlook}, \text{Temperature}, \text{Humidity}, \text{Wind}\}$
 
 **Klassenverteilung:** 9 $\times$ [Yes]{.cgr}, 5 $\times$ [No]{.crd}:
 \begin{align} H(M) &= -\frac{9}{14} \log_2 \frac{9}{14} - \frac{5}{14} \log_2
@@ -285,11 +309,12 @@ gain(Temperature)=0.029, gain(Humidity)=0.152, gain(Wind)=0.048
 ![](/figs/02_A_trees_example_02.png)
 
 - nach dem ersten Attributsplit entstehen wieder Teilbäume (s. **Abb. 2.2**)
-- für jeden dieser Teilbäume: erneut suchen des besten Attributs unter
-  **_allen_** Attributen (einschließlich des ersten _Outlook_)
-- Fortsetzung bis alle Objekte eindeutig klassifiziert sind oder kein
-  Informationsgewinn mehr möglich ist, z.B. wenn weitere Klassifizierung nicht
-  mehr möglich ist: danach zufällige Festsetzung oder Mehrheitsklasse
+- für jeden dieser Teilbäume: erneut suchen des besten Attributs unter den
+  **_verbleibenden_** Attributen, d.h. ohne _Outlook_ (s. [ID3](#id3),
+  Schritt 5)
+- Fortsetzung bis alle Objekte eindeutig klassifiziert sind oder ein anderes
+  Abbruchkriterium von [ID3](#id3) greift: dann Mehrheitsklasse (bei
+  Gleichstand zufällige Festsetzung)
 
 ### C4.5: Weiterentwicklung von ID3
 
