@@ -26,6 +26,44 @@
     \end{cases}
   $$
 
+### Weitere Aktivierungsfunktionen {#slp-aktivierungen .unlisted}
+
+| Funktion   | $\phi(z)$                  | Werte        | Einsatz            |
+|------------|----------------------------|--------------|--------------------|
+| Heaviside  | 1 für $z \geq 0$, sonst 0  | $\{0,1\}$    | Perzeptron         |
+| Signum     | $\pm 1$ je nach Vorzeichen | $\{-1,1\}$   | Perzeptron         |
+| Identität  | $z$                        | $\mathbb{R}$ | Output Regression  |
+| Sigmoid    | $1 / (1 + e^{-z})$         | $(0,1)$      | Output binär       |
+| tanh       | $\tanh(z)$                 | $(-1,1)$     | Hidden Layer       |
+| ReLU       | $\max(0, z)$               | $[0,\infty)$ | Hidden (Standard)  |
+| Leaky ReLU | $\max(\alpha z, z)$        | $\mathbb{R}$ | Hidden Layer       |
+| Softmax    | $e^{z_k} / \sum_c e^{z_c}$ | $(0,1)^C$    | Output $C$ Klassen |
+
+- Aus dem Studienbrief (SB 2, Tabelle 3.1):
+  - ReLU: eine der am häufigsten verwendeten Aktivierungsfunktionen; schnelle
+    Konvergenz, da die Gradienten für $z > 0$ nicht beschränkt sind
+  - Sigmoid: Wertebereich $(0,1)$, nicht nullzentriert; für große und kleine
+    $z$ Gradienten nahe 0 $\ra$ langsame Konvergenz möglich
+  - tanh: Wertebereich $(-1,1)$, nullzentriert;
+    $\tanh(z) = \frac{e^{z} - e^{-z}}{e^{z} + e^{-z}}$
+  - Softmax: ordnet bei Klassifikation jeder der $C$ Klassen eine
+    Wahrscheinlichkeit zu (Summe 1); wirkt auf den ganzen Vektor
+    $\bs{z} \in \mathbb{R}^C$, nicht elementweise
+
+- Weitere:
+  - Signum: $\phi(z) = 1$ für $z \geq 0$, sonst $-1$; wie Heaviside, aber
+    mit Klassen $\{-1, 1\}$
+  - Identität: keine Transformation, Output bleibt reell
+  - Leaky ReLU: kleine Steigung $\alpha$ (z.B. $0.01$) für $z < 0$, damit der
+    Gradient dort nicht 0 ist („tote“ Neuronen)
+
+- Faustregel für den Output Layer: Aktivierung passend zum Wertebereich der
+  $y_i$ wählen
+
+- Heaviside und Signum sind nicht differenzierbar $\ra$ geeignet für die
+  [Perzeptron-Lernregel](#slp-lernregel), nicht für Gradientenverfahren
+  (siehe [Grenzen des Perzeptrons](#slp-grenzen))
+
 ### Entscheidungsgrenze und Halbräume {.unlisted}
 
 - $z = \bs{w}^\top \bs{x} + b = 0$ stellt eine lineare Entscheidungsgrenze dar
