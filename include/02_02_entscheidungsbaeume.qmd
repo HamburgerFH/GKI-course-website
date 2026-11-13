@@ -479,6 +479,33 @@ $\mathcal{V}_1^R = \{\text{Sun}, \text{Rain}\}$.
   $p_R^q(\mathcal{V}_j^R) = 1 - p_L^q(\mathcal{V}_j^L)$
 - für einen festen Split kurz: $M_q^L$, $M_q^R$, $p_L^q$, $p_R^q$
 
+### CART: Beispiel (Fußball-Daten)
+
+- Wurzel $S_0$ mit $M_0 = M$, d.h. alle 14 Tage D1–D14, $|M_0| = 14$
+- Attribute $A_1 = \text{Outlook}$, $A_2 = \text{Temperature}$,
+  $A_3 = \text{Humidity}$, $A_4 = \text{Wind}$, also $j = 1, \dots, 4$ ($p = 4$)
+- betrachtet wird $j = 1$ (Outlook) mit Wertemenge
+  $\mathcal{V}_1 = \{\text{Sun}, \text{Overcast}, \text{Rain}\}$
+- Ausprägung eines Trainingsobjekts: für Tag D3 gilt
+  $A_1(\bs{x}_3) = x_{31} = \text{Overcast}$
+- binäre Partition: $\mathcal{V}_1^L = \{\text{Overcast}\}$,
+  $\mathcal{V}_1^R = \{\text{Sun}, \text{Rain}\}$
+  - $\mathcal{V}_1^L \cup \mathcal{V}_1^R = \mathcal{V}_1$ und
+    $\mathcal{V}_1^L \cap \mathcal{V}_1^R = \emptyset$
+- Zerlegung von $M_0$:
+  - $M_0^L(\mathcal{V}_1^L) = \{\text{D3}, \text{D7}, \text{D12}, \text{D13}\}$
+    (alle Tage mit Outlook = Overcast), $|M_0^L| = 4$
+  - $M_0^R(\mathcal{V}_1^R) = \{\text{D1}, \text{D2}, \text{D4}, \text{D5},
+    \text{D6}, \text{D8}, \text{D9}, \text{D10}, \text{D11}, \text{D14}\}$,
+    $|M_0^R| = 10$
+- Anteile: $p_L^0(\mathcal{V}_1^L) = \frac{4}{14} \approx 0.29$,
+  $p_R^0(\mathcal{V}_1^R) = 1 - \frac{4}{14} = \frac{10}{14} \approx 0.71$
+  (die hochgestellte 0 ist der Knotenindex $q = 0$, keine Potenz)
+- weitere Kandidaten für $j = 1$: $\{\text{Sun}\}$ vs.
+  $\{\text{Overcast}, \text{Rain}\}$ und $\{\text{Rain}\}$ vs.
+  $\{\text{Sun}, \text{Overcast}\}$; analog alle Partitionen von
+  $A_2, A_3, A_4$
+
 ### CART: Gini-Index und Knotenaufteilung
 
 ::: {#def-gini}
@@ -519,6 +546,17 @@ Klasse zuordnet.
 - $\text{Gini}(M_q^L)$ und $\text{Gini}(M_q^R)$ gemäß @def-gini mit den
   Klassenanteilen in $M_q^L$ bzw. $M_q^R$
 
+**Beispiel** (Fortsetzung, Partition $\{\text{Overcast}\}$ vs.
+$\{\text{Sun}, \text{Rain}\}$):
+
+- $\text{Gini}(M_0)$ mit 9 × Yes, 5 × No:
+  $1 - \left(\frac{9}{14}\right)^2 - \left(\frac{5}{14}\right)^2 \approx 0.459$
+- $\text{Gini}(M_0^L)$ mit 4 × Yes: $1 - 1^2 = 0$ (reine Menge)
+- $\text{Gini}(M_0^R)$ mit 5 × Yes, 5 × No:
+  $1 - 0.5^2 - 0.5^2 = 0.5$ (Maximum bei $K = 2$)
+- $\text{wGini}(M_0, \mathcal{V}_1^L) = \frac{4}{14} \cdot 0
+  + \frac{10}{14} \cdot 0.5 \approx 0.357$
+
 ### CART: Gini-Gewinn und Optimierung
 
 - Gini-Gewinn durch Partition $\mathcal{V}_j^L$ von Attribut $A_j$ (mit
@@ -544,6 +582,22 @@ Klasse zuordnet.
   $M_q^L = M_q^L(\mathcal{V}_{j^*}^{L,*})$ und
   $M_q^R = M_q^R(\mathcal{V}_{j^*}^{R,*})$, und die Aufspaltung beginnt von
   neuem
+
+**Beispiel** (Fortsetzung):
+
+- $\text{GiniGain}(M_0, \{\text{Overcast}\}) = 0.459 - 0.357 = 0.102$
+- Vergleich der drei Partitionen von Outlook:
+
+  | $\mathcal{V}_1^L$     | $\text{wGini}$ | $\text{GiniGain}$ |
+  | --------------------- | :------------: | :---------------: |
+  | $\{\text{Overcast}\}$ |     0.357      |     **0.102**     |
+  | $\{\text{Sun}\}$      |     0.394      |       0.066       |
+  | $\{\text{Rain}\}$     |     0.457      |       0.002       |
+
+- bester Outlook-Split: $\{\text{Overcast}\}$ vs. $\{\text{Sun}, \text{Rain}\}$;
+  CART vergleicht dies noch mit den besten Partitionen von $A_2, A_3, A_4$
+- Kinderknoten: $M_0^L$ ist rein und wird Blatt (Yes), $M_0^R$ wird weiter
+  aufgeteilt
 
 ### CART: Eigenschaften und Pruning
 
