@@ -212,7 +212,7 @@ wie überraschend ist die Klasse eines zufällig gezogenen Objekts?
 
 ## Iterative Dichotomiser 3 (ID3) {#id3}
 
-- ID3 (Quinlan, 1986): klassisches Verfahren zum Aufbau von Entscheidungsbäumen
+- ID3 [@quinlan1986]: klassisches Verfahren zum Aufbau von Entscheidungsbäumen
   für kategoriale Attribute
 - top-down und _greedy_: in jedem Knoten wird das lokal beste Attribut gewählt,
   getroffene Entscheidungen werden nicht revidiert
@@ -222,7 +222,16 @@ wie überraschend ist die Klasse eines zufällig gezogenen Objekts?
     $\mathcal{A}$
   - Ziel: maximale Reduktion der Unreinheit durch Auswahl des besten $A^*$
 
-**Algorithmus** für einen Knoten mit Menge $M$ und Attributen $\mathcal{A}$:
+::::: {#id3-algorithmus .algorithm}
+
+**Algorithmus 1:** ID3$(M, \mathcal{A})$
+
+::: {.alg-io}
+
+**Eingabe:** Menge $M$, Attribute $\mathcal{A}$ \
+**Ausgabe:** (Teil-)Baum mit Wurzel für $M$
+
+:::
 
 1. berechne $H(M)$
 2. berechne $H_A(M)$ und $\text{gain}(A)$ für alle $A \in \mathcal{A}$
@@ -230,8 +239,10 @@ wie überraschend ist die Klasse eines zufällig gezogenen Objekts?
 4. teile $M$ gemäß der Ausprägungen von $A^*$ in $M_1, \dots, M_v$ (ein
    Kindknoten je Ausprägung)
 5. wende 1.–4. rekursiv auf jedes $M_j$ an, mit $\mathcal{A} \setminus \{A^*\}$
-   -- **Grund**: in $M_j$ hat $A^*$ für alle Objekte den Wert $a_j$, ein
-   erneuter Split brächte gain = 0
+   [**Grund**: in $M_j$ hat $A^*$ für alle Objekte den Wert $a_j$, ein erneuter
+   Split brächte gain = 0]{.alg-comment}
+
+::: {.alg-stop}
 
 **Abbruch** (Knoten wird Blatt):
 
@@ -240,6 +251,10 @@ wie überraschend ist die Klasse eines zufällig gezogenen Objekts?
 - $M_j$ ist leer -> Mehrheitsklasse des Elternknotens
 - kein Informationsgewinn mehr möglich ($\text{gain}(A) = 0$ für alle
   $A \in \mathcal{A}$) -> Mehrheitsklasse in $M_j$ (gängigste Variante)
+
+:::
+
+:::::
 
 **Grenzen** (-> Motivation für C4.5, s.u.):
 
@@ -268,15 +283,14 @@ wie überraschend ist die Klasse eines zufällig gezogenen Objekts?
 _Titel: Trainingsdaten für die Klassifikation: Wetterbedingungen und
 Spielergebnis_
 
-- Daten: Wetterbedingungen an 14 Tagen, d.h. $M=14$ zu klassifizierende Objekte,
-  mit Attributen:
+- Daten: Wetterbedingungen an 14 Tagen, d.h. $|M| = 14$ zu klassifizierende
+  Objekte, mit Attributen:
   - Outlook: sun, overcast, rain
   - Temperature: hot, sweet, cool
   - Humidity: high, normal
   - Wind: high, low
-- Zielvariable der Klassifikation: ''Play''
-  - $\hookrightarrow$ Ausprägungen [Yes]{.cgr} es wurde Fußball gespielt vs.
-    [No]{.crd}, es wurde nicht gespielt
+- Zielvariable der Klassifikation `Play`: Ausprägungen [Yes]{.cgr} es wurde
+  Fußball gespielt vs. [No]{.crd}, es wurde nicht gespielt
 
 ### Beispiel II: Fußball mit Entscheidungsbäumen -- Berechnungen
 
@@ -285,6 +299,7 @@ Spielergebnis_
   $\mathcal{A} = \{\text{Outlook}, \text{Temperature}, \text{Humidity}, \text{Wind}\}$
 
 **Klassenverteilung:** 9 $\times$ [Yes]{.cgr}, 5 $\times$ [No]{.crd}:
+
 $$
 \begin{aligned}
 H(M) &= -\frac{9}{14} \log_2 \frac{9}{14} - \frac{5}{14} \log_2 \frac{5}{14}
@@ -305,45 +320,74 @@ Vergleich mit den anderen Informationsgewinnen:
 
 gain(Temperature)=0.029, gain(Humidity)=0.152, gain(Wind)=0.048
 
-**_Folge:_** Outlook wird als Wurzelknoten gewählt da
-[gain(outlook)=0.247]{.ctl} am höchsten.
+**Entscheidung:** Outlook wird als Wurzelknoten gewählt da
+[gain(outlook)=0.247]{.ctl} am höchsten
 
 ### Beispiel II: Fußball mit Entscheidungsbäumen -- Ergebnisse
 
-![](/figs/02_A_trees_example_02.png)
+![Aufteilung des Fußball-Datensatzes mit Hilfe des gain-Kriteriums: Outlook
+als Wurzelknoten, je Ausprägung eine Teilmenge $M_j$ (O, T, H, W = Outlook,
+Temperature, Humidity, Wind)](/figs/02_A_trees_example_02.png){#fig-02_tree_football}
 
-- nach dem ersten Attributsplit entstehen wieder Teilbäume (s. **Abb. 2.2**)
-- für jeden dieser Teilbäume: erneut suchen des besten Attributs unter den
-  **_verbleibenden_** Attributen, d.h. ohne _Outlook_ (s. [ID3](#id3),
-  Schritt 5)
+- nach dem ersten Attributsplit entstehen wieder Teilbäume (s.
+  [@fig-02_tree_football])
+- für jeden Teilbaum: erneut bestes Attributs unter **_verbleibenden_**
+  Attributen suchen, d.h. **ohne** `Outlook`
+  ([ID3, Schritt 5](#id3-algorithmus))
 - Fortsetzung bis alle Objekte eindeutig klassifiziert sind oder ein anderes
-  Abbruchkriterium von [ID3](#id3) greift: dann Mehrheitsklasse (bei Gleichstand
-  zufällige Festsetzung)
+  Abbruchkriterium von [ID3](#id3) greift, dann:
+  - Mehrheitsklasse
+  - oder bei Gleichstand zufällige Festsetzung
 
 ### C4.5: Weiterentwicklung von ID3
 
-- C4.5 verwendet wie ID3 Entropie als Kriterium, verbessert jedoch die Auswahl
-  der Attribute
-- **Problem:** Informationsgewinn bevorzugt Attribute mit vielen Ausprägungen
-- Lösung: **gainRatio** als Quotient aus Informationsgewinn und Entropie der
-  Aufteilung ''Split-Entropie'':
+- C4.5 [@quinlan1993] ist der Nachfolger von ID3 [@quinlan1986]: verwendet wie
+  ID3 Entropie als Kriterium, verbessert jedoch die Auswahl der Attribute
+- weitere Neuerungen gegenüber ID3: stetige Merkmale über Schwellenwerte
+  $A \le t$ (binärer Split, Merkmal darf im Teilbaum erneut vorkommen),
+  fehlende Werte, Pruning
+- **Problem:** Informationsgewinn ($\text{gain}(A)$) bevorzugt Attribute mit
+  vielen Ausprägungen
+- Lösung: **gainRatio** als Quotient aus Informationsgewinn ($\text{gain}(A)$)
+  und Entropie der Aufteilung ''Split-Entropie'':
 
   $$
   \text{gainRatio}(A) = \frac{\text{gain}(A)}{\text{SplitEntropy}(A)}
   $$
 
 - **Split Entropy:** misst die Informationsmenge zur Beschreibung der Aufteilung
-  selbst:
-  $$
-  \text{SplitEntropy}(A) = -\sum_{j=1}^v \frac{|M_j|}{|M|}
-  \log_2 \frac{|M_j|}{|M|}
-  $$
-- je mehr mögliche Ausprägungen ein Attribut hat, desto höher die Split-Entropie
+  selbst, d.h. wie überraschend ist, in welche Teilmenge $M_j$ ein zufällig
+  gezogenes Objekt fällt (Klassen spielen keine Rolle):
 
-- Informationsgewinn allein belohnt ''überpräzise'' Splits, z.B. durch ein
-  Attribut mit fast eindeutigem Wert
-- gainRatio normalisiert diesen Effekt und bevorzugt trennscharfe und
-  gleichzeitig generalisierende Attribute
+  $$
+  \text{SplitEntropy}(A) = -\sum_{j:\, |M_j| > 0} \frac{|M_j|}{|M|}
+  \log_2 \frac{|M_j|}{|M|} \;\le\; \log_2 v
+  $$
+
+- je mehr mögliche Ausprägungen ein Attribut hat, desto höher kann die
+  Split-Entropie werden (Maximum $\log_2 v$ bei Gleichverteilung); der
+  tatsächliche Wert hängt von der Verteilung auf die $M_j$ ab
+
+- Informationsgewinn ($\text{gain}(A)$) allein belohnt ''überpräzise'' Splits,
+  z.B. durch ein Attribut mit fast eindeutigem Wert
+- gainRatio normalisiert diesen Effekt (gain pro Bit Split-Information); da
+  kleine Split-Entropien gainRatio stark erhöhen, wählt C4.5 nur unter
+  Attributen mit mindestens durchschnittlichem $\text{gain}(A)$
+
+**Beispiel** (Fußball-Daten, Wurzelknoten):
+
+| Attribut    | $\text{gain}(A)$ | $\text{SplitEntropy}(A)$ | $\text{gainRatio}(A)$ |
+| ----------- | :--------------: | :----------------------: | :-------------------: |
+| Outlook     |      0.247       |          1.577           |       **0.156**       |
+| Temperature |      0.029       |          1.557           |         0.019         |
+| Humidity    |      0.152       |          1.000           |         0.152         |
+| Wind        |      0.048       |          0.985           |         0.049         |
+| Day         |      0.940       |          3.807           |         0.247         |
+
+- ohne Day: Outlook bleibt bestes Attribut, aber knapp vor Humidity
+- Day (jeder Tag eigene Teilmenge, alle $M_j$ rein): maximaler gain, aber
+  nutzlos für neue Tage; gainRatio dämpft von 0.940 auf 0.247, Day gewinnt
+  trotzdem -> ID-artige Attribute werden vorab entfernt
 
 ## CART: eine Alternative zur ID3/C4.5 Familie
 
@@ -376,6 +420,7 @@ gain(Temperature)=0.029, gain(Humidity)=0.152, gain(Wind)=0.048
   R_q^i(\mathcal{A}_i^R) &= \lbrace x^{(m)} \in M_q : a_i^{m} \in \mathcal{A}_i^R \rbrace
   \end{aligned}
   $$
+
 - wobei $a_i^{m}$ die konkrete Ausprägung eines Attributs $A_i$ für ein zu
   klassifizierendes Input(-objekt) $x^{(m)}$ bezeichnet und die
   Wahrscheinlichkeiten bzw. Anteile:
@@ -521,6 +566,7 @@ $$
   \text{SD}(M) &= \sqrt{86.88} \approx 9.32
   \end{aligned}
   $$
+
 - **_Varianzreduktion:_**
   $$
   \text{gain}_\text{Var} = 86.88 - 67.31 = 19.57
