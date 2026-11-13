@@ -52,6 +52,21 @@ Klassifikationsproblems mit Merkmalen $X_1$ und $X_2$ (rechts); Quelle:
 - sei $A$ ein Attribut/Merkmal mit $v$ möglichen Ausprägungen $a_1, \dots, a_v$
   ($v$ hängt von $A$ ab)
 
+::: {.callout-important title="Notation (Aufbau, Entropie, ID3, C4.5)"}
+
+$A$ ist ein Attribut mit den Ausprägungen $a_1, \dots, a_v$, und $A(\bs{x}_i)$
+ist der Wert von $A$ für Beobachtung $i$. Der Index $j$ zählt hier die
+**Ausprägungen**: $M_j$ enthält alle Objekte mit $A(\bs{x}_i) = a_j$,
+$j = 1, \dots, v$.
+
+**Beispiel** (Fußball-Daten, s.u.): $A = \text{Outlook}$ mit $v = 3$
+Ausprägungen $a_1 = \text{Sun}$, $a_2 = \text{Overcast}$, $a_3 = \text{Rain}$;
+für Tag D1 gilt $A(\bs{x}_1) = \text{Sun}$, und
+$M_1 = \{\text{D1}, \text{D2}, \text{D8}, \text{D9}, \text{D11}\}$ enthält alle
+Tage mit Outlook = Sun.
+
+:::
+
 - **gesucht**: Entscheidungsbaum, der $M$ möglichst gut trennt und vor allem auf
   ungesehene Daten generalisiert (perfekte Trennung von $M$ ist nicht das Ziel)
 - **Vorgehen**: Aufteilung von $M$ in Teilmengen $M_1, \dots, M_v$ gemäß $A$:
@@ -404,6 +419,22 @@ Temperature, Humidity, Wind)](/figs/02_A_trees_example_02.png){#fig-02_tree_foot
 ## CART: eine Alternative zur ID3/C4.5-Familie
 
 ### CART: Grundidee
+
+::: {.callout-important title="Notationswechsel (CART)"}
+
+Der Index $j$ zählt ab hier die **Attribute**: $A_j$ ist das $j$-te Merkmal mit
+$A_j(\bs{x}_i) = x_{ij}$, $j = 1, \dots, p$ (wie in
+[Grundlagen](02_01_grundlagen_und_definitionen.qmd)). Die Ausprägungen von
+$A_j$ werden als Menge $\mathcal{V}_j$ geschrieben.
+
+**Beispiel** (Fußball-Daten): $p = 4$ Attribute $A_1 = \text{Outlook}$,
+$A_2 = \text{Temperature}$, $A_3 = \text{Humidity}$, $A_4 = \text{Wind}$; für
+Tag D4 gilt $A_2(\bs{x}_4) = x_{42} = \text{Sweet}$. Wertemenge
+$\mathcal{V}_1 = \{\text{Sun}, \text{Overcast}, \text{Rain}\}$, ein binärer
+Split ist z.B. $\mathcal{V}_1^L = \{\text{Overcast}\}$,
+$\mathcal{V}_1^R = \{\text{Sun}, \text{Rain}\}$.
+
+:::
 
 - CART = **Classification And Regression Trees** [@breiman1984]
 - CART beginnt mit einem einzelnen Knoten $S_0$ (der Wurzel) und Menge von
