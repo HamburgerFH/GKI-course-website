@@ -276,6 +276,8 @@ wie überraschend ist die Klasse eines zufällig gezogenen Objekts?
 
 ### Beispiel II: Fußball mit Entscheidungsbäumen -- Einführung
 
+::: {.index-table}
+
 | **Day** | **Outlook** | **Temperature** | **Humidity** | **Wind** |  **Play**   |
 | :-----: | :---------: | :-------------: | :----------: | :------: | :---------: |
 |   D1    |     Sun     |       Hot       |     High     |   Low    | [No]{.crd}  |
@@ -292,6 +294,8 @@ wie überraschend ist die Klasse eines zufällig gezogenen Objekts?
 |   D12   |  Overcast   |      Sweet      |     High     |   High   | [Yes]{.cgr} |
 |   D13   |  Overcast   |       Hot       |    Normal    |   Low    | [Yes]{.cgr} |
 |   D14   |    Rain     |      Sweet      |     High     |   High   | [No]{.crd}  |
+
+:::
 
 _Titel: Trainingsdaten für die Klassifikation: Wetterbedingungen und
 Spielergebnis_
@@ -594,6 +598,8 @@ Klasse zuordnet.
 
 ### Beispiel: Fußball-Datensatz (Regression) -- Daten
 
+::: {.index-table}
+
 | **Day** | **Outlook** | **Temperature** | **Humidity** | **Wind** | **Players** |
 | :-----: | :---------: | :-------------: | :----------: | :------: | ----------: |
 |   D1    |     Sun     |       Hot       |     High     |   Low    |          25 |
@@ -610,6 +616,8 @@ Klasse zuordnet.
 |   D12   |  Overcast   |      Sweet      |     High     |   High   |          52 |
 |   D13   |  Overcast   |       Hot       |    Normal    |   Low    |          44 |
 |   D14   |    Rain     |      Sweet      |     High     |   High   |          30 |
+
+:::
 
 _Titel: Trainingsdaten für die Regression: Wetterbedingungen und Spieleranzahl_
 
@@ -695,15 +703,25 @@ $$
 ### Ensemble von Entscheidungsbäumen {.unlisted}
 
 - Random Forest kombiniert viele Entscheidungsbäume zu einem Modell
-- Idee: **Bootstrapping** + **zufällige Attributauswahl** pro Split
-- jeder Baum wird auf einer Zufallsstichprobe der Daten trainiert
+- Idee: **Bagging** (Bootstrap-Aggregation) + **zufällige Attributauswahl** pro
+  Split
+- jeder Baum wird auf einer Bootstrap-Stichprobe der Daten trainiert (Ziehen
+  mit Zurücklegen), die Vorhersagen aller Bäume werden aggregiert
 - bei jedem Split wird eine **Zufallsauswahl** von Attributen betrachtet
-- Vorhersage bei **Regression** vs. Klassifikation:
+- Vorhersage bei **Regression** (Mittelwert) vs. **Klassifikation**
+  (Mehrheitsvotum):
+
   $$
   \hat{y}_i = \frac{1}{T} \sum_{t=1}^T \hat{y}_{it}\;, \quad
-  \hat{p}_i = \frac{1}{T} \sum_{t=1}^T I(\hat{y}_{it} = 1)
-  \quad \Rightarrow \quad
-  \hat{y}_i =
+  \hat{g}_i = \arg\max_{k \in \{1, \dots, K\}} \sum_{t=1}^T
+  I(\hat{g}_{it} = k)
+  $$
+
+- binärer Spezialfall: mit dem Stimmenanteil
+  $\hat{p}_i = \frac{1}{T} \sum_{t=1}^T I(\hat{g}_{it} = 1)$ gilt
+
+  $$
+  \hat{g}_i =
   \begin{cases}
   1, & \hat{p}_i > 0.5 \\
   0, & \text{sonst}
@@ -713,7 +731,8 @@ $$
 ### Random Forest: Eigenschaften {.unlisted}
 
 - reduziert die Varianz einzelner Bäume durch Aggregation
-- robust gegenüber Rauschen und Overfitting
+- robuster gegenüber Rauschen und deutlich weniger anfällig für Overfitting als
+  Einzelbäume (mehr Bäume schaden nicht), aber nicht immun
 - keine Pruning-Strategien notwendig
 - keine starke Parametrierung erforderlich (nur Anzahl Bäume $T$ und
   Attributanzahl $m$ pro Split)
