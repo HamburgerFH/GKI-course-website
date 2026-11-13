@@ -1,59 +1,41 @@
-## Motivation Multilayer Perceptron (MLP) und Kernidee
-
-
+## Multilayer Perceptron (MLP): Motivation und Architektur
 
 ### Motivation: Warum Hidden Layer? {.unlisted}
 
-- Lineare Modelle wie das Perzeptron sind begrenzt  
-- Können nur linear separierbare Daten klassifizieren  
-- Beispiel: XOR ist nicht linear trennbar  
-- Lösung: Komposition einfacher nichtlinearer Funktionen  
+- Lineare Modelle wie das Perzeptron sind begrenzt, siehe
+  [Grenzen des Perzeptrons](02_03_SLP.qmd#slp-grenzen)
+- Können nur linear separierbare Daten klassifizieren
+- Beispiel: XOR ist nicht linear trennbar
+- Lösung: Komposition einfacher nichtlinearer Funktionen
 - $\ra$ Einführung verdeckter Schichten (Hidden Layer)
 
+### Architektur und Notation: MLP mit 1 Hidden Layer {#mlp-notation .unlisted}
 
+| Symbol           | Dimension                   | Bedeutung                     |
+| :--------------- | :-------------------------- | :---------------------------- |
+| $\bs{x}_i$       | $\mathbb{R}^d$              | Eingabevektor                 |
+| $h_1$            | natürliche Zahl             | Dimension des Hidden Layers   |
+| $\bs{W}^{(1)}$   | $\mathbb{R}^{h_1 \times d}$ | Gewichte Eingabe $\ra$ Hidden |
+| $\bs{b}^{(1)}$   | $\mathbb{R}^{h_1}$          | Bias im Hidden Layer          |
+| $\bs{a}_i^{(1)}$ | $\mathbb{R}^{h_1}$          | affiner Schritt im Hidden     |
+| $\phi$           | elementweise                | Aktivierung im Hidden Layer   |
+| $\bs{h}_i$       | $\mathbb{R}^{h_1}$          | Ausgabe des Hidden Layers     |
+| $\bs{W}^{(2)}$   | $\mathbb{R}^{1 \times h_1}$ | Gewichte Hidden $\ra$ Output  |
+| $b^{(2)}$        | $\mathbb{R}$                | Bias im Output Layer          |
+| $z_i^{(2)}$      | $\mathbb{R}$                | affiner Schritt im Output     |
+| $\sigma$         | $\mathbb{R} \ra (0,1)$      | Aktivierung im Output Layer   |
+| $\hat{y}_i$      | $(0,1)$                     | Ausgang                       |
 
-### Architektur eines MLP mit 1 Hidden Layer {.unlisted}
+- $\phi$: z.B. ReLU, $\tanh$, Sigmoid
+- $\sigma$: typisch Sigmoid bei binärer Klassifikation
+- Dimensionsüberprüfung:
+  - $\bs{W}^{(1)} \bs{x}_i \in \mathbb{R}^{h_1}$, da
+    $(h_1 \times d) \cdot (d \times 1) = h_1 \times 1$
+  - $\bs{W}^{(2)} \bs{h}_i \in \mathbb{R}$, da
+    $(1 \times h_1) \cdot (h_1 \times 1) = 1 \times 1$
+  - $\hat{y}_i = \sigma(\bs{W}^{(2)} \bs{h}_i + b^{(2)}) \in (0,1)$
 
-- Eingabe: $\bs{x}_i \in \mathbb{R}^d$  
-- Hidden Layer: Dimension $h_1$  
-- Ausgang: $\hat{y}_i \in (0,1)$
-
-### Gewichtsmatrizen und Bias-Vektoren {.unlisted}
-
-- Eingabe $\rightarrow$ Hidden: $\bs{W}^{(1)} \in \mathbb{R}^{h_1 \times d},\quad \bs{b}^{(1)} \in \mathbb{R}^{h_1}$
-
-- Hidden $\rightarrow$ Output: $\bs{W}^{(2)} \in \mathbb{R}^{1 \times h_1},\quad b^{(2)} \in \mathbb{R}$
-
-
-### Forward Pass {.unlisted}
-
-- Hidden Layer: $\bs{a}_i^{(1)} = \bs{W}^{(1)} \bs{x}_i + \bs{b}^{(1)} \in \mathbb{R}^{h_1}$ und $\bs{h}_i = \phi\left( \bs{a}_i^{(1)} \right) \in \mathbb{R}^{h_1}$
-
-- Output Layer: $z_i^{(2)} = \bs{W}^{(2)} \bs{h}_i + b^{(2)} \in \mathbb{R}$ und $\hat{y}_i = \sigma(z_i^{(2)}) \in (0,1)$
-
-
-
-## Modelaufbau
-
-
-
-### Komponenten des Modells {.unlisted}
-
-- $\phi$: Aktivierungsfunktion im Hidden Layer (z.B. ReLU, $\tanh$, Sigmoid)  
-- $\sigma$: Aktivierung im Output Layer (typisch Sigmoid bei binärer Klassifikation)
-
-
-
-### Dimensionsüberprüfung {.unlisted}
-
-- $\bs{x}_i \in \mathbb{R}^d$  
-- $\bs{W}^{(1)} \bs{x}_i \in \mathbb{R}^{h_1}$  
-- $\bs{h}_i \in \mathbb{R}^{h_1}$  
-- $\hat{y}_i = \sigma(\bs{W}^{(2)} \bs{h}_i + b^{(2)}) \in (0,1)$
-
-
-
-### Beispiel {.unlisted}
+### Netzstruktur und Anzahl der Parameter {.unlisted}
 
 - Beispielhafte Netzstruktur:
 
@@ -70,93 +52,65 @@
 
 - Doppelt $h_1$: Bias im Hidden Layer und Gewichte im Output
 
-
 ### Klarstellung: Warum $\bs{W}^{(2)} \in \mathbb{R}^{1 \times h_1}$? {.unlisted}
 
-- Die Form von $\bs{W}^{(2)}$ hängt **nicht** von der Aktivierungsfunktion $\phi$ ab  
-- $\phi$ wirkt elementweise auf Vektoren in $\mathbb{R}^{h_1}$  
-- $\phi$ verlangt **keine** Skalareingabe im Output-Layer
+- Die Form von $\bs{W}^{(2)}$ hängt **nicht** von der Aktivierungsfunktion
+  $\phi$ ab:
+  - $\phi$ wirkt elementweise auf Vektoren in $\mathbb{R}^{h_1}$
+  - $\phi$ verlangt **keine** Skalareingabe im Output-Layer
 
+- Die Outputstruktur bestimmt die Form von $\bs{W}^{(2)}$:
+  - Ziel: skalare Ausgabe $\hat{y}_i \in (0,1)$
+  - Dazu: $\bs{W}^{(2)}$ muss $\bs{h}_i \in \mathbb{R}^{h_1}$ zu Skalar
+    kombinieren:
 
+    $$
+    z_i^{(2)} = \bs{W}^{(2)} \bs{h}_i + b^{(2)} \in \mathbb{R}
+    $$
 
-### Klarstellung: Outputstruktur bestimmt Form von $\bs{W}^{(2)}$ {.unlisted}
-
-- Ziel: skalare Ausgabe $\hat{y}_i \in (0,1)$  
-- Dazu: $\bs{W}^{(2)}$ muss $\bs{h}_i \in \mathbb{R}^{h_1}$ zu Skalar kombinieren:
-
-  $$
-  z_i^{(2)} = \bs{W}^{(2)} \bs{h}_i + b^{(2)} \in \mathbb{R}
-  $$
-
-- Deshalb: $\bs{W}^{(2)} \in \mathbb{R}^{1 \times h_1}$
-
-
+  - Deshalb: $\bs{W}^{(2)} \in \mathbb{R}^{1 \times h_1}$
 
 ### Achtung: Erweiterung auf $C$ Klassen (Softmax) {.unlisted}
 
 - Bei Klassifikation mit $C$ Klassen:
   - Output ist Vektor $\hat{\bs{y}}_i \in \mathbb{R}^C$
   - Gewichtsmatrix: $\bs{W}^{(2)} \in \mathbb{R}^{C \times h_1}$
-- Softmax erzeugt Wahrscheinlichkeitsverteilung über $C$ Klassen  
-- **Fazit**: Form von $\bs{W}^{(2)}$ ergibt sich aus **gewünschter Ausgabedimension**
-
-
+- Softmax erzeugt Wahrscheinlichkeitsverteilung über $C$ Klassen
+- **Fazit**: Form von $\bs{W}^{(2)}$ ergibt sich aus
+  **gewünschter Ausgabedimension**
 
 ## Vorwärtspropagation im MLP
 
+### Vorwärtspass {#mlp-vorwaertspass .unlisted}
 
+Ziel: vollständige Vorwärtspropagation im MLP formal darstellen, Notation wie
+in der [Tabelle oben](#mlp-notation)
 
-### Ziel {.unlisted}
-
-- Vollständige Vorwärtspropagation im MLP formal darstellen  
-- Notation:
-  - $\bs{x}_i \in \mathbb{R}^d$: Eingabevektor  
-  - $h_1$: Dimension des Hidden Layers  
-  - $\phi$: Aktivierung im Hidden Layer  
-  - $\sigma$: Aktivierung im Output Layer
-
-
-
-### Gewichtsmatrizen und Biasvektoren {.unlisted}
-
-- $\bs{W}^{(1)} \in \mathbb{R}^{h_1 \times d}$, $\bs{b}^{(1)} \in \mathbb{R}^{h_1}$  
-- $\bs{W}^{(2)} \in \mathbb{R}^{1 \times h_1}$, $b^{(2)} \in \mathbb{R}$
-
-
-
-### Vorwärtspass: Hidden Layer {.unlisted}
-
-- Affiner Schritt:
+- Hidden Layer, affiner Schritt:
 
   $$
   \bs{a}_i^{(1)} = \bs{W}^{(1)} \bs{x}_i + \bs{b}^{(1)} \in \mathbb{R}^{h_1}
   $$
 
-- Aktivierung (elementweise):
+- Hidden Layer, Aktivierung (elementweise):
 
   $$
   \bs{h}_i = \phi\left( \bs{a}_i^{(1)} \right) \in \mathbb{R}^{h_1}
   $$
 
-
-
-### Vorwärtspass: Output Layer {.unlisted}
-
-- Affiner Schritt:
+- Output Layer, affiner Schritt:
 
   $$
   z_i^{(2)} = \bs{W}^{(2)} \bs{h}_i + b^{(2)} \in \mathbb{R}
   $$
 
-- Aktivierung:
+- Output Layer, Aktivierung:
 
   $$
   \hat{y}_i = \sigma(z_i^{(2)}) \in (0,1)
   $$
 
-
-
-### Gesamtmodell als Funktion {.unlisted}
+### Gesamtmodell als Funktion {#mlp-gesamtmodell .unlisted}
 
 - Komposition der Schritte:
 
@@ -170,18 +124,12 @@
   \theta = \left\{ \bs{W}^{(1)}, \bs{b}^{(1)}, \bs{W}^{(2)}, b^{(2)} \right\}
   $$
 
-
-
-## Vorwärtspropagation im MLP: Beispiel
-
-
-
 ### Beispiel: Hidden Layer {.unlisted}
 
-- $d = 2$, $h_1 = 3$  
-- $\bs{x}_i = \begin{pmatrix} 1 \\ -1 \end{pmatrix}$  
-- $\bs{W}^{(1)} = \begin{pmatrix} 1 & 0 \\ 0 & -1 \\ 1 & 1 \end{pmatrix}$,  
-  $\bs{b}^{(1)} = \begin{pmatrix} 0 \\ 1 \\ 0 \end{pmatrix}$  
+- $d = 2$, $h_1 = 3$
+- $\bs{x}_i = \begin{pmatrix} 1 \\ -1 \end{pmatrix}$
+- $\bs{W}^{(1)} = \begin{pmatrix} 1 & 0 \\ 0 & -1 \\ 1 & 1 \end{pmatrix}$,
+  $\bs{b}^{(1)} = \begin{pmatrix} 0 \\ 1 \\ 0 \end{pmatrix}$
 - Aktivierung: $\phi = \text{ReLU}$
 
 $$
@@ -214,69 +162,65 @@ $$
 \hat{y}_i = \sigma(-1) \approx 0.2689
 $$
 
-
-
 ### Interpretation {.unlisted}
 
-- Hidden Layer $\ra$ nichtlineare Repräsentation der Eingabe  
-- Output Layer $\ra$ linearer Schritt + Sigmoid $\ra$ Wahrscheinlichkeit  
+- Hidden Layer $\ra$ nichtlineare Repräsentation der Eingabe
+- Output Layer $\ra$ linearer Schritt + Sigmoid $\ra$ Wahrscheinlichkeit
 - Gesamtmodell ist vollständig differenzierbar
-
-
 
 ## Backpropagation
 
-
-
 ### Ziel {.unlisted}
 
-- Effizienter Gradient der Verlustfunktion bezüglich aller Modellparameter:
-
-  $$
-  \theta = \left\{ \bs{W}^{(1)}, \bs{b}^{(1)}, \bs{W}^{(2)}, b^{(2)} \right\}
-  $$
+- Effizienter Gradient der Verlustfunktion bezüglich aller Modellparameter
+  $\theta$ aus dem [Gesamtmodell](#mlp-gesamtmodell)
 
 - Zentrale Methode: Backpropagation basierend auf Kettenregel der Ableitung
 
+### Ausgangspunkt: Vorwärtspass und Verlust {.unlisted}
 
+- Der [Vorwärtspass](#mlp-vorwaertspass) als Kette, ergänzt um den Verlust:
 
-### Wiederholung: Vorwärtspass {.unlisted}
+  $$
+  \bs{x}_i
+  \xrightarrow{\bs{W}^{(1)},\, \bs{b}^{(1)}} \bs{a}_i^{(1)}
+  \xrightarrow{\phi} \bs{h}_i
+  \xrightarrow{\bs{W}^{(2)},\, b^{(2)}} z_i^{(2)}
+  \xrightarrow{\sigma} \hat{y}_i
+  \xrightarrow{y_i} \mathcal{L}_i
+  $$
 
-$$
-\bs{a}_i^{(1)} = \bs{W}^{(1)} \bs{x}_i + \bs{b}^{(1)} \in \mathbb{R}^{h_1}
-$$
-$$
-\bs{h}_i = \phi\left( \bs{a}_i^{(1)} \right) \in \mathbb{R}^{h_1}
-$$
-$$
-z_i^{(2)} = \bs{W}^{(2)} \bs{h}_i + b^{(2)} \in \mathbb{R}
-$$
-$$
-\hat{y}_i = \sigma(z_i^{(2)}) \in (0,1)
-$$
+- Verlust: log loss wie im
+  [differenzierbaren Perzeptron](02_03_SLP.qmd#slp-gradienten):
 
-$$
-\mathcal{L}_i = -\left[ y_i \log \hat{y}_i + (1 - y_i) \log(1 - \hat{y}_i) \right]
-$$
+  $$
+  \mathcal{L}_i = -\left[ y_i \log \hat{y}_i + (1 - y_i) \log(1 - \hat{y}_i) \right]
+  $$
+
+- Backpropagation durchläuft diese Kette rückwärts, von $\mathcal{L}_i$ zu den
+  Parametern
 
 ### Schritt 1: Ableitung am Output {.unlisted}
 
-- Gesucht:  
+- Gesucht:
   $$
   \frac{\partial \mathcal{L}_i}{\partial z_i^{(2)}}
   $$
 
-- Herleitung:
-  - $\mathcal{L}_i$ hängt von $\hat{y}_i = \sigma(z_i^{(2)})$ ab  
-  - $\frac{d}{dz} \mathcal{L}_i = (\sigma(z_i^{(2)}) - y_i) \cdot \sigma'(z_i^{(2)})$  
-  - mit $\sigma'(z) = \sigma(z)(1 - \sigma(z))$
+- Herleitung, dieselbe Rechnung wie im
+  [SLP](02_03_SLP.qmd#slp-gradienten):
+  - $\mathcal{L}_i$ hängt von $\hat{y}_i = \sigma(z_i^{(2)})$ ab
+  - Kettenregel:
+    $\frac{\partial \mathcal{L}_i}{\partial z_i^{(2)}}
+    = \frac{\hat{y}_i - y_i}{\hat{y}_i (1 - \hat{y}_i)} \cdot
+    \sigma'(z_i^{(2)})$
+  - mit $\sigma'(z) = \sigma(z)(1 - \sigma(z))$ kürzt sich der Nenner
 
-- Ergibt:
+- Ergibt den Fehlerterm am Output:
   $$
-  \frac{\partial \mathcal{L}_i}{\partial z_i^{(2)}} = \hat{y}_i - y_i
+  \delta_i^{(2)} = \frac{\partial \mathcal{L}_i}{\partial z_i^{(2)}}
+  = \hat{y}_i - y_i
   $$
-
-
 
 ### Schritt 2: Gradienten Output Layer {.unlisted}
 
@@ -290,19 +234,16 @@ $$
   \frac{\partial \mathcal{L}_i}{\partial b^{(2)}} = \hat{y}_i - y_i
   $$
 
-
-
 ### Schritt 3: Fehlerterm im Hidden Layer {.unlisted}
 
 - Fehlerterm wird rückwärts weitergegeben:
   $$
-  \bs{\delta}_i^{(1)} = (\hat{y}_i - y_i) \cdot \bs{W}^{(2)\top} \circ \phi'\left( \bs{a}_i^{(1)} \right)
+  \bs{\delta}_i^{(1)} = \frac{\partial \mathcal{L}_i}{\partial \bs{a}_i^{(1)}}
+  = (\hat{y}_i - y_i) \cdot \bs{W}^{(2)\top} \circ \phi'\left( \bs{a}_i^{(1)} \right)
   $$
 
-- $\circ$: Hadamard-Produkt (elementweise Multiplikation)  
+- $\circ$: Hadamard-Produkt (elementweise Multiplikation)
 - $\phi'(\bs{a}_i^{(1)})$: Ableitung der Aktivierungsfunktion pro Neuron
-
-
 
 ### Schritt 4: Gradienten Hidden Layer {.unlisted}
 
@@ -318,52 +259,59 @@ $$
 
 ### Gesamtalgorithmus: Backpropagation {.unlisted}
 
-- Für jedes $i = 1, \dots, N$:
-  1. **Vorwärtspass**: berechne $\hat{y}_i$  
-  2. **Fehlerterm**: $\delta_i^{(2)} = \hat{y}_i - y_i$  
-  3. **Rückpropagation**: berechne $\bs{\delta}_i^{(1)}$  
-  4. **Gradienten** für alle Gewichte und Bias berechnen  
-  5. **SGD-Update**:
-     $$
-     \theta \leftarrow \theta - \eta \cdot \nabla_\theta \mathcal{L}_i
-     $$
+::::: {#alg-backprop}
 
+#### Backpropagation mit SGD
 
+::: {.alg-io}
+
+**Eingabe:** Trainingsdaten $\{(\bs{x}_i, y_i)\}_{i=1}^N$, Parameter $\theta$,
+Lernrate $\eta > 0$ \
+**Ausgabe:** aktualisierte Parameter $\theta$
+
+:::
+
+1. **für** jedes $i = 1, \dots, N$:
+2. &emsp;**Vorwärtspass**: berechne $\hat{y}_i$
+3. &emsp;**Fehlerterm** (Schritt 1): $\delta_i^{(2)} = \hat{y}_i - y_i$
+4. &emsp;**Rückpropagation** (Schritt 3): berechne $\bs{\delta}_i^{(1)}$
+5. &emsp;**Gradienten** für alle Gewichte und Bias berechnen (Schritte 2
+   und 4)
+6. &emsp;**SGD-Update**:
+   $\theta \leftarrow \theta - \eta \cdot \nabla_\theta \mathcal{L}_i$
+
+:::::
 
 ## Training und praktische Aspekte
 
-
-
 ### Wahl von Lernrate und Initialisierung {.unlisted}
 
-- Zu große Lernrate $\eta$ $\rightarrow$ Divergenz  
-- Zu kleine Lernrate $\rightarrow$ langsames Lernen  
-- Häufig: Start mit moderatem $\eta$ und Reduktion über Epochen  
+- Zu große Lernrate $\eta$ $\rightarrow$ Divergenz
+- Zu kleine Lernrate $\rightarrow$ langsames Lernen
+- Häufig: Start mit moderatem $\eta$ und Reduktion über Epochen
 - Initialisierung der Gewichte:
-  - Kleine Zufallswerte (z.B. Normalverteilung)  
+  - Kleine Zufallswerte (z.B. Normalverteilung)
   - Vermeidung von Symmetrie: nicht alle Gewichte = 0
-
-
-
-### Overfitting und Generalisierung {.unlisted}
-
-- Zu hohe Modellkapazität $\rightarrow$ Anpassung an Rauschen in den Trainingsdaten  
-- Symptome:
-  - Training loss sinkt weiter, Validation loss steigt  
-  - Klassifikationsfehler im Test höher als erwartet
-- Lösung: Regularisierung oder Early Stopping
-
 
 ### Mini-Batch Training und SGD {.unlisted}
 
-- **SGD**: Gewichtsupdate nach jedem Datenpunkt  
-- **Batch Gradient Descent**: über alle Daten summieren  
-- **Mini-Batch SGD**:
-  - Reduzierter Rechenaufwand pro Schritt  
-  - Stabilerer Verlauf durch Mittelung über kleine Teilmengen  
+- **SGD**: Gewichtsupdate nach jedem Datenpunkt
+- **Batch Gradient Descent**: über alle Daten summieren
+- Formeln für beide: siehe
+  [Update-Regeln im SLP](02_03_SLP.qmd#slp-update-regeln)
+- **Mini-Batch SGD**: Update nach jeweils $B$ Datenpunkten
+  - Reduzierter Rechenaufwand pro Schritt
+  - Stabilerer Verlauf durch Mittelung über kleine Teilmengen
 - Typische Batchgrößen: $B = 32, 64, 128$
 
+### Overfitting und Generalisierung {.unlisted}
 
+- Zu hohe Modellkapazität $\rightarrow$ Anpassung an Rauschen in den
+  Trainingsdaten
+- Symptome:
+  - Training loss sinkt weiter, Validation loss steigt
+  - Klassifikationsfehler im Test höher als erwartet
+- Lösung: Regularisierung oder Early Stopping
 
 ### Regularisierung {.unlisted}
 
@@ -372,19 +320,18 @@ $$
   \mathcal{L}_\text{reg} = \mathcal{L} + \lambda \|\bs{W}\|_2^2
   $$
 
-- Kontrolliert die Größe der Gewichte, verhindert Überanpassung  
+- Kontrolliert die Größe der Gewichte, verhindert Überanpassung
 
 - **Dropout**:
-  - Zufälliges Deaktivieren von Neuronen während des Trainings  
+  - Zufälliges Deaktivieren von Neuronen während des Trainings
   - Erhöht Robustheit, reduziert Abhängigkeit einzelner Pfade
-
-
 
 ### Grenzen klassischer MLPs {.unlisted}
 
-- Keine Gedächtnisstruktur $\rightarrow$ nicht geeignet für zeitabhängige Daten  
-- Eingaben müssen fester Länge sein $\rightarrow$ keine sequenzielle Verarbeitung  
+- Keine Gedächtnisstruktur $\rightarrow$ nicht geeignet für zeitabhängige Daten
+- Eingaben müssen fester Länge sein $\rightarrow$ keine sequenzielle
+  Verarbeitung
 - Training bei tieferen Architekturen problematisch:
-  - Vanishing Gradient  
+  - Vanishing Gradient
   - Rechenaufwand steigt stark
 - Deshalb: CNNs für Bilddaten, RNNs/LSTMs für Sequenzen
