@@ -401,43 +401,48 @@ Temperature, Humidity, Wind)](/figs/02_A_trees_example_02.png){#fig-02_tree_foot
   nutzlos für neue Tage; gainRatio dämpft von 0.940 auf 0.247, Day gewinnt
   trotzdem -> ID-artige Attribute werden vorab entfernt
 
-## CART: eine Alternative zur ID3/C4.5 Familie
+## CART: eine Alternative zur ID3/C4.5-Familie
 
-### Cart -- Grundidee
+### CART: Grundidee
 
-- CART beginnt mit einem einzelnen Knoten $L_0$ (der Wurzel) und Menge von
+- CART = **Classification And Regression Trees** [@breiman1984]
+- CART beginnt mit einem einzelnen Knoten $S_0$ (der Wurzel) und Menge von
   Objekten $M_0$ ($=M$)
-- jeder Knoten $L_q$ verarbeitet eine Teilmenge $M_q \subseteq M$ der Daten
-- wenn alle Elemente in $M_q$ die gleiche Klasse haben $\rightarrow$ $L_q$ wird
+- jeder Knoten $S_q$ verarbeitet eine Teilmenge $M_q \subseteq M$ der Daten
+- wenn alle Elemente in $M_q$ die gleiche Klasse haben $\rightarrow$ $S_q$ wird
   Blatt
-- falls für eine Untermenge $M_q$ kein Informationsgewinn mehr möglich ist:
-  - dann zufällige Festsetzung der Kategoriezugehörigkeit
-  - oder Festsetzung der Kategoriezugehörigkeit mit Wert der Mehrheitskategorie
-  - oder als Mittelwert über Kategorien (bei metrischen Werten z.B.
-    Regressionsbäumen)
-- sonst: wähle Attribut $A_i$ unter allen Attributen, für $i=1,\ldots,p$, mit
-  Menge von Attributwerten $\mathcal{A}_i$, sodass eine optimale Aufspaltung von
+- falls für eine Untermenge $M_q$ kein Split den Gini-Index mehr verringert
+  oder ein Abbruchkriterium greift (z.B. Mindestgröße von $M_q$): $S_q$ wird
+  Blatt mit
+  - Mehrheitsklasse in $M_q$ (Klassifikation)
+  - bei Gleichstand zufälliger Festsetzung der Klasse
+  - Mittelwert der Zielwerte $y_i$ in $M_q$ (Regressionsbäume)
+- sonst: wähle Attribut $A_j$ unter allen Attributen, für $j=1,\ldots,p$, mit
+  Menge von Attributwerten $\mathcal{V}_j$, sodass eine optimale Aufspaltung von
   $M_q$ entsteht
-  - $\hookrightarrow$ **_Optimalitätsmaß:_** nicht Entropie sondern _Gini-Index_
-    !
+  - $\hookrightarrow$ **_Optimalitätsmaß:_** Standard ist der _Gini-Index_
+    (Entropie ebenfalls möglich)
 - es werden **binäre Partitionen**, d.h. Partitionen mit den Eigenschaften
-  $\mathcal{A}_i^L \cup \mathcal{A}_i^R = \mathcal{A}_i$, und
-  $\mathcal{A}_i^L \cap \mathcal{A}_i^R = \emptyset$ betrachtet; diese
-  definieren dann auch eine Zerlegung von $M_q$ zwei ebenfalls disjunkte
+  $\mathcal{V}_j^L \cup \mathcal{V}_j^R = \mathcal{V}_j$, und
+  $\mathcal{V}_j^L \cap \mathcal{V}_j^R = \emptyset$ betrachtet; diese
+  definieren dann auch eine Zerlegung von $M_q$ in zwei ebenfalls disjunkte
   Teilmengen:
 
   $$
   \begin{aligned}
-  L_q^i(\mathcal{A}_i^L) &= \lbrace x^{(m)} \in M_q : a_i^{m} \in \mathcal{A}_i^L \rbrace \\
-  R_q^i(\mathcal{A}_i^R) &= \lbrace x^{(m)} \in M_q : a_i^{m} \in \mathcal{A}_i^R \rbrace
+  M_q^L(\mathcal{V}_j^L) &= \lbrace (\bs{x}_i, g_i) \in M_q :
+  A_j(\bs{x}_i) \in \mathcal{V}_j^L \rbrace \\
+  M_q^R(\mathcal{V}_j^R) &= \lbrace (\bs{x}_i, g_i) \in M_q :
+  A_j(\bs{x}_i) \in \mathcal{V}_j^R \rbrace
   \end{aligned}
   $$
 
-- wobei $a_i^{m}$ die konkrete Ausprägung eines Attributs $A_i$ für ein zu
-  klassifizierendes Input(-objekt) $x^{(m)}$ bezeichnet und die
-  Wahrscheinlichkeiten bzw. Anteile:
-  $p_{iL}^q(\mathcal{A}_i^L) = \frac{L_q^i(\mathcal{A}_i^L)}{M_q}$ und
-  $p_{iR}^q(\mathcal{A}_i^R) = 1 - p_{iL}^q(\mathcal{A}_i^L)$
+- wobei $A_j$ das $j$-te Merkmal ist und $A_j(\bs{x}_i) = x_{ij}$ die konkrete
+  Ausprägung von $A_j$ für ein Trainingsobjekt $(\bs{x}_i, g_i)$ bezeichnet und
+  die Wahrscheinlichkeiten bzw. Anteile:
+  $p_L^q(\mathcal{V}_j^L) = \frac{|M_q^L(\mathcal{V}_j^L)|}{|M_q|}$ und
+  $p_R^q(\mathcal{V}_j^R) = 1 - p_L^q(\mathcal{V}_j^L)$
+- für einen festen Split kurz: $M_q^L$, $M_q^R$, $p_L^q$, $p_R^q$
 
 ### CART: Gini-Index und Knotenaufteilung
 
