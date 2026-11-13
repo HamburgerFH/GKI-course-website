@@ -274,7 +274,7 @@ wie überraschend ist die Klasse eines zufällig gezogenen Objekts?
 - nur kategoriale Attribute, kein Pruning, daher Neigung zu Overfitting
 - gain bevorzugt Attribute mit vielen Ausprägungen
 
-### Beispiel II: Fußball mit Entscheidungsbäumen -- Einführung
+### Beispiel: Fußball-Datensatz (Klassifikation) -- Einführung
 
 ::: {.index-table}
 
@@ -309,7 +309,7 @@ Spielergebnis_
 - Zielvariable der Klassifikation `Play`: Ausprägungen [Yes]{.cgr} es wurde
   Fußball gespielt vs. [No]{.crd}, es wurde nicht gespielt
 
-### Beispiel II: Fußball mit Entscheidungsbäumen -- Berechnungen
+### Beispiel: Fußball-Datensatz (Klassifikation) -- Berechnungen
 
 - Ziel: finde Attribut mit maximalem Informationsgewinn als Wurzelknoten, d.h.
   Schritte 1.–3. von [@alg-id3] für $M$ mit
@@ -340,7 +340,7 @@ gain(Temperature)=0.029, gain(Humidity)=0.152, gain(Wind)=0.048
 **Entscheidung:** Outlook wird als Wurzelknoten gewählt da
 [gain(outlook)=0.247]{.ctl} am höchsten
 
-### Beispiel II: Fußball mit Entscheidungsbäumen -- Ergebnisse
+### Beispiel: Fußball-Datensatz (Klassifikation) -- Ergebnisse
 
 ![Aufteilung des Fußball-Datensatzes mit Hilfe des gain-Kriteriums: Outlook
 als Wurzelknoten, je Ausprägung eine Teilmenge $M_j$ (O, T, H, W = Outlook,
@@ -738,60 +738,3 @@ $$
   Attributanzahl $m$ pro Split)
 - Ensemble-Vorhersagen sind oft genauer und stabiler als Einzelbäume
 - Nachteile: geringe Interpretierbarkeit, hoher Rechenaufwand bei vielen Bäumen
-
-## Hyperparameter-Optimierung: Grundlagen
-
-- **Parameter**: durch den Datensatz bestimmt, vom Algorithmus gelernt (z.B.
-  Regressionskoeffizienten, Gewichte im neuronalen Netz)
-- **Hyperparameter**: vom Anwender vor dem Training festgelegt, steuern das
-  Lernverfahren
-- Ziel der HPO: Wahl von Hyperparametern, die Modellgüte maximieren
-- es gibt Verfahren ohne Hyperparameter (lineare Regression) und Verfahren ohne
-  lernbare Parameter (k-nearest-neighbour), aber keine ohne beides
-- typische HPO-Verfahren: grid search, random search, Bayessche Optimierung,
-  gradientenbasierte Optimierung, evolutionäre Verfahren
-
-### Entscheidungsbaum: kurzer Überblick {.unlisted}
-
-- iterative Aufteilung des Datensatzes entlang Attributen bis zu Blättern
-- Klassifikation: Datenpunkt folgt vom Wurzelknoten bis zum Blatt
-- Problem: overfitting bei zu komplexen Bäumen
-
-Zentrale Hyperparameter sind hier sog. **Splittingkriterien**
-
-- **criterion**: gini, entropy, log_loss
-- **max_depth**: maximale Tiefe des Baums zur Iomplexitätskontrolle
-- **min_samples_split**: minimale Anzahl Datenpunkte für einen split
-
-### Datengrundlage für die Beispiele {.unlisted}
-
-- Datensatz: handgeschriebene Ziffern 0–9 (''Pen-Based Recognition of
-  Handwritten Digits'')
-- 16 attribute als 4 $\times$ 4-Pixel-Darstellung, werte 0–100
-- Umfang: 10992 Beobachtungen, davon 7494 Trainings- und 3498 Test-Datenpunkte
-- keine Fehlwerte (missing values)
-
-### Grid Search: Idee, Eigenschaften und Umsetzung für Entscheidungsbaum {.unlisted}
-
-- **Prinzip**: brute-force Prüfung aller Hyperparameter-kombinationen
-- garantiertes Auffinden der besten Kombination im Raster
-- **Komplexität**: viele parameter $\times$ viele Ausprägungen $\ra$ rasches
-  Wachstum der Kombinationszahl
-- Beispiel: 5 Hyperparameter $\times$ 4 Werte $\ra$ $4^5 = 1\,024$ Kombinationen
-- **parallele Ausführung** möglich, da Einzeltests unabhängig sind
-- daten splitten: training und test
-- suchraum
-  - criterion $\in \{$gini, entropy, log_loss$\}$
-  - max_depth $\in \{1,\dots,10\}$
-  - min_samples_split $\in \{2,\dots,10\}$
-- Schleifen über alle Kombinationen, Modell trainieren, **accuracy** auf
-  Testdaten berechnen, beste Kombination merken
-- optional Reproduzierbarkeit: `random_state = 123`
-
-### Grid Search: Beobachtung und Einsatzgrenzen {.unlisted}
-
-- Laufzeit steigt stark mit Suchraumgröße
-- gut geeignet bei wenigen diskreten Hyperparametern
-- Ergebnisse variieren leicht durch zufallseffekte in Datensplitting und
-  Baumerzeugung
-- beispielhafte Güte in der Anwendung: accuracy um ca. 88 % auf Testdaten

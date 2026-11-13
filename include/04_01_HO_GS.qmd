@@ -1,2 +1,68 @@
-## Hyperparameter Optimierung und Grid Search
+## Hyperparameter-Optimierung: Grundlagen
 
+- **Parameter**: durch den Datensatz bestimmt, vom Algorithmus gelernt (z.B.
+  Regressionskoeffizienten, Gewichte im neuronalen Netz)
+- **Hyperparameter**: vom Anwender vor dem Training festgelegt, steuern das
+  Lernverfahren
+- Ziel der HPO: Wahl von Hyperparametern, die Modellgüte maximieren
+- es gibt Verfahren ohne Hyperparameter (lineare Regression) und Verfahren ohne
+  lernbare Parameter (k-nearest-neighbour), aber keine ohne beides
+- typische HPO-Verfahren: grid search, random search, Bayessche Optimierung,
+  gradientenbasierte Optimierung, evolutionäre Verfahren
+
+### Entscheidungsbaum: kurzer Überblick {.unlisted}
+
+- iterative Aufteilung des Datensatzes entlang Attributen bis zu Blättern
+- Klassifikation: Datenpunkt folgt vom Wurzelknoten bis zum Blatt
+- Problem: overfitting bei zu komplexen Bäumen
+
+Zentrale Hyperparameter sind hier das **Splitkriterium** und Parameter zur
+**Komplexitätskontrolle**:
+
+- **criterion** (Splitkriterium): gini, entropy (in scikit-learn identisch mit
+  log_loss)
+- **max_depth**: maximale Tiefe des Baums zur Komplexitätskontrolle
+- **min_samples_split**: minimale Anzahl Datenpunkte für einen split
+
+### Datengrundlage für die Beispiele {.unlisted}
+
+- Datensatz: handgeschriebene Ziffern 0–9 (''Optical Recognition of
+  Handwritten Digits'', in scikit-learn `load_digits()`) [@alpaydin1998]
+- 64 Attribute: Pixel eines $8 \times 8$-Bildes, Werte 0–16
+- Umfang: 1797 Beobachtungen, zufällige Aufteilung in Trainings- und Testdaten
+  (z.B. 80/20)
+- keine Fehlwerte (missing values)
+- Umsetzung im Notebook [Grid Search](04_02_grid_search.ipynb)
+
+### Grid Search: Idee, Eigenschaften und Umsetzung für Entscheidungsbaum {.unlisted}
+
+- **Prinzip**: brute-force Prüfung aller Hyperparameter-kombinationen
+- garantiertes Auffinden der besten Kombination im Raster
+- **Komplexität**: viele parameter $\times$ viele Ausprägungen $\ra$ rasches
+  Wachstum der Kombinationszahl
+- Beispiel: 5 Hyperparameter $\times$ 4 Werte $\ra$ $4^5 = 1\,024$ Kombinationen
+- **parallele Ausführung** möglich, da Einzeltests unabhängig sind
+- Daten zufällig in Trainings- und Testdaten splitten; für die Auswahl der
+  Hyperparameter zusätzlich Validierungsdaten aus den Trainingsdaten abspalten
+  oder Kreuzvalidierung verwenden
+- suchraum
+  - criterion $\in \{$gini, entropy$\}$
+  - max_depth $\in \{1,\dots,10\}$
+  - min_samples_split $\in \{2,\dots,10\}$
+- Schleifen über alle Kombinationen, Modell trainieren, **accuracy** auf
+  Validierungsdaten (bzw. per Kreuzvalidierung) berechnen, beste Kombination
+  merken
+- Testdaten erst ganz am Ende einmal zur Bewertung des gewählten Modells
+  nutzen; Auswahl auf den Testdaten wäre **Data Leakage** (zu optimistische
+  Güte)
+- optional Reproduzierbarkeit: `random_state = 123`
+
+### Grid Search: Beobachtung und Einsatzgrenzen {.unlisted}
+
+- Laufzeit steigt stark mit Suchraumgröße
+- gut geeignet bei wenigen diskreten Hyperparametern
+- Ergebnisse variieren leicht durch Zufallseffekte im Datensplitting und in
+  der Baumerzeugung
+- beispielhafte Güte in der Anwendung: accuracy ca. 86–91 % je nach
+  Zufallssplit, wenn auf den Testdaten ausgewählt wird (zu optimistisch); mit
+  sauberer Validierung etwas niedriger (im Notebook z.B. 83–84 %)
