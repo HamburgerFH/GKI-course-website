@@ -52,6 +52,7 @@ Molecular BioSystems 5(12)](/figs/02_A_trees_example_01.png){#fig-02_tree_exampl
 - sei $M = \{(\bs{x}_i, g_i)\}_{i=1}^N$ eine Trainingsmenge mit $K$ Klassen und
   $p$ Merkmalen
 - sei $A$ ein Attribut/Merkmal mit $v$ möglichen Ausprägungen $a_1, \dots, a_v$
+  ($v$ hängt von $A$ ab)
 
 - **gesucht**: Entscheidungsbaum, der $M$ möglichst gut trennt und vor allem auf
   ungesehene Daten generalisiert (perfekte Trennung von $M$ ist nicht das Ziel)
@@ -126,8 +127,7 @@ $\log_2 0$ nicht definiert ist.
 
 #### Eigenschaften der Entropie
 
-$H(M)$ misst die Unreinheit (Unsicherheit) der
-Klassenverteilung in $M$:
+$H(M)$ misst die Unreinheit (Unsicherheit) der Klassenverteilung in $M$:
 
 - für eine reine Menge, alle Objekte gleiche Klasse, d.h.
   $\exists!\, k: p_k = 1$ und $p_j = 0 \ \forall j \neq k$: Entropie $= 0$
@@ -230,8 +230,8 @@ wie überraschend ist die Klasse eines zufällig gezogenen Objekts?
 4. teile $M$ gemäß der Ausprägungen von $A^*$ in $M_1, \dots, M_v$ (ein
    Kindknoten je Ausprägung)
 5. wende 1.–4. rekursiv auf jedes $M_j$ an, mit $\mathcal{A} \setminus \{A^*\}$
-   (in $M_j$ hat $A^*$ für alle Objekte den Wert $a_j$, ein erneuter Split
-   brächte gain = 0)
+   -- **Grund**: in $M_j$ hat $A^*$ für alle Objekte den Wert $a_j$, ein
+   erneuter Split brächte gain = 0
 
 **Abbruch** (Knoten wird Blatt):
 
@@ -285,17 +285,21 @@ Spielergebnis_
   $\mathcal{A} = \{\text{Outlook}, \text{Temperature}, \text{Humidity}, \text{Wind}\}$
 
 **Klassenverteilung:** 9 $\times$ [Yes]{.cgr}, 5 $\times$ [No]{.crd}:
-\begin{align} H(M) &= -\frac{9}{14} \log_2 \frac{9}{14} - \frac{5}{14} \log_2
-\frac{5}{14} \approx 0.940\\ H(M_{\text{sun}}) &= -\frac{2}{5} \log_2
-\frac{2}{5} - \frac{3}{5} \log_2 \frac{3}{5} \approx 0.971 \\
-H(M_{\text{overcast}}) & = -1 \cdot \log_2 1 = 0 \\ H(M_{\text{rain}}) &=
--\frac{3}{5} \log_2 \frac{3}{5} - \frac{2}{5} \log_2 \frac{2}{5} \approx 0.971\\
-\Rightarrow H_{\text{Outlook}}(M) &= \frac{5}{14} \cdot 0.971 + \frac{4}{14}
-\cdot 0
-
-- \frac{5}{14} \cdot 0.971 \approx 0.693 \\ \Rightarrow
-  \text{gain}(\text{Outlook}) &= H(M) - H_{\text{Outlook}}(M) = 0.940 - 0.693 =
-  0.247 \end{align}
+$$
+\begin{aligned}
+H(M) &= -\frac{9}{14} \log_2 \frac{9}{14} - \frac{5}{14} \log_2 \frac{5}{14}
+\approx 0.940 \\
+H(M_{\text{sun}}) &= -\frac{2}{5} \log_2 \frac{2}{5} - \frac{3}{5} \log_2
+\frac{3}{5} \approx 0.971 \\
+H(M_{\text{overcast}}) &= -1 \cdot \log_2 1 = 0 \\
+H(M_{\text{rain}}) &= -\frac{3}{5} \log_2 \frac{3}{5} - \frac{2}{5} \log_2
+\frac{2}{5} \approx 0.971 \\
+\Rightarrow H_{\text{Outlook}}(M) &= \frac{5}{14} \cdot 0.971
++ \frac{4}{14} \cdot 0 + \frac{5}{14} \cdot 0.971 \approx 0.693 \\
+\Rightarrow \text{gain}(\text{Outlook}) &= H(M) - H_{\text{Outlook}}(M)
+= 0.940 - 0.693 = 0.247
+\end{aligned}
+$$
 
 Vergleich mit den anderen Informationsgewinnen:
 
@@ -313,8 +317,8 @@ gain(Temperature)=0.029, gain(Humidity)=0.152, gain(Wind)=0.048
   **_verbleibenden_** Attributen, d.h. ohne _Outlook_ (s. [ID3](#id3),
   Schritt 5)
 - Fortsetzung bis alle Objekte eindeutig klassifiziert sind oder ein anderes
-  Abbruchkriterium von [ID3](#id3) greift: dann Mehrheitsklasse (bei
-  Gleichstand zufällige Festsetzung)
+  Abbruchkriterium von [ID3](#id3) greift: dann Mehrheitsklasse (bei Gleichstand
+  zufällige Festsetzung)
 
 ### C4.5: Weiterentwicklung von ID3
 
@@ -355,7 +359,7 @@ gain(Temperature)=0.029, gain(Humidity)=0.152, gain(Wind)=0.048
   - oder Festsetzung der Kategoriezugehörigkeit mit Wert der Mehrheitskategorie
   - oder als Mittelwert über Kategorien (bei metrischen Werten z.B.
     Regressionsbäumen)
-- sonst: wähle Attribut $A_i$ unter allen Attributen, für $i=1,\ldots,v$, mit
+- sonst: wähle Attribut $A_i$ unter allen Attributen, für $i=1,\ldots,p$, mit
   Menge von Attributwerten $\mathcal{A}_i$, sodass eine optimale Aufspaltung von
   $M_q$ entsteht
   - $\hookrightarrow$ **_Optimalitätsmaß:_** nicht Entropie sondern _Gini-Index_
@@ -364,9 +368,14 @@ gain(Temperature)=0.029, gain(Humidity)=0.152, gain(Wind)=0.048
   $\mathcal{A}_i^L \cup \mathcal{A}_i^R = \mathcal{A}_i$, und
   $\mathcal{A}_i^L \cap \mathcal{A}_i^R = \emptyset$ betrachtet; diese
   definieren dann auch eine Zerlegung von $M_q$ zwei ebenfalls disjunkte
-  Teilmengen: \begin{align} L_q^i(\mathcal{A}_i^L)&=\lbrace x^{(m)}\in
-  M_q:a_i^{m}\in \mathcal{A}_i^L\rbrace\\ R_q^i(\mathcal{A}_i^R)&=\lbrace
-  x^{(m)}\in M_q:a_i^{m}\in \mathcal{A}_i^R\rbrace \end{align}
+  Teilmengen:
+
+  $$
+  \begin{aligned}
+  L_q^i(\mathcal{A}_i^L) &= \lbrace x^{(m)} \in M_q : a_i^{m} \in \mathcal{A}_i^L \rbrace \\
+  R_q^i(\mathcal{A}_i^R) &= \lbrace x^{(m)} \in M_q : a_i^{m} \in \mathcal{A}_i^R \rbrace
+  \end{aligned}
+  $$
 - wobei $a_i^{m}$ die konkrete Ausprägung eines Attributs $A_i$ für ein zu
   klassifizierendes Input(-objekt) $x^{(m)}$ bezeichnet und die
   Wahrscheinlichkeiten bzw. Anteile:
@@ -385,11 +394,16 @@ gain(Temperature)=0.029, gain(Humidity)=0.152, gain(Wind)=0.048
   $\mathcal{A}_i^L, \mathcal{A}_i^R$ und Berechnung eines gewichteten Gini-Index
   nach Aufteilung:
 
-  \begin{align} wGini(M_q, \mathcal{A}_i^L) &= p_{iL}^q \cdot
-  Gini(L_q^i(\mathcal{A}_i^L)) + p_{iR}^q \cdot Gini(R_q^i(\mathcal{A}_i^R))\\
-  Gini(L_q^i(\mathcal{A}*i^L)) &= 1 - \sum*{k=1}^K
-  (p_{kL}^q(\mathcal{A}_i^L))^2\\ Gini(R_q^i(\mathcal{A}*i^R)) &= 1 -
-  \sum*{k=1}^K (p_{kR}^q(\mathcal{A}_i^R))^2 \end{align}
+  $$
+  \begin{aligned}
+  wGini(M_q, \mathcal{A}_i^L) &= p_{iL}^q \cdot Gini(L_q^i(\mathcal{A}_i^L))
+  + p_{iR}^q \cdot Gini(R_q^i(\mathcal{A}_i^R)) \\
+  Gini(L_q^i(\mathcal{A}_i^L)) &= 1 - \sum_{k=1}^K
+  (p_{kL}^q(\mathcal{A}_i^L))^2 \\
+  Gini(R_q^i(\mathcal{A}_i^R)) &= 1 - \sum_{k=1}^K
+  (p_{kR}^q(\mathcal{A}_i^R))^2
+  \end{aligned}
+  $$
 
 ### CART: Gini-Gewinn und Optimierung
 
@@ -494,12 +508,19 @@ $$
 ### Beispiel: Fußball-Datensatz (Regression)
 
 - Gesamtvarianz (korrekt): $86.88$ \quad Gesamt-Std.-Abw. (wie im SB): $9.32$
-- gewichtete Varianz nach Outlook: \begin{align} \bar{y} &= \frac{1}{14}
-  \sum_{i=1}^{14} y_i = \frac{607}{14} \approx 43.36 \\[1ex] \text{Var}(M) &=
-  \frac{1}{14} \sum_{i=1}^{14} (y_i - \bar{y})^2 = \frac{1}{14} \left[ (25 -
-  43.36)^2 + (30 - 43.36)^2 + \dots + (30 - 43.36)^2 \right] \\ &= \frac{1}{14}
-  \cdot 1216.26 \approx 86.88 \\[1ex] \text{SD}(M) &= \sqrt{86.88} \approx 9.32
-  \end{align}
+- gewichtete Varianz nach Outlook:
+
+  $$
+  \begin{aligned}
+  \bar{y} &= \frac{1}{14} \sum_{i=1}^{14} y_i = \frac{607}{14} \approx 43.36
+  \\[1ex]
+  \text{Var}(M) &= \frac{1}{14} \sum_{i=1}^{14} (y_i - \bar{y})^2
+  = \frac{1}{14} \left[ (25 - 43.36)^2 + (30 - 43.36)^2 + \dots
+  + (30 - 43.36)^2 \right] \\
+  &= \frac{1}{14} \cdot 1216.26 \approx 86.88 \\[1ex]
+  \text{SD}(M) &= \sqrt{86.88} \approx 9.32
+  \end{aligned}
+  $$
 - **_Varianzreduktion:_**
   $$
   \text{gain}_\text{Var} = 86.88 - 67.31 = 19.57
