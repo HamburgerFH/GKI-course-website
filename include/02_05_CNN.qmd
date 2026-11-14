@@ -9,13 +9,16 @@
   \bs{h} = \phi\left( \bs{W} \bs{x} + \bs{b} \right)
   $$
 
-  - affin: Matrix mal Vektor plus Bias-Vektor (Geraden bleiben Geraden,
-    Parallelen bleiben parallel)
+  - affin: Matrix mal Vektor plus Bias-Vektor
 
 - Das funktioniert für jeden Input, denn jede Darstellung lässt sich in einen
   Vektor umwandeln:
-  - Bild mit $28 \times 28$ Pixeln $\ra$ Vektor mit $784$ Einträgen (Zeilen
-    aneinanderhängen, „Flatten“)
+  - Graustufenbild mit $28 \times 28$ Pixeln (MNIST) $\ra$ Vektor mit $784$
+    Einträgen (Zeilen aneinanderhängen, „Flatten“)
+  - jeder Eintrag ist der Grauwert eines Pixels, bei MNIST $0$ (Hintergrund)
+    bis $255$ (Strich), meist auf $[0, 1]$ skaliert
+  - Farbbild: drei Werte pro Pixel (rot, grün, blau)
+    $\ra$ $28 \cdot 28 \cdot 3 = 2352$ Einträge
 
 - Problem 1: die **Struktur** der Daten geht verloren
   - alle Einträge des Vektors werden gleich behandelt
@@ -188,6 +191,10 @@ $$
 
 ![Ausgabe einer diskreten Faltung; Quelle: @dumoulin2018, im Studienbrief
 (SB 2) Abb. 3.5](/figs/02_05_cnn_02_faltung_positionen.png){#fig-cnn-positionen}
+
+- Neues Beispiel, andere IFM und anderer Kernel als im
+  [Rechenbeispiel](#cnn-rechenbeispiel); die
+  [Stride/Padding-Folie](#cnn-ausgabegroesse) verwendet dieses Beispiel weiter
 
 - Die neun Teilbilder zeigen die neun Positionen des Kernels, zeilenweise von
   links oben nach rechts unten
