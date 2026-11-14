@@ -1,6 +1,6 @@
 ## Single-Layer-Perzeptron (SLP): Modell
 
-### Mathematische Struktur {.unlisted}
+### Mathematische Struktur {#slp-modell .unlisted}
 
 - Binäre Klassifikation mit $d$-dimensionaler Eingabe/Input
   $\bs{x} \in \mathbb{R}^d$:
@@ -128,7 +128,7 @@
   $\ra$ nimmt alle $d$ Komponenten von $\bs{x}_i$ auf:
   - gewichtete Summe $z_i = \bs{w}^\top \bs{x}_i + b$ (Zwischenwert, kein
     eigenes Neuron)
-  - Schwellenfunktion $\phi(z_i)$ entscheidet, ob Output $0$ oder $1$
+  - Heaviside-Aktivierung $\phi(z_i)$ entscheidet, ob Output $0$ oder $1$
   - pro Eingabevektor entsteht genau ein Ausgabewert
     $\hat{y}_i = \phi(z_i) \in \{0,1\}$
 
@@ -175,23 +175,43 @@
   \bs{w} = (0,0)^\top,\quad b = 0,\quad \eta = 1
   $$
 
-- Dann: $z_1 = 0 \Rightarrow \hat{y}_1 = 1 \Rightarrow$ keine Änderung
+- Aktivierung: Heaviside wie im [Modell](#slp-modell), d.h.
+  $\phi(z) = 1$ für $z \geq 0$, sonst $\phi(z) = 0$
+
+- Sample 1:
+  - $z_1 = \bs{w}^\top \bs{x}_1 + b = 0 \cdot 1 + 0 \cdot 1 + 0 = 0$
+  - Heaviside: $\hat{y}_1 = \phi(0) = 1$, da $z_1 \geq 0$
+  - $\hat{y}_1 = y_1 \Rightarrow$ keine Änderung
 
 - Weiteres Sample: $\bs{x}_2 = (-2, 0)^\top$, $y_2 = 0$
+  - $z_2 = 0 \cdot (-2) + 0 \cdot 0 + 0 = 0$
+  - Heaviside: $\hat{y}_2 = \phi(0) = 1$
+  - $\hat{y}_2 \neq y_2 \Rightarrow$ Korrektursignal $y_2 - \hat{y}_2 = -1$
 
-- Dann: $z_2 = 0 \Rightarrow \hat{y}_2 = 1 \Rightarrow$ Fehler $e_2 = -1$
-
-- Update:
+- Update gemäß [Lernregel](#slp-lernregel):
 
   $$
-  \bs{w} \leftarrow (0,0)^\top -1 \cdot (-2,0)^\top = (2,0)^\top,\quad
-  b \leftarrow 0 -1 = -1
+  \begin{aligned}
+  \bs{w} &\leftarrow \bs{w} + \eta (y_2 - \hat{y}_2) \bs{x}_2
+    = (0,0)^\top + 1 \cdot (-1) \cdot (-2,0)^\top = (2,0)^\top \\
+  b &\leftarrow b + \eta (y_2 - \hat{y}_2) = 0 + 1 \cdot (-1) = -1
+  \end{aligned}
   $$
+
+- Kontrolle: $z_2 = 2 \cdot (-2) + 0 \cdot 0 - 1 = -5 < 0
+  \Rightarrow \hat{y}_2 = 0 = y_2$
+
+- Hinweis: die Konvention $\phi(0) = 1$ entscheidet hier über $\hat{y}_1$ und
+  $\hat{y}_2$; mit $\phi(0) = 0$ wäre Sample 1 falsch klassifiziert
 
 ### Online-Lernen und Epochen {#slp-online .unlisted}
 
 - Gewichtsupdate erfolgt sofort nach Verarbeitung von $(\bs{x}_i, y_i)$;
   dieser Lernmodus heißt **online**: kein Warten auf ganzen Batch
+
+- **Batch**: Teilmenge der Trainingsdaten, die verarbeitet wird, bevor
+  $\bs{w}$ und $b$ einmal aktualisiert werden; Anzahl der Datenpunkte darin:
+  **Batchgröße** $B$
 
 - Netzparameter $\bs{w}$, $b$ sind **global** – gelten für alle Beobachtungen
   $\ra$ Änderung an $\bs{w}$ durch Punkt $\bs{x}_k$ kann spätere $\hat{y}_j$,
@@ -208,6 +228,19 @@
   ggf. Update
 
 - Reihenfolge der Daten bleibt konstant oder wird pro Epoche neu gemischt
+
+- Lernmodi im Vergleich, $N$ Trainingsdaten, Batchgröße $B$:
+
+| Lernmodus       | Batchgröße  | Update nach ...  | Updates pro Epoche    |
+|-----------------|-------------|------------------|-----------------------|
+| Online          | $B = 1$     | jedem Datenpunkt | $N$                   |
+| Mini-Batch      | $1 < B < N$ | jedem Mini-Batch | $\lceil N / B \rceil$ |
+| Offline (Batch) | $B = N$     | ganzer Epoche    | $1$                   |
+
+- Mini-Batch und Offline: Korrekturen werden über den Batch summiert bzw.
+  gemittelt, dann folgt **ein** Update
+- Perzeptron-Lernregel hier: online; Standard bei MLPs: Mini-Batch, siehe
+  [Neuronale Netze II: MLP](02_04_MLP.qmd)
 
 ::::: {#alg-perzeptron}
 
@@ -325,11 +358,21 @@ $$
   - glatt und überall differenzierbar
   - Wertebereich: $(0,1)$
   - Sättigung bei großen positiven/negativen $z$
-  - Ableitung:
+  - Ableitung, per Kettenregel auf $\sigma(z) = (1 + e^{-z})^{-1}$:
 
     $$
-    \sigma'(z) = \sigma(z)(1 - \sigma(z))
+    \begin{aligned}
+    \sigma'(z) &= -(1 + e^{-z})^{-2} \cdot (-e^{-z})
+                = \frac{e^{-z}}{(1 + e^{-z})^2} \\
+               &= \underbrace{\frac{1}{1 + e^{-z}}}_{\sigma(z)} \cdot
+                  \underbrace{\frac{e^{-z}}{1 + e^{-z}}}_{1 - \sigma(z)}
+                = \sigma(z)(1 - \sigma(z))
+    \end{aligned}
     $$
+
+  - $\frac{e^{-z}}{1 + e^{-z}} = \frac{(1 + e^{-z}) - 1}{1 + e^{-z}}
+    = 1 - \sigma(z)$; praktisch: $\sigma'$ folgt direkt aus dem bereits
+    berechneten $\hat{y} = \sigma(z)$
 
 - Modell mit Sigmoid-Aktivierung, für $i = 1, \dots, N$:
 
@@ -340,6 +383,33 @@ $$
 - Ziel: $\hat{y}_i \approx y_i \in \{0,1\}$
 
 ### Fehlerfunktion: log loss {.unlisted}
+
+- Woher kommt der log loss? Sigmoid-Output als Wahrscheinlichkeit:
+  $\hat{y}_i = P(y_i = 1 \mid \bs{x}_i)$, also
+  $P(y_i = 0 \mid \bs{x}_i) = 1 - \hat{y}_i$
+
+- Bernoulli-Verteilung mit Parameter $\hat{y}_i$, als Fallunterscheidung und
+  kompakt in einer Formel:
+
+  $$
+  P(y_i \mid \bs{x}_i) =
+  \begin{cases}
+    \hat{y}_i     & y_i = 1 \\
+    1 - \hat{y}_i & y_i = 0
+  \end{cases}
+  \;=\; \hat{y}_i^{\,y_i} (1 - \hat{y}_i)^{1 - y_i}
+  $$
+
+- Gute Parameter $\bs{w}, b$ machen die beobachteten Labels möglichst
+  wahrscheinlich (**Maximum Likelihood**):
+  $\prod_{i=1}^N P(y_i \mid \bs{x}_i) \ra \max$
+
+- Logarithmus (Produkt $\ra$ Summe) und Minuszeichen (Maximieren $\ra$
+  Minimieren) ergeben den sogenannten **log loss** (auch: binäre
+  Kreuzentropie): $\mathcal{L}_i = -\log P(y_i \mid \bs{x}_i)$
+
+- Intuition: für $y_i = 1$ ist $\mathcal{L}_i = -\log \hat{y}_i$, also klein
+  für $\hat{y}_i \approx 1$ und sehr groß für $\hat{y}_i \ra 0$
 
 ::: {#def-log-loss}
 
@@ -363,8 +433,25 @@ $$
 
 ### Gradienten für Gewichte und Bias {#slp-gradienten .unlisted}
 
-- Kettenregel entlang $\bs{w}, b \ra z_i \ra \hat{y}_i \ra \mathcal{L}_i$,
-  mit $\sigma'(z_i) = \hat{y}_i (1 - \hat{y}_i)$:
+- Ziel: $\mathcal{L}$ per Gradientenabstieg minimieren $\ra$ benötigt werden
+  $\frac{\partial \mathcal{L}_i}{\partial \bs{w}}$ und
+  $\frac{\partial \mathcal{L}_i}{\partial b}$ (siehe
+  [Update-Regeln](#slp-update-regeln))
+
+- $\mathcal{L}_i$ hängt nur indirekt über
+  $\bs{w}, b \ra z_i \ra \hat{y}_i \ra \mathcal{L}_i$ von den Parametern ab
+  $\ra$ Kettenregel; $\frac{\partial \mathcal{L}_i}{\partial z_i}$ ist ein
+  gemeinsamer Zwischenschritt für beide Ableitungen
+
+- Schritt 1, Ableitung des log loss nach $\hat{y}_i$:
+
+  $$
+  \frac{\partial \mathcal{L}_i}{\partial \hat{y}_i}
+  = -\frac{y_i}{\hat{y}_i} + \frac{1 - y_i}{1 - \hat{y}_i}
+  = \frac{\hat{y}_i - y_i}{\hat{y}_i (1 - \hat{y}_i)}
+  $$
+
+- Schritt 2, weiter zu $z_i$ mit $\sigma'(z_i) = \hat{y}_i (1 - \hat{y}_i)$:
 
   $$
   \frac{\partial \mathcal{L}_i}{\partial z_i}
@@ -374,17 +461,23 @@ $$
   = \hat{y}_i - y_i
   $$
 
-- Ableitung nach $\bs{w}$, mit $\frac{\partial z_i}{\partial \bs{w}} = \bs{x}_i$:
+- Schritt 3, weiter zu $\bs{w}$ und $b$ mit
+  $\frac{\partial z_i}{\partial \bs{w}} = \bs{x}_i$ und
+  $\frac{\partial z_i}{\partial b} = 1$:
 
   $$
-  \frac{\partial \mathcal{L}_i}{\partial \bs{w}} = (\hat{y}_i - y_i) \cdot \bs{x}_i
+  \begin{aligned}
+  \frac{\partial \mathcal{L}_i}{\partial \bs{w}}
+    &= \frac{\partial \mathcal{L}_i}{\partial z_i} \cdot
+       \frac{\partial z_i}{\partial \bs{w}} = (\hat{y}_i - y_i)\, \bs{x}_i \\
+  \frac{\partial \mathcal{L}_i}{\partial b}
+    &= \frac{\partial \mathcal{L}_i}{\partial z_i} \cdot
+       \frac{\partial z_i}{\partial b} = \hat{y}_i - y_i
+  \end{aligned}
   $$
 
-- Ableitung nach $b$, mit $\frac{\partial z_i}{\partial b} = 1$:
-
-  $$
-  \frac{\partial \mathcal{L}_i}{\partial b} = \hat{y}_i - y_i
-  $$
+- Intuition: Gradient $=$ Fehler $\times$ Eingabe; $\sigma'(z_i)$ kürzt sich
+  weg $\ra$ log loss und Sigmoid passen besonders gut zusammen
 
 ### Update-Regeln (Gradient Descent) {#slp-update-regeln .unlisted}
 
@@ -397,6 +490,10 @@ $$
   b \leftarrow b - \eta \sum_{i=1}^N (\hat{y}_i - y_i)
   $$
 
+  - **1 Update pro Epoche**; alle $\hat{y}_i$ werden mit denselben
+    $\bs{w}, b$ berechnet
+  - exakter Gradient von $\mathcal{L}$, aber teuer bei großem $N$
+
 - Stochastisch (SGD):
 
   $$
@@ -404,8 +501,14 @@ $$
   b \leftarrow b - \eta (\hat{y}_i - y_i)
   $$
 
+  - **$N$ Updates pro Epoche**, $i$ in zufälliger Reihenfolge; $\hat{y}_i$
+    wird jeweils mit den aktuellen $\bs{w}, b$ berechnet
+  - Gradient eines einzelnen Punktes: verrauschte, aber billige Schätzung
+    des Gesamtgradienten
+
 - SGD entspricht dem [Online-Modus](#slp-online) der Perzeptron-Lernregel:
-  Update nach jedem Datenpunkt statt nach dem ganzen Batch
+  Update nach jedem Datenpunkt statt nach dem ganzen Batch; Mini-Batch als
+  Mittelweg, siehe [Lernmodi im Vergleich](#slp-online)
 
 ### Interpretation {.unlisted}
 
