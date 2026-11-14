@@ -111,15 +111,26 @@
   Label $y_i \in \{0,1\}$ \
   $\bs{x}_i$ besitzt $d$ Merkmale $\ra$ Eingabeschicht hat $d$ Inputneuronen
 
-- Ein Neuron ist eine **Verarbeitungseinheit im Netzwerk**, nicht ein
-  Trainingsdatum \
+- Ein Neuron ist ein **Knoten im Netzwerk**, nicht ein Trainingsdatum \
   $\ra$ **nicht** $N$ Neuronen, sondern $N$ Durchläufe durch dasselbe Netzwerk
 
+- Ein Neuron wird mit seinem **Wert** identifiziert:
+  - Inputneuronen: die Komponenten $x_{i1}, \dots, x_{id}$ von $\bs{x}_i$;
+    sie rechnen nichts, sondern geben die Daten weiter
+  - Outputneuron: der Ausgabewert $\hat{y}_i$; er entsteht aus den
+    Inputneuronen über Gewichte, Bias und Aktivierung
+  - im MLP zusätzlich Hidden-Neuronen $\bs{h}_i$ dazwischen, siehe
+    [Neuronale Netze II: MLP](02_04_MLP.qmd#mlp-notation)
+
+- Gewichte $\bs{w}$ sind die **Verbindungen** zwischen Neuronen, keine Neuronen
+
 - Im Single-Layer-Perzeptron: genau **ein** Outputneuron in der Ausgabeschicht \
-  $\ra$ nimmt alle $d$ Komponenten von $\bs{x}$ auf:
-  - berechnet gewichtete Summe $z = \bs{w}^\top \bs{x} + b$
-  - entscheidet per Schwellenfunktion $\phi(z)$, ob Output $0$ oder $1$
-  - pro Eingabevektor entsteht genau ein Ausgabewert $\hat{y} \in \{0,1\}$
+  $\ra$ nimmt alle $d$ Komponenten von $\bs{x}_i$ auf:
+  - gewichtete Summe $z_i = \bs{w}^\top \bs{x}_i + b$ (Zwischenwert, kein
+    eigenes Neuron)
+  - Schwellenfunktion $\phi(z_i)$ entscheidet, ob Output $0$ oder $1$
+  - pro Eingabevektor entsteht genau ein Ausgabewert
+    $\hat{y}_i = \phi(z_i) \in \{0,1\}$
 
 ## Perzeptron-Lernregel
 
