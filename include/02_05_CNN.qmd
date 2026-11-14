@@ -1,0 +1,440 @@
+## Convolutional Neural Networks (CNN): Motivation und Aufbau
+
+### Motivation: Warum reicht das MLP nicht? {.unlisted}
+
+- Jede Schicht im MLP ist eine **affine Transformation** mit anschließender
+  Aktivierung, siehe [Vorwärtspass im MLP](02_04_MLP.qmd#mlp-vorwaertspass):
+
+  $$
+  \bs{h} = \phi\left( \bs{W} \bs{x} + \bs{b} \right)
+  $$
+
+  - affin: Matrix mal Vektor plus Bias-Vektor (Geraden bleiben Geraden,
+    Parallelen bleiben parallel)
+
+- Das funktioniert für jeden Input, denn jede Darstellung lässt sich in einen
+  Vektor umwandeln:
+  - Bild mit $28 \times 28$ Pixeln $\ra$ Vektor mit $784$ Einträgen (Zeilen
+    aneinanderhängen, „Flatten“)
+
+- Problem 1: die **Struktur** der Daten geht verloren
+  - alle Einträge des Vektors werden gleich behandelt
+  - welche Pixel benachbart sind (topologische Information), nutzt das Netz
+    nicht
+
+- Problem 2: viele Parameter
+  - jedes Hidden-Neuron hat ein eigenes Gewicht pro Pixel
+  - Hidden Layer mit $h_1 = 100$ Neuronen: $784 \cdot 100 + 100 = 78\,500$
+    Parameter, bei größeren Bildern entsprechend mehr
+
+- Idee des CNN: die Struktur nutzen, mit **diskreten Faltungen** (engl.
+  Convolutions) statt voll verbundener Schichten
+
+### Daten mit Struktur {.unlisted}
+
+Bilder, Tonclips und ähnliche Daten haben drei Eigenschaften gemeinsam:
+
+- Sie werden als **mehrdimensionale Arrays** gespeichert
+- Sie haben eine oder mehrere Achsen, auf denen die **Reihenfolge wichtig**
+  ist
+- Eine Achse, die **Kanalachse**, liefert verschiedene Ansichten derselben
+  Daten
+
+| Daten                  | Array                           | Achsen mit Reihenfolge | Kanäle          |
+| :--------------------- | :------------------------------ | :--------------------- | :-------------- |
+| Graustufenbild (MNIST) | $28 \times 28 \times 1$         | Höhe, Breite           | Helligkeit      |
+| Farbbild               | Höhe $\times$ Breite $\times$ 3 | Höhe, Breite           | rot, grün, blau |
+| Stereo-Tonclip         | Zeit $\times$ 2                 | Zeit                   | links, rechts   |
+
+- Gegenbeispiel: beim Wein-Datensatz ist die Reihenfolge der Merkmale
+  beliebig (ungeordnete Sammlung von Merkmalen) $\ra$ dort passt das MLP
+
+- Vertauscht man dagegen die Pixel eines Bildes, entsteht ein anderes Bild
+
+- Eine affine Transformation nutzt diese Eigenschaften nicht; hilfreich wären
+  sie z.B. in der Computer Vision und der Spracherkennung
+
+### Aufbau eines CNN {#cnn-aufbau .unlisted}
+
+CNNs bestehen aus drei Arten von Layern:
+
+| Layer                         | Aufgabe                                   | lernbare Parameter |
+| :---------------------------- | :---------------------------------------- | :----------------- |
+| Convolutional Layer (Faltung) | Merkmale mit Kerneln aus dem Input ziehen | Kernel, Bias       |
+| Pooling Layer                 | Feature Maps verkleinern (Downsampling)   | keine              |
+| Fully-Connected Layer         | wie die Schichten im MLP                  | Gewichte, Bias     |
+
+![Aufbau eines vereinfachten CNN für die Klassifikation von MNIST; Quelle:
+@oshea2015, im Studienbrief (SB 2) Abb. 3.4](/figs/02_05_cnn_01_aufbau.png){#fig-cnn-aufbau}
+
+Was zeigt [@fig-cnn-aufbau], von links nach rechts?
+
+1. **input**: Bild einer handgeschriebenen Ziffer. MNIST ist ein Datensatz
+   handgeschriebener Ziffern von 0 bis 9 ($28 \times 28$ Pixel, Graustufen).
+   Wie im MLP speichert der Input Layer die Pixelwerte
+2. **convolution w/ReLU**: der Convolutional Layer wendet Kernel auf das Bild
+   an, danach folgt die Aktivierung (ReLU). Jedes Quadrat im Stapel ist eine
+   **Feature Map**, also ein gefiltertes Bild; pro Kernel entsteht eine
+3. **pooling**: gleich viele Feature Maps, aber kleiner. Die räumliche
+   Dimension wird reduziert, um die Komplexität des Netzes zu verringern
+4. **fully-connected** (erst mit ReLU, dann als Output): Schichten wie im
+   MLP; jedes kleine Quadrat ist ein Neuron. Sie leiten das Ergebnis bis zum
+   Output Layer weiter: 10 Neuronen, eines pro Ziffer 0 bis 9
+
+- Die Zeichnung ist schematisch: Anzahl und Größe der Quadrate sind nicht
+  maßstäblich
+
+- Ergebnis: deutlich geringere Netzwerk-Komplexität als bei voll verbundenen
+  Schichten direkt auf den Pixeln $\ra$ CNNs verarbeiten Bilder und andere
+  Daten mit impliziter Struktur besser
+
+## Convolutional Layer: diskrete Faltung
+
+:::: {.callout-important title="Notation (Faltung, Pooling)"}
+
+Notation wie im Studienbrief (SB 2, Kap. 3.1.3), jeweils entlang der Achse
+$j$ (bei Bildern: $j = 1$ Höhe, $j = 2$ Breite):
+
+| Symbol | Bedeutung                                                    |
+| :----- | :----------------------------------------------------------- |
+| IFM    | Input Feature Map: Eingabe des Layers                        |
+| OFM    | Output Feature Map: Ausgabe des Layers                       |
+| $i_j$  | Eingangsgröße                                                |
+| $k_j$  | Größe des Kernels bzw. des Pooling-Fensters                  |
+| $s_j$  | Stride: Schrittweite zwischen zwei Positionen des Kernels    |
+| $p_j$  | Null-Padding: Anzahl der Nullen an Anfang und Ende der Achse |
+| $o_j$  | Ausgangsgröße                                                |
+| $m$    | Anzahl der IFM                                               |
+| $n$    | Anzahl der OFM                                               |
+
+**Achtung:** $i$ ist hier die Eingangsgröße, nicht der Index einer
+Beobachtung, und $p$ das Padding.
+
+::::
+
+### Begriffe: Feature Map und Kernel {.unlisted}
+
+- **Input Feature Map (IFM)**: das Gitter am Eingang des Layers, z.B. das
+  Bild selbst oder die Ausgabe der vorherigen Schicht
+
+- **Kernel** (auch Filter): kleine Matrix mit Gewichten, z.B. $3 \times 3$;
+  der Studienbrief spricht von „Kernel-Funktionen“
+
+- **Output Feature Map (OFM)**: das Ergebnis, wieder ein Gitter
+
+::: {#def-faltung}
+
+#### Diskrete Faltung (2-D)
+
+Der Kernel $\bs{K} \in \mathbb{R}^{k_1 \times k_2}$ wird schrittweise über
+die IFM $\bs{X} \in \mathbb{R}^{i_1 \times i_2}$ geschoben. An jeder Position
+werden die überlappenden Einträge komponentenweise multipliziert und
+aufaddiert. Für Schrittweite 1 und Position $(r, c)$:
+
+$$
+O_{r,c} = \sum_{a=1}^{k_1} \sum_{b=1}^{k_2} K_{a,b} \cdot X_{r+a-1,\, c+b-1}
+$$
+
+:::
+
+- Das ist dieselbe Rechnung wie im Neuron, $\bs{w}^\top \bs{x}$, nur auf
+  einem kleinen Bildausschnitt statt auf dem ganzen Input
+
+- Anschaulich: der Kernel beschreibt ein Muster; der Output ist dort groß, wo
+  der Bildausschnitt zum Muster passt
+
+### Rechenbeispiel: einen Kernel anwenden {#cnn-rechenbeispiel .unlisted}
+
+![Anwendung einer Kernel-Matrix auf einen $5 \times 5$ Input; im Studienbrief
+(SB 2) Abb. 3.6](/figs/02_05_cnn_03_kernel_rechnung.png){#fig-cnn-kernel}
+
+- Links die IFM ($5 \times 5$), in der Mitte der Kernel ($3 \times 3$),
+  rechts die OFM, die Schritt für Schritt gefüllt wird; $*$ steht für die
+  Faltung
+
+- Die farbigen Rahmen (grün, blau, orange) markieren die drei Zeilen des
+  aktuellen Ausschnitts und die jeweils zugehörige Zeile des Kernels
+
+- Oben, Kernel in der linken oberen Ecke:
+
+  $$
+  \begin{aligned}
+  &0 \cdot 1 + (-1) \cdot 3 + 0 \cdot 7 \\
+  &+ (-1) \cdot 5 + 5 \cdot 4 + (-1) \cdot 2 \\
+  &+ 0 \cdot 4 + (-1) \cdot 2 + 0 \cdot 2 = 8
+  \end{aligned}
+  $$
+
+- Unten, Kernel eine Spalte weiter rechts:
+  $-7 - 4 + 10 - 3 - 2 = -6$ (in der Abbildung hinter dem „$=$“ nicht
+  ausgeschrieben, der Wert steht in der OFM)
+
+- Vollständige OFM nach allen neun Positionen, und nach der Aktivierung
+  (ReLU setzt negative Werte auf 0):
+
+  $$
+  \begin{pmatrix} 8 & -6 & -1 \\ -4 & -6 & 25 \\ 4 & 15 & -10 \end{pmatrix}
+  \quad \xrightarrow{\text{ReLU}} \quad
+  \begin{pmatrix} 8 & 0 & 0 \\ 0 & 0 & 25 \\ 4 & 15 & 0 \end{pmatrix}
+  $$
+
+- Dieser Kernel ist ein Schärfungsfilter aus der Bildverarbeitung: die Mitte
+  wird betont, die Nachbarn werden abgezogen
+
+- **[Im CNN werden die Kernelwerte nicht vorgegeben, sondern
+  gelernt]{.ctl}**: sie sind die Gewichte des Layers
+
+### Alle Positionen im Überblick {.unlisted}
+
+![Ausgabe einer diskreten Faltung; Quelle: @dumoulin2018, im Studienbrief
+(SB 2) Abb. 3.5](/figs/02_05_cnn_02_faltung_positionen.png){#fig-cnn-positionen}
+
+- Die neun Teilbilder zeigen die neun Positionen des Kernels, zeilenweise von
+  links oben nach rechts unten
+
+- Hellblau: IFM ($5 \times 5$); dunkelblau: aktuelle Position des Kernels
+
+- Kleine tiefgestellte Zahlen: Werte des Kernels, hier
+
+  $$
+  \bs{K} = \begin{pmatrix} 0 & 1 & 2 \\ 2 & 2 & 0 \\ 0 & 1 & 2 \end{pmatrix}
+  $$
+
+- Grün: OFM ($3 \times 3$); dunkelgrün: der gerade berechnete Wert
+
+- Probe für das erste Teilbild:
+
+  $$
+  3 \cdot 0 + 3 \cdot 1 + 2 \cdot 2 + 0 \cdot 2 + 0 \cdot 2 + 1 \cdot 0
+  + 3 \cdot 0 + 1 \cdot 1 + 2 \cdot 2 = 12
+  $$
+
+- Warum ist die OFM $3 \times 3$? Der Kernel passt in jeder Richtung an
+  $5 - 3 + 1 = 3$ Positionen
+
+- Der Einfachheit halber gibt es hier nur eine IFM und einen Kernel; in der
+  Praxis sind es meist mehrere, siehe [unten](#cnn-mehrere-kernel)
+
+### Eigenschaften der Faltung {.unlisted}
+
+- **linear** und **ordnungserhaltend**: was im Bild links oben liegt, liegt
+  auch in der OFM links oben
+
+- **sparse**: nur wenige Inputs tragen zu einem Output bei, im Beispiel
+  $3 \cdot 3 = 9$ von $25$
+
+- **Parameter werden wiederverwendet** (Parameter Sharing): dieselben
+  Gewichte werden an allen Stellen des Inputs angewendet $\ra$ ein Muster
+  wird überall im Bild erkannt
+
+- Vergleich für $25$ Inputs und $9$ Outputs:
+
+  | Schicht               | Gewichte           |
+  | :-------------------- | :----------------- |
+  | Fully-Connected       | $25 \cdot 9 = 225$ |
+  | Faltung, $3 \times 3$ | $9$                |
+
+- Im Layer kommen wie beim Neuron ein Bias $b$ und die Aktivierung $\phi$
+  (meist ReLU) dazu:
+
+  $$
+  \text{OFM} = \phi\left( \bs{X} * \bs{K} + b \right)
+  $$
+
+- Hinweis: mathematisch ist eine Faltung die Verknüpfung zweier Funktionen,
+  bei der der Kernel gespiegelt wird; im Deep Learning wird darauf
+  verzichtet, das Ergebnis heißt trotzdem Faltung
+
+### Mehrere Kernel, mehrere Feature Maps {#cnn-mehrere-kernel .unlisted}
+
+![Faltung mit mehreren Kerneln: aus zwei IFM werden drei OFM; Quelle:
+@dumoulin2018, im Studienbrief (SB 2) Abb. 3.7](/figs/02_05_cnn_04_mehrere_kernel.png){#fig-cnn-mehrere-kernel width=75%}
+
+- Links (blau): $m = 2$ IFM, z.B. zwei Kanäle
+
+- Mitte: drei Pfade, je mit einem Kernel-Paket aus zwei $3 \times 3$-Kerneln,
+  einer pro IFM
+
+- Pro Pfad: jede IFM wird mit ihrem Kernel gefaltet, die beiden Ergebnisse
+  werden elementweise addiert („$+$“) $\ra$ **eine** OFM (grün)
+
+- Rechts: die $n = 3$ OFM werden gestapelt und bilden den Output des Layers,
+  also die IFM der nächsten Schicht
+
+- Die Sammlung aller Kernel hat die Form $(n, m, k_1, k_2) = (3, 2, 3, 3)$
+  $\ra$ $3 \cdot 2 \cdot 3 \cdot 3 = 54$ Gewichte
+  - in welcher Reihenfolge diese Achsen gespeichert werden, ist Konvention
+    (im Studienbrief: „Permutation“)
+
+- Verschiedene Kernel ziehen verschiedene Merkmale aus dem Input (z.B.
+  Kanten, Ecken, Texturen) $\ra$ je mehr Kernel, desto mehr OFM
+
+- Die Bildunterschrift im Studienbrief nennt „eine IFM“, die Abbildung zeigt
+  zwei
+
+- Verallgemeinerung: die 2-D-Faltung lässt sich auf $N$ Dimensionen
+  erweitern; bei einer 3-D-Faltung ist der Kernel ein Quader und läuft über
+  Höhe, Breite und Tiefe
+
+### Ausgabegröße: Stride und Padding {#cnn-ausgabegroesse .unlisted}
+
+Vier Größen bestimmen die Ausgangsgröße $o_j$ entlang der Achse $j$:
+Eingangsgröße $i_j$, Kernelgröße $k_j$, Stride $s_j$ und Null-Padding $p_j$.
+
+::: {#prp-cnn-ausgabegroesse}
+
+#### Ausgangsgröße einer Faltungsschicht
+
+$$
+o_j = \left\lfloor \frac{i_j + 2 p_j - k_j}{s_j} \right\rfloor + 1
+$$
+
+:::
+
+- $\lfloor \cdot \rfloor$: abrunden. Die Formel steht nicht im Studienbrief,
+  sondern in der dort zitierten Quelle [@dumoulin2018]
+
+![Diskrete Faltung mit $i_1 = i_2 = 5$, $k_1 = k_2 = 3$, $s_1 = s_2 = 2$ und
+$p_1 = p_2 = 1$; Quelle: @dumoulin2018, im Studienbrief (SB 2)
+Abb. 3.8](/figs/02_05_cnn_05_stride_padding.png){#fig-cnn-stride-padding}
+
+- Gleiche IFM und gleicher Kernel wie in [@fig-cnn-positionen], aber:
+  - gestrichelte Felder: **Null-Padding**, ein Rand aus Nullen; aus
+    $5 \times 5$ wird $7 \times 7$
+  - **Stride 2**: der Kernel springt jeweils zwei Felder weiter
+
+- Ausgangsgröße: $\lfloor (5 + 2 \cdot 1 - 3) / 2 \rfloor + 1 = 3$
+
+- Probe für das erste Teilbild: unter dem Kernel liegen nur zwei Einträge
+  ungleich 0, also $3 \cdot 2 + 3 \cdot 0 = 6$
+
+| $i_j$ | $k_j$ | $s_j$ | $p_j$ | $o_j$ | Bemerkung                              |
+| :---- | :---- | :---- | :---- | :---- | :------------------------------------- |
+| 5     | 3     | 1     | 0     | 3     | [@fig-cnn-positionen]                  |
+| 5     | 3     | 2     | 1     | 3     | [@fig-cnn-stride-padding]              |
+| 5     | 3     | 2     | 0     | 2     | Stride allein verkleinert die Ausgabe  |
+| 5     | 3     | 1     | 1     | 5     | Padding erhält die Größe               |
+| 28    | 3     | 1     | 0     | 26    | MNIST, siehe [Beispiel](#cnn-beispiel) |
+
+- **Stride** ist eine Form der Dimensionsreduktion: ein Maß dafür, wie viel
+  von der Eingabe beibehalten wird
+
+- **Padding** gleicht den Rand aus: ohne Padding schrumpft die Ausgabe mit
+  jeder Faltung, und Randpixel gehen seltener in die Rechnung ein
+
+## Pooling Layer
+
+### Pooling: Teilbereiche zusammenfassen {.unlisted}
+
+- Wie bei der Faltung wandert ein Fenster über den Input
+
+- Statt der Linearkombination mit einem Kernel wird eine feste Funktion auf
+  den Ausschnitt angewendet:
+  - **Max-Pooling**: größtes Element des Ausschnitts
+  - **Average-Pooling**: Summe der Werte geteilt durch ihre Anzahl
+
+- **[Pooling hat keine lernbaren Parameter]{.ctl}**
+
+- Ausgangsgröße wie bei der Faltung, ohne Padding ($k_j$: Größe des
+  Pooling-Fensters):
+
+  $$
+  o_j = \left\lfloor \frac{i_j - k_j}{s_j} \right\rfloor + 1
+  $$
+
+- Zweck: Feature Maps werden kleiner (Downsampling) $\ra$ weniger Rechnung
+  und weniger Parameter in den folgenden Schichten; kleine Verschiebungen im
+  Bild ändern das Ergebnis kaum
+
+### Beispiel: Max- und Average-Pooling {.unlisted}
+
+![Max- und Average-Pooling (2-D) auf einem $3 \times 3$ Input mit
+$i_1 = i_2 = 3$, $k_1 = k_2 = 2$, $s_1 = s_2 = 1$; Quelle: @chen2021, im
+Studienbrief (SB 2) Abb. 3.9](/figs/02_05_cnn_06_pooling.png){#fig-cnn-pooling width=70%}
+
+- Input $3 \times 3$, Fenster $2 \times 2$ („Size“), Stride 1 $\ra$
+  $o_j = (3 - 2)/1 + 1 = 2$, also Output $2 \times 2$
+
+- Die Pfeile zeigen die Laufrichtung des Fensters; hellblau sind das erste
+  Fenster und der zugehörige Wert im Output
+
+| Fenster      | Werte      | Max | Average |
+| :----------- | :--------- | :-- | :------ |
+| oben links   | 1, 2, 3, 4 | 4   | 2.5     |
+| oben rechts  | 2, 1, 4, 5 | 5   | 3.0     |
+| unten links  | 3, 4, 7, 8 | 8   | 5.5     |
+| unten rechts | 4, 5, 8, 9 | 9   | 6.5     |
+
+- In der Praxis oft $k_j = s_j = 2$: die Fenster überlappen nicht, jede Achse
+  wird halbiert, z.B. $26 \times 26 \ra 13 \times 13$
+
+## Gesamtbild: vom Bild zur Klasse
+
+### Beispiel: Dimensionen und Parameter für MNIST {#cnn-beispiel .unlisted}
+
+Netz mit demselben Aufbau wie in [@fig-cnn-aufbau]. Im Notebook
+[Optimierung eines Modells: MNIST-Datensatz](03_03_mnist_structured.ipynb)
+wird genau dieses Netz umgesetzt, dort für Fashion-MNIST (ebenfalls
+$28 \times 28$ Pixel in Graustufen und 10 Klassen):
+
+| Layer                                 | Ausgabe                  | Parameter                         |
+| :------------------------------------ | :----------------------- | :-------------------------------- |
+| Input                                 | $28 \times 28 \times 1$  | $0$                               |
+| Faltung: 32 Kernel $3 \times 3$, ReLU | $26 \times 26 \times 32$ | $32 \cdot 9 + 32 = 320$           |
+| Max-Pooling: $2 \times 2$, Stride 2   | $13 \times 13 \times 32$ | $0$                               |
+| Flatten                               | $5408$                   | $0$                               |
+| Fully-Connected: 100 Neuronen, ReLU   | $100$                    | $5408 \cdot 100 + 100 = 540\,900$ |
+| Fully-Connected: 10 Neuronen, Softmax | $10$                     | $100 \cdot 10 + 10 = 1010$        |
+
+- Faltung: $o_j = (28 - 3)/1 + 1 = 26$; $m = 1$ IFM, $n = 32$ OFM, pro
+  Kernel 9 Gewichte und ein Bias
+
+- Pooling: $o_j = (26 - 2)/2 + 1 = 13$
+
+- **Flatten**: die $13 \cdot 13 \cdot 32 = 5408$ Werte werden zu einem Vektor
+  aneinandergehängt, damit Schichten wie im MLP anschließen können
+
+- Output: 10 Neuronen mit Softmax $\ra$ eine Wahrscheinlichkeit pro Ziffer,
+  siehe [Softmax im MLP](02_04_MLP.qmd#mlp-softmax)
+
+- Beobachtungen:
+  - der Convolutional Layer braucht nur $320$ Parameter; eine voll verbundene
+    Schicht mit gleich vielen Outputs, $26 \cdot 26 \cdot 32 = 21\,632$,
+    bräuchte $784 \cdot 21\,632 \approx 17$ Mio. Gewichte
+  - ohne Pooling hätte die erste Fully-Connected-Schicht
+    $21\,632 \cdot 100 + 100 = 2\,163\,300$ statt $540\,900$ Parameter
+
+### Training eines CNN {.unlisted}
+
+- Die Einträge der Kernel und die Bias-Werte sind die Parameter $\theta$ des
+  Convolutional Layers; sie werden zufällig initialisiert
+
+- Gelernt wird wie im MLP: Vorwärtspass, Verlust, Backpropagation und
+  Gradientenverfahren, siehe [Backpropagation](02_04_MLP.qmd#alg-backprop)
+  - möglich, weil Faltung und Aktivierung differenzierbar sind
+
+- Welche Muster die Kernel erkennen, wird also nicht vorgegeben, sondern
+  ergibt sich aus den Trainingsdaten
+
+- Pooling Layer haben nichts zu lernen; sie reichen den Fehler nur zurück
+
+- Overfitting und Regularisierung (z.B. Dropout): wie im
+  [MLP](02_04_MLP.qmd#mlp-regularisierung)
+
+### Zusammenfassung: MLP und CNN im Vergleich {.unlisted}
+
+|                | MLP                             | CNN                               |
+| :------------- | :------------------------------ | :-------------------------------- |
+| Input          | Vektor                          | mehrdimensionales Array           |
+| Struktur       | geht verloren                   | bleibt erhalten                   |
+| Verbindungen   | jedes Neuron mit allen Inputs   | lokal (sparse)                    |
+| Gewichte       | eines pro Verbindung            | geteilt: derselbe Kernel überall  |
+| Bausteine      | Fully-Connected                 | Faltung, Pooling, Fully-Connected |
+| typische Daten | ungeordnete Merkmale (Tabellen) | Bilder, Ton                       |
+
+Ablauf im CNN in vier Schritten:
+
+1. Input Layer speichert die Pixelwerte
+2. Convolutional Layer: Kernel anwenden, dann Aktivierung
+3. Pooling Layer: Downsampling der Feature Maps
+4. Fully-Connected Layer: wie im MLP bis zum Output Layer
