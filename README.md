@@ -2,11 +2,14 @@
 
 ## Notebooks für Studierende (GKI-notebooks)
 
+/!\ Zu Beginn ab der Abfrage bei VScode: den workspace/project **immer** als
+vertrauenswürdig anklicken.
+
 Die Notebooks in `include/*.ipynb` sind die Quelle. Bei jedem Push nach `main`,
 der Notebooks, `data/processed/` oder `requirements.txt` ändert, kopiert der
 Workflow `sync-notebooks.yml` sie nach
-[HamburgerFH/GKI-notebooks](https://github.com/HamburgerFH/GKI-notebooks).
-Dort starten Studierende die Notebooks per Codespaces:
+[HamburgerFH/GKI-notebooks](https://github.com/HamburgerFH/GKI-notebooks). Dort
+starten Studierende die Notebooks per Codespaces:
 <https://codespaces.new/HamburgerFH/GKI-notebooks>
 
 Der Workflow pusht mit einem Deploy-Key (Secret `NOTEBOOKS_DEPLOY_KEY`).
@@ -75,5 +78,5 @@ In dem terminal Fenster, `Ctrl+c`, danach mit `y` bestätigen.
 ## To-Do's
 
 1. Update der Notebooks mit mehr comments und Text, Bezug SB 03 komplett
-2. Füge ein Notebook zur Hyperparameteroptimierung hinzu (Bezug erster
-Teil SB 04 bis einschließlich 4.2)
+2. Füge ein Notebook zur Hyperparameteroptimierung hinzu (Bezug erster Teil SB
+   04 bis einschließlich 4.2)
