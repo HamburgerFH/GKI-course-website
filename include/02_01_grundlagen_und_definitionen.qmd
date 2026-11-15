@@ -23,14 +23,17 @@
 ### Überwachtes Lernen: Grundidee {.unlisted}
 
 - Gegeben: Daten/Beobachtungen indiziert durch $i=1,\ldots,N$
-- Ziel: aus dem Eingabevektor $\bs{X}_i$ eine **Vorhersage** $Y_i$ oder $G_i$
-  ableiten
+- Ziel: aus dem Eingabevektor $\bs{X}_i$ eine **Vorhersage** $Y_i$ ableiten
   - Länge des Eingabevektors = Anzahl der Merkmale bzw. features $p$
-- Trainingsdaten bestehen aus Paaren $(\bs{x}_i, y_i)$ oder $(\bs{x}_i, g_i)$:
+- Trainingsdaten bestehen aus Paaren $(\bs{x}_i, y_i)$:
   - konkrete Werte klein geschrieben
   - vs. Variablen / allgemeine Größen: Großbuchstaben
 - **Regression:** $Y_i$ ist quantitativ, z.B. Preis, Temperatur, Gewicht
-- **Klassifikation:** $G_i$ ist qualitativ, z.B. Klassen `Ja/Nein`, `rot/blau`
+- **Klassifikation:** $Y_i$ ist qualitativ, z.B. Klassen `Ja/Nein`, `rot/blau`
+- Regression oder Klassifikation erkennt man am Wertebereich von $Y_i$, z.B.
+  $Y_i \in \mathbb{R}$ vs. $Y_i \in \{1, \dots, K\}$
+  - Hinweis: der Studienbrief schreibt für Klassen $G$ bzw. $g_i$ (für
+    Gruppe); hier wird einheitlich $Y$ bzw. $y_i$ verwendet
 - auch möglich: **geordnete Kategorien** (z.B. klein, mittel, groß) – hier
   nicht behandelt
 - **überwacht** bedeutet: Trainingsdaten enthalten Zielgrößen zur Kontrolle des
@@ -49,7 +52,7 @@
 - **Sepal** = Kelchblatt vs. **Petal** = Blütenblatt (siehe Bild)
 - Ziel: Vorhersage der Iris-Spezies (setosa, versicolor, virginica)
 - typische Klassifikationsaufgabe mit
-  $G_i \in \mathcal{G} = \{\text{setosa}, \text{versicolor}, \text{virginica}\}$
+  $Y_i \in \mathcal{G} = \{\text{setosa}, \text{versicolor}, \text{virginica}\}$
   (oft kodiert als 1, 2, 3)
 
 ### Hintergrund zum Datensatz {.unlisted}
@@ -110,18 +113,18 @@ $$
 ### Zielgrößen (Output) {.unlisted}
 
 - $Y_i \in \mathbb{R}$: quantitatives Ziel (Regression)
-- $G_i \in \mathcal{G}$: qualitatives Ziel (Klassifikation), z.B.
+- $Y_i \in \mathcal{G}$: qualitatives Ziel (Klassifikation), z.B.
   $\mathcal{G} = \{\text{setosa}, \dots\}$
-- $\hat{Y}_i$, $\hat{G}_i$: geschätzte Ausgaben
-- Ziel: $\hat{Y}_i \approx Y_i$, $\hat{G}_i \approx G_i$
-- Binäre Klassifikation: $G$ als 0/1 kodiert, $\hat{Y}_i \in [0, 1]$ als
-  geschätzte Wahrscheinlichkeit für $G_i = 1$; Schwellenwert-Regel z.B. für
+- $\hat{Y}_i$: geschätzte Ausgabe
+- Ziel: $\hat{Y}_i \approx Y_i$
+- Binäre Klassifikation: $Y$ als 0/1 kodiert, $\hat{p}_i \in [0, 1]$ als
+  geschätzte Wahrscheinlichkeit für $Y_i = 1$; Schwellenwert-Regel z.B. für
   Wert 0.5:
 
 $$
-\hat{G}_i =
+\hat{Y}_i =
 \begin{cases}
-  1 & \text{falls } \hat{Y}_i > 0.5 \\\\
-  0 & \text{falls } \hat{Y}_i \leq 0.5
+  1 & \text{falls } \hat{p}_i > 0.5 \\\\
+  0 & \text{falls } \hat{p}_i \leq 0.5
 \end{cases}
 $$

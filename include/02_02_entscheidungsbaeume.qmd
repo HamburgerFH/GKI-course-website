@@ -47,8 +47,8 @@ Klassifikationsproblems mit Merkmalen $X_1$ und $X_2$ (rechts); Quelle:
 
 ## Aufbau eines Entscheidungsbaums: Aufgabe und Vorgehen
 
-- sei $M = \{(\bs{x}_i, g_i)\}_{i=1}^N$ eine Trainingsmenge mit $K$ Klassen und
-  $p$ Merkmalen
+- sei $M = \{(\bs{x}_i, y_i)\}_{i=1}^N$ eine Trainingsmenge mit $K$ Klassen,
+  $y_i \in \{1, \dots, K\}$, und $p$ Merkmalen
 - sei $A$ ein Attribut/Merkmal mit $v$ möglichen Ausprägungen $a_1, \dots, a_v$
   ($v$ hängt von $A$ ab)
 
@@ -70,7 +70,7 @@ Tage mit Outlook = Sun.
 - **gesucht**: Entscheidungsbaum, der $M$ möglichst gut trennt und vor allem auf
   ungesehene Daten generalisiert (perfekte Trennung von $M$ ist nicht das Ziel)
 - **Vorgehen**: Aufteilung von $M$ in Teilmengen $M_1, \dots, M_v$ gemäß $A$:
-  - $M_j = \{ (\bs{x}_i, g_i) \in M : A(\bs{x}_i) = a_j \}$
+  - $M_j = \{ (\bs{x}_i, y_i) \in M : A(\bs{x}_i) = a_j \}$
   - für jeden Split-Knoten wird ein Attribut $A$ gewählt, das $M$ möglichst gut
     trennt, also einen möglichst guten Split erzeugt
 - **Ziel**: maximale Homogenität der Klassen in den Teilmengen $M_j$, wobei
@@ -82,7 +82,7 @@ Tage mit Outlook = Sun.
     Informationsgewinn 0 und der Split nutzlos
 
 - **Voraussetzung**: Attribute müssen Klassen unterscheidbar machen, d.h. falls
-  $\bs{x}_i = \bs{x}_j$, aber $g_i \neq g_j$: keine trennbare Klassifikation
+  $\bs{x}_i = \bs{x}_j$, aber $y_i \neq y_j$: keine trennbare Klassifikation
   möglich
 - **Occam’s Razor Prinzip** -> wähle die einfachste Hypothese, die zu den Daten
   passt: bei mehreren möglichen Bäumen wählt man den einfacheren: Einfachheit
@@ -465,15 +465,15 @@ $\mathcal{V}_1^R = \{\text{Sun}, \text{Rain}\}$.
 
   $$
   \begin{aligned}
-  M_q^L(\mathcal{V}_j^L) &= \lbrace (\bs{x}_i, g_i) \in M_q :
+  M_q^L(\mathcal{V}_j^L) &= \lbrace (\bs{x}_i, y_i) \in M_q :
   A_j(\bs{x}_i) \in \mathcal{V}_j^L \rbrace \\
-  M_q^R(\mathcal{V}_j^R) &= \lbrace (\bs{x}_i, g_i) \in M_q :
+  M_q^R(\mathcal{V}_j^R) &= \lbrace (\bs{x}_i, y_i) \in M_q :
   A_j(\bs{x}_i) \in \mathcal{V}_j^R \rbrace
   \end{aligned}
   $$
 
 - wobei $A_j$ das $j$-te Merkmal ist und $A_j(\bs{x}_i) = x_{ij}$ die konkrete
-  Ausprägung von $A_j$ für ein Trainingsobjekt $(\bs{x}_i, g_i)$ bezeichnet und
+  Ausprägung von $A_j$ für ein Trainingsobjekt $(\bs{x}_i, y_i)$ bezeichnet und
   die Wahrscheinlichkeiten bzw. Anteile:
   $p_L^q(\mathcal{V}_j^L) = \frac{|M_q^L(\mathcal{V}_j^L)|}{|M_q|}$ und
   $p_R^q(\mathcal{V}_j^R) = 1 - p_L^q(\mathcal{V}_j^L)$
@@ -766,16 +766,20 @@ $$
   (Mehrheitsvotum):
 
   $$
-  \hat{y}_i = \frac{1}{T} \sum_{t=1}^T \hat{y}_{it}\;, \quad
-  \hat{g}_i = \arg\max_{k \in \{1, \dots, K\}} \sum_{t=1}^T
-  I(\hat{g}_{it} = k)
+  \begin{aligned}
+  \text{Regression:} \quad
+    \hat{y}_i &= \frac{1}{T} \sum_{t=1}^T \hat{y}_{it} \\
+  \text{Klassifikation:} \quad
+    \hat{y}_i &= \arg\max_{k \in \{1, \dots, K\}} \sum_{t=1}^T
+    I(\hat{y}_{it} = k)
+  \end{aligned}
   $$
 
 - binärer Spezialfall: mit dem Stimmenanteil
-  $\hat{p}_i = \frac{1}{T} \sum_{t=1}^T I(\hat{g}_{it} = 1)$ gilt
+  $\hat{p}_i = \frac{1}{T} \sum_{t=1}^T I(\hat{y}_{it} = 1)$ gilt
 
   $$
-  \hat{g}_i =
+  \hat{y}_i =
   \begin{cases}
   1, & \hat{p}_i > 0.5 \\
   0, & \text{sonst}
